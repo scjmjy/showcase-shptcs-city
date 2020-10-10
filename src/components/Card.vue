@@ -1,7 +1,7 @@
 <template>
     <div class="container" :style="containerStyle">
         <div v-if="$slots.title || opts_.hasTitle" class="u-flex" :style="titleContainerStyle">
-            <span v-if="!$slots.title && opts_.hasTitle" class="title" :style="titleStyle">
+            <span v-if="!$slots.title && opts_.hasTitle" class="title" :style="titleStyle" ref="refTitle" @click="emit('click', $event)">
                 {{ opts_.title }}
             </span>
             <div v-else-if="$slots.title" :style="titleStyle">
@@ -18,8 +18,11 @@
     </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from 'vue'
+import { toggleClass } from '@/utils/css.ts'
+
+export default Vue.extend({
     name: 'Card',
     props: {
         opts: {
@@ -28,17 +31,19 @@ export default {
         }
     },
     computed: {
-        defaultOpts() {
+        defaultOpts(): any {
             return {
+                hoverable: false,
+                bgColor: '#061c4a1a',
                 justify: 'center',
                 align: 'center',
                 hasTitle: true,
                 title: '我的标题',
                 titleHeight: 40,
-                titleColor: '#4fb5f6',
-                titleBgColor: '#10143855',
-                titleSize: 18,
-                titleStyle: {},
+                titleColor: '#0BB7FFFF',
+                titleBgColor: '#0050EF1A',
+                titleSize: 20,
+                titleStyle: { fontWeight: 'bold' },
                 borderWidth: 1,
                 borderColor: '#2d426d',
                 shadowColor: '#2d426d',
@@ -47,16 +52,20 @@ export default {
                 cornerColor: '#1356ee'
             }
         },
-        opts_() {
+        opts_(): any {
             const opts = Object.assign({}, this.defaultOpts, this.opts)
+            if (this.opts.titleStyle) {
+                const titleStyle = Object.assign({}, this.defaultOpts.titleStyle, this.opts.titleStyle)
+                opts.titleStyle = titleStyle
+            }
             return opts
         },
-        borderStyle() {
+        borderStyle(): string {
             const { borderWidth, borderColor } = this.opts_
             return `${borderWidth}px solid ${borderColor}`
         },
-        containerStyle() {
-            const { shadowColor, hasTitle } = this.opts_
+        containerStyle(): any {
+            const { shadowColor, hasTitle, bgColor } = this.opts_
             let shadow = ''
             if (hasTitle || this.$slots.title) {
                 shadow = `inset 15px -15px 20px -20px ${shadowColor},
@@ -67,10 +76,11 @@ export default {
             }
             return {
                 border: this.borderStyle,
-                'box-shadow': shadow
+                'box-shadow': shadow,
+                'background-color': bgColor
             }
         },
-        titleContainerStyle() {
+        titleContainerStyle(): any {
             const { titleHeight, titleBgColor, justify, align } = this.opts_
             return {
                 'justify-content': justify,
@@ -79,7 +89,7 @@ export default {
                 height: titleHeight + 'px'
             }
         },
-        titleStyle() {
+        titleStyle(): any {
             const { titleColor, titleSize, titleStyle } = this.opts_
             return {
                 color: titleColor,
@@ -87,7 +97,7 @@ export default {
                 ...titleStyle
             }
         },
-        contentStyle() {
+        contentStyle(): any {
             const { hasTitle, titleHeight } = this.opts_
             let height = ''
             if (hasTitle || this.$slots.title) {
@@ -99,19 +109,19 @@ export default {
                 height
             }
         },
-        cornerBorderStyle() {
+        cornerBorderStyle(): string {
             const { cornerWidth, cornerColor } = this.opts_
             return `${cornerWidth}px solid ${cornerColor}`
         },
-        cornerLength() {
+        cornerLength(): string {
             const { cornerLength } = this.opts_
             return cornerLength + 'px'
         },
-        cornerOffset() {
+        cornerOffset(): string {
             const { borderWidth } = this.opts_
             return -borderWidth + 'px'
         },
-        cornerLtStyle() {
+        cornerLtStyle(): any {
             return {
                 width: this.cornerLength,
                 height: this.cornerLength,
@@ -121,7 +131,7 @@ export default {
                 'border-top': this.cornerBorderStyle
             }
         },
-        cornerRtStyle() {
+        cornerRtStyle(): any {
             return {
                 width: this.cornerLength,
                 height: this.cornerLength,
@@ -131,7 +141,7 @@ export default {
                 'border-top': this.cornerBorderStyle
             }
         },
-        cornerRbStyle() {
+        cornerRbStyle(): any {
             return {
                 width: this.cornerLength,
                 height: this.cornerLength,
@@ -141,7 +151,7 @@ export default {
                 'border-bottom': this.cornerBorderStyle
             }
         },
-        cornerLbStyle() {
+        cornerLbStyle(): any {
             return {
                 width: this.cornerLength,
                 height: this.cornerLength,
@@ -151,8 +161,18 @@ export default {
                 'border-bottom': this.cornerBorderStyle
             }
         }
+    },
+    mounted() {
+        if (this.$refs.refTitle && this.opts_.hoverable) {
+            toggleClass(this.$refs.refTitle as HTMLElement, 'hoverable')
+        }
+    },
+    methods: {
+        emit(evName: string, ev: Event) {
+            this.$emit(evName, ev.target)
+        }
     }
-}
+})
 </script>
 
 <style scoped>
@@ -160,42 +180,18 @@ export default {
     display: inline-block;
     overflow: visible;
     position: relative;
-    /* border-left: 1px solid #2d426d; */
-    /* box-shadow: inset 15px -15px 20px -20px #94c0ef63; */
 }
+
 .slope {
-    /* border-right: 1px solid rgb(45, 66, 109); */
-    /* border-top: 1px solid rgb(45, 66, 109); */
-    /* width: 100px; */
-    /* height: 50px; */
-    /* transform: skewX(45deg); */
-    /* box-shadow: inset -15px 15px 20px -20px rgba(148, 192, 239, 0.39); */
     display: flex;
 }
 .title {
-    /* transform: skewX(-45deg); */
 }
-/* .slope::after {
-    display: inline-block;
-    position: absolute;
-    top: -25px;
-    width: 50px;
-    height: 50px;
-    content: ' ';
-    border-left: 1px solid rgb(45,66,109);
-    transform: rotate(-45deg);
-} */
+
 .placeholder {
-    /* margin-left: 24px; */
-    /* height: 50px; */
-    /* border-bottom: 1px solid rgb(45, 66, 109); */
-    /* box-shadow: 0px 15px 20px -20px rgba(148, 192, 239, 0.39); */
 }
 .content {
     overflow: hidden;
-    /* border-right: 1px solid rgb(45, 66, 109); */
-    /* border-bottom: 1px solid rgb(45, 66, 109); */
-    /* box-shadow: inset -15px 0px 20px -20px rgba(148, 192, 239, 0.39); */
 }
 .corner {
     position: absolute;

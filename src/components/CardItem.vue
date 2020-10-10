@@ -26,13 +26,13 @@ export default {
         defaultOpts() {
             return {
                 icon: 'dolar',
-                iconWidth: '50px',
-                iconHeight: '50px',
+                iconWidth: '42px',
+                iconHeight: '42px',
                 iconRightGap: '10px',
                 iconColor: 'rgb(0,218,213)',
                 value: 0,
                 valueStyle: {
-                    'font-size': '24px',
+                    'font-size': '26px',
                     color: 'white',
                     'margin-right': '2px'
                 },
@@ -46,8 +46,8 @@ export default {
                 title: '我的标题',
                 titlePadding: '0px',
                 titleStyle: {
-                    color: 'rgb(0,207,214)',
-                    'font-size': '16px'
+                    color: '#00F6FF',
+                    'font-size': '13px'
                 }
             }
         },

@@ -36,9 +36,9 @@ export default {
                 width: 500,
                 height: 40,
                 title: '我的标题',
-                titleColor: '#02d7d5',
-                titleSize: 42,
-                titleStyle: {},
+                titleColor: '#00FFFB',
+                titleSize: 36,
+                titleStyle: { fontWeight: 'bold' },
                 borderWidth: 1,
                 borderColor: '#2d426d',
                 shadowColor: '#2d426d',
@@ -50,6 +50,10 @@ export default {
         },
         opts_() {
             const opts = Object.assign({}, this.defaultOpts, this.opts)
+            if (this.opts.titleStyle) {
+                const titleStyle = Object.assign({}, this.defaultOpts.titleStyle, this.opts.titleStyle)
+                opts.titleStyle = titleStyle
+            }
             return opts
         },
         slopeOrginWidth() {
@@ -97,7 +101,7 @@ export default {
                 height: borderWidth + 'px',
                 left: offset,
                 right: offset,
-                'background-image': `radial-gradient(40% 4px at 50% 50%, ${borderBottomColor} 0%, ${borderBottomColor} 40%, ${borderColor} 100%)`,
+                'background-image': `radial-gradient(20% 4px at 50% 50%, ${borderBottomColor} 0%, ${borderBottomColor} 40%, ${borderColor} 100%)`,
                 'box-shadow': `0px 0px 20px 3px ${shadowColor}`
             }
         },

@@ -17,7 +17,7 @@ import State, { DiaoYanNianDuTongJi } from '@/store/state'
         },
         barHeight: {
             type: Number,
-            default: 230
+            default: 200
         }
     },
     computed: {
@@ -55,11 +55,17 @@ export default class DiaoYanNianDuTongJiCom extends Vue {
             zongShu.push(weiChuLi[index] + yiChuLi[index])
         }
         const opt = {
+            grid: {
+                containLabel: true,
+                left: 0,
+                right: 0,
+                bottom: 0
+            },
             title: {
                 text: '大调研年度数据可视化统计',
                 textStyle: {
                     color: 'white',
-                    fontSize: 14
+                    fontSize: 20
                 }
             },
             tooltip: {
@@ -76,8 +82,8 @@ export default class DiaoYanNianDuTongJiCom extends Vue {
                 }
             },
             legend: {
-                left: 185,
-                top: 6,
+                left: 266,
+                top: 3,
                 icon: 'roundRect',
                 textStyle: { color: 'white' },
                 data: [{ name: '未处理' }, { name: '已处理' }]
@@ -117,9 +123,9 @@ export default class DiaoYanNianDuTongJiCom extends Vue {
                     name: '未处理',
                     type: 'bar',
                     data: weiChuLi,
-                    barWidth: 20,
+                    barWidth: 14,
                     itemStyle: {
-                        color: 'rgb(51,181,255)'
+                        color: '#34B6FF'
                     },
                     stack: 'month'
                 },
@@ -127,9 +133,9 @@ export default class DiaoYanNianDuTongJiCom extends Vue {
                     name: '已处理',
                     type: 'bar',
                     data: yiChuLi,
-                    barWidth: 20,
+                    barWidth: 14,
                     itemStyle: {
-                        color: 'rgb(254,177,71)'
+                        color: '#FDB246'
                     },
                     stack: 'month'
                 },

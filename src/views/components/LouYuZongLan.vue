@@ -1,12 +1,11 @@
 <template>
-    <slope-card :opts="slopeOpts">
-        <div style="padding: 10px">
-            <div class="u-flex u-w-100">
+    <slope-card :opts="slopeOpts" @click="onTitleClick">
+        <div class="zonglan-content">
+            <div class="u-w-100" style="white-space: nowrap;">
                 <card-item class="card-item" :opts="huGuanQiYe"></card-item>
                 <card-item class="card-item" :opts="shuiShou"></card-item>
-                <div class="card-item"></div>
             </div>
-            <div class="u-flex u-w-100 u-m-t-20">
+            <div class="u-w-100 u-m-t-40" style="white-space: nowrap;">
                 <card-item class="card-item" :opts="zhongDianQiYe"></card-item>
                 <card-item class="card-item" :opts="zhongDianQiYeShuiShou"></card-item>
                 <card-item class="card-item" :opts="shuiShouZhanBi"></card-item>
@@ -24,15 +23,17 @@ export default Vue.extend({
     computed: {
         slopeOpts() {
             return {
+                hoverable: true,
                 title: '楼宇总览',
                 titleStyle: {
-                    'margin-left': '-10px;'
+                    'left': '20px'
                 }
             }
         },
         huGuanQiYe() {
             return {
-                icon: 'dolar',
+                icon: '户管企业总数',
+                iconColor: '#06DAD6',
                 value: 7500,
                 suffix: '+',
                 suffixStyle: {
@@ -43,7 +44,8 @@ export default Vue.extend({
         },
         shuiShou() {
             return {
-                icon: 'dolar',
+                icon: '税收总额',
+                iconColor: '#00D98B',
                 value: 3.2,
                 suffix: '亿',
                 title: '税收总额（2019）'
@@ -51,15 +53,17 @@ export default Vue.extend({
         },
         zhongDianQiYe() {
             return {
-                icon: 'dolar',
+                icon: '重点企业数',
+                iconColor: '#FFD200',
                 value: 41,
                 suffix: '家',
-                title: '重点企业数（500万以上）'
+                title: '重点企业数(500万以上)'
             }
         },
         zhongDianQiYeShuiShou() {
             return {
-                icon: 'dolar',
+                icon: '重点企业税收总额',
+                iconColor: '#5654CE',
                 value: 2.5,
                 suffix: '亿',
                 title: '重点企业税收总额'
@@ -67,20 +71,24 @@ export default Vue.extend({
         },
         shuiShouZhanBi() {
             return {
-                icon: 'dolar',
+                icon: '税收占比',
+                iconColor: '#00FFFB',
                 value: 67,
                 suffix: '%',
                 title: '税收占比'
             }
         }
+    },
+    methods: {
+        onTitleClick() {
+            alert('楼宇总览 click')
+        }
     }
 })
 </script>
 
-<style>
-.card-item {
-    flex: 1;
-    /* width: 200px;
-    height: 140px; */
+<style scoped>
+.zonglan-content {
+    padding: 60px 20px;
 }
 </style>

@@ -12,7 +12,10 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+* {
+    box-sizing: border-box;
+}
 html,
 body,
 #app {
@@ -21,7 +24,38 @@ body,
 }
 
 #app {
-    /* background-image: url('./assets/img/bg.png'); */
     background-color: rgb(21, 24, 30);
+    /* background-color: black; */
+}
+
+/** Card title hoverable */
+.hoverable {
+    transition: all 0.1s ease-in;
+    cursor: pointer;
+    &:hover {
+        transform: scale(1.1);
+    }
+    &:active {
+        transform: scale(1.1) translate(2px, 2px);
+    }
+}
+
+.linkable {
+    transition: all 0.1s ease-in;
+    cursor: pointer;
+    &:hover {
+        text-decoration: underline;
+    }
+    &:active {
+        text-decoration: underline;
+        transform: translate(2px, 2px);
+    }
+}
+
+.card-item {
+    width: 185px;
+}
+.card-item + .card-item {
+    margin-left: 30px;
 }
 </style>

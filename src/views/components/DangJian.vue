@@ -32,7 +32,8 @@ export default class DangJianBanKuai extends Vue {
     get cardOpts() {
         return {
             title: '党建板块',
-            justify: 'start'
+            justify: 'start',
+            titleStyle: { 'margin-left': '20px' }
         }
     }
     get dangZhiBu() {

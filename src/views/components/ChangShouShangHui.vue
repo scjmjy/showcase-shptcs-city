@@ -1,9 +1,11 @@
 <template>
     <card :opts="cardOpts">
-        <div style="padding: 10px">
-            <card-item class="card-item" :opts="shangHuiQiYe"></card-item>
-            <card-item class="card-item" :opts="shangHuiQiYeShuiShou"></card-item>
-            <card-item class="card-item" :opts="xinZengHuiYuan"></card-item>
+        <div class="shanghui-content">
+            <div class="u-w-100" style="white-space: nowrap;">
+                <card-item class="card-item" :opts="shangHuiQiYe"></card-item>
+                <card-item class="card-item" :opts="shangHuiQiYeShuiShou"></card-item>
+                <card-item class="card-item" :opts="xinZengHuiYuan"></card-item>
+            </div>
         </div>
     </card>
 </template>
@@ -18,12 +20,14 @@ export default Vue.extend({
         cardOpts() {
             return {
                 title: '长寿商会信息',
-                justify: 'start'
+                justify: 'start',
+                titleStyle: { 'margin-left': '20px' }
             }
         },
         shangHuiQiYe() {
             return {
-                icon: 'dolar',
+                icon: '商会企业数',
+                iconColor: '#EB704A',
                 value: 41,
                 suffix: '家',
                 title: '商会企业数'
@@ -31,7 +35,8 @@ export default Vue.extend({
         },
         shangHuiQiYeShuiShou() {
             return {
-                icon: 'dolar',
+                icon: '商会企业税收总额',
+                iconColor: '#00FFFB',
                 value: 2.5,
                 suffix: '亿',
                 title: '商会企业税收总额'
@@ -39,7 +44,8 @@ export default Vue.extend({
         },
         xinZengHuiYuan() {
             return {
-                icon: 'dolar',
+                icon: '新增会员数',
+                iconColor: '#00DA8C',
                 value: 10,
                 suffix: '家',
                 title: '新增会员数'
@@ -49,9 +55,11 @@ export default Vue.extend({
 })
 </script>
 
-<style>
-.card-item {
-    /* width: 200px;
-    height: 140px; */
+<style scoped>
+.shanghui-content {
+    padding: 0px 20px;
+    height: 100%;
+    display: flex;
+    align-items: center;
 }
 </style>

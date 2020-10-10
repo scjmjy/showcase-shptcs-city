@@ -1,7 +1,7 @@
 <template>
     <card :opts="cardOpts">
-        <dv-scroll-board :config="scrollConfig" @click="onClick" style="width:620px; height:280px; display: inline-block; border-right: 1px solid #2d426d;" />
-        <dv-scroll-board :config="scrollConfig" @click="onClick" style="width:620px; height:280px; display: inline-block;" />
+        <dv-scroll-board :config="scrollConfig" @click="onClick" style="width:610px; height:280px; display: inline-block; border-right: 1px solid #2d426d;" />
+        <dv-scroll-board :config="scrollConfig" @click="onClick" style="margin-left: 20px; width:610px; height:280px; display: inline-block;" />
     </card>
 </template>
 
@@ -15,7 +15,8 @@ export default Vue.extend({
         cardOpts(): any {
             return {
                 title: '信息发布',
-                justify: 'start'
+                justify: 'start',
+                titleStyle: { 'margin-left': '20px' }
             }
         },
         xinXiFaBu(): any {
@@ -32,10 +33,11 @@ export default Vue.extend({
         scrollConfig(): any {
             return {
                 data: this.xinXiFaBu,
-                index: true,
+                // index: true,
                 rowNum: 6,
                 align: ['center'],
-                columnWidth: [50, 120],
+                // columnWidth: [40, 140],
+                columnWidth: [130],
                 evenRowBGC: 'transparent',
                 oddRowBGC: 'transparent'
             }
@@ -46,19 +48,22 @@ export default Vue.extend({
             let color = 'white'
             switch (category) {
                 case '政策信息':
-                    color = 'rgb(0,255,251)'
+                    color = '#00FFFB'
                     break
                 case '党建活动':
-                    color = 'rgb(255,55,55)'
+                    color = '#FF3838'
                     break
                 case '招商信息':
-                    color = 'rgb(255,241,10)'
+                    color = '#FFF10B'
+                    break
+                default :
+                    color = 'white'
                     break
             }
-            return `<span style="color:${color};">【${category}】</span>`
+            return `<span style="color:${color}; font-size: 18px;">【${category}】</span>`
         },
         buildTitle(title: string) {
-            return `<a href="javascript:void(0)" style="color:rgb(7,184,254);">${title}</a>`
+            return `<div class="linkable" style="color: #0BB7FF; font-size: 18px;">${title}</div>`
         },
         // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
         // @ts-ignore
@@ -70,4 +75,6 @@ export default Vue.extend({
 })
 </script>
 
-<style></style>
+<style lang="scss">
+
+</style>

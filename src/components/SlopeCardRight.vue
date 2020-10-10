@@ -1,14 +1,14 @@
 <template>
     <div class="container" :style="containerStyle">
-        <div class="u-flex">
+        <div class="u-flex u-rela">
             <div class="placeholder u-flex-1" :style="placeholderStyle"></div>
             <div class="slope" :style="slopeStyle">
-                <span v-if="!$slots.title" class="title" :style="titleStyle">
-                    {{ opts_.title }}
-                </span>
-                <div v-else :style="titleStyle">
-                    <slot name="title"></slot>
-                </div>
+            </div>
+            <span v-if="!$slots.title" class="title u-abso" :style="titleStyle" ref="refTitle" @click="emit('click', $event)">
+                {{ opts_.title }}
+            </span>
+            <div v-else class="title u-abso" :style="titleStyle">
+                <slot name="title"></slot>
             </div>
         </div>
         <div class="right-border" :style="placeholderRightBorder"></div>
@@ -22,8 +22,11 @@
     </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from 'vue'
+import { toggleClass } from '@/utils/css.ts'
+
+export default Vue.extend({
     name: 'SlopeCardRight',
     props: {
         opts: {
@@ -32,17 +35,18 @@ export default {
         }
     },
     computed: {
-        defaultOpts() {
+        defaultOpts(): any {
             return {
+                hoverable: false,
                 angle: 45,
                 width: 100,
-                height: 40,
+                height: 41,
                 justify: 'center',
                 align: 'center',
                 title: '我的标题',
-                titleColor: '#4fb5f6',
-                titleSize: 18,
-                titleStyle: {},
+                titleColor: '#0BB7FFFF',
+                titleSize: 20,
+                titleStyle: { fontWeight: 'bold', right: '0px' },
                 borderWidth: 1,
                 borderColor: '#2d426d',
                 shadowColor: '#2d426d',
@@ -51,26 +55,30 @@ export default {
                 cornerColor: '#1356ee'
             }
         },
-        opts_() {
+        opts_(): any {
             const opts = Object.assign({}, this.defaultOpts, this.opts)
+            if (this.opts.titleStyle) {
+                const titleStyle = Object.assign({}, this.defaultOpts.titleStyle, this.opts.titleStyle)
+                opts.titleStyle = titleStyle
+            }
             return opts
         },
-        borderStyle() {
+        borderStyle(): string {
             const { borderWidth, borderColor } = this.opts_
             return `${borderWidth}px solid ${borderColor}`
         },
-        containerStyle() {
+        containerStyle(): any {
             const { shadowColor } = this.opts_
             return {
                 'box-shadow': `inset -15px -15px 20px -15px ${shadowColor}`
             }
         },
-        placeholderRightBorder() {
+        placeholderRightBorder(): any {
             return {
                 'border-right': this.borderStyle
             }
         },
-        slopeStyle() {
+        slopeStyle(): any {
             const { width, height, angle, shadowColor, justify, align } = this.opts_
             return {
                 'border-left': this.borderStyle,
@@ -83,16 +91,17 @@ export default {
                 'align-items': align
             }
         },
-        titleStyle() {
-            const { titleColor, titleSize, angle, titleStyle } = this.opts_
+        titleStyle(): any {
+            const { titleColor, titleSize, angle, titleStyle, height } = this.opts_
+            const top = (height - titleSize) / 2
             return {
                 color: titleColor,
                 'font-size': titleSize + 'px',
-                transform: `skewX(${angle}deg)`,
+                top,
                 ...titleStyle
             }
         },
-        placeholderStyle() {
+        placeholderStyle(): any {
             const { height, angle, shadowColor } = this.opts_
             const ang = 90 - angle
             const tan = Math.tan((ang * Math.PI) / 180)
@@ -103,7 +112,7 @@ export default {
                 'box-shadow': `0px 15px 20px -15px ${shadowColor}`
             }
         },
-        contentStyle() {
+        contentStyle(): any {
             const { shadowColor, height } = this.opts_
             return {
                 'border-left': this.borderStyle,
@@ -112,15 +121,15 @@ export default {
                 height: `calc(100% - ${height}px)`
             }
         },
-        cornerBorderStyle() {
+        cornerBorderStyle(): string {
             const { cornerWidth, cornerColor } = this.opts_
             return `${cornerWidth}px solid ${cornerColor}`
         },
-        cornerLength() {
+        cornerLength(): string {
             const { cornerLength } = this.opts_
             return cornerLength + 'px'
         },
-        cornerLtStyle() {
+        cornerLtStyle(): any {
             const { height } = this.opts_
             return {
                 width: this.cornerLength,
@@ -130,7 +139,7 @@ export default {
                 top: height - 1 + 'px'
             }
         },
-        cornerRtStyle() {
+        cornerRtStyle(): any {
             return {
                 width: this.cornerLength,
                 height: this.cornerLength,
@@ -138,7 +147,7 @@ export default {
                 'border-top': this.cornerBorderStyle
             }
         },
-        cornerRbStyle() {
+        cornerRbStyle(): any {
             return {
                 width: this.cornerLength,
                 height: this.cornerLength,
@@ -146,7 +155,7 @@ export default {
                 'border-bottom': this.cornerBorderStyle
             }
         },
-        cornerLbStyle() {
+        cornerLbStyle(): any {
             return {
                 width: this.cornerLength,
                 height: this.cornerLength,
@@ -154,8 +163,18 @@ export default {
                 'border-bottom': this.cornerBorderStyle
             }
         }
+    },
+    mounted() {
+        if (this.$refs.refTitle && this.opts_.hoverable) {
+            toggleClass(this.$refs.refTitle as HTMLElement, 'hoverable')
+        }
+    },
+    methods: {
+        emit(evName: string, ev: Event) {
+            this.$emit(evName, ev.target)
+        }
     }
-}
+})
 </script>
 
 <style scoped>

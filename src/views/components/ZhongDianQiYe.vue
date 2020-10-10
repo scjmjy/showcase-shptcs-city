@@ -1,5 +1,5 @@
 <template>
-    <card :opts="slopeOpts">
+    <card :opts="slopeOpts" @click="onTitleClick">
         <iframe
             class="fr-frame"
             src="http://localhost:8075/webroot/decision/view/form?viewlet=rotary_gear.frm"
@@ -18,8 +18,14 @@ export default Vue.extend({
     computed: {
         slopeOpts() {
             return {
+                hoverable: true,
                 title: '重点企业分析'
             }
+        }
+    },
+    methods: {
+        onTitleClick() {
+            alert('重点企业分析 click')
         }
     }
 })

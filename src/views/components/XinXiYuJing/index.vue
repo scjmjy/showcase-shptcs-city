@@ -16,8 +16,12 @@ export default Vue.extend({
     computed: {
         cardOpts() {
             return {
+                hoverable: true,
                 title: '信息预警板块',
-                width: 200
+                width: 200,
+                titleStyle: {
+                    'right': '20px'
+                }
             }
         }
     }

@@ -5,7 +5,7 @@
                 <overview class="u-flex-1 overview" />
                 <diao-yan-nian-du-tong-ji class="u-flex-1 nian-du-tong-ji" />
             </div>
-            <div class="u-flex u-col-start u-flex-1" style="height: 260px;">
+            <div class="u-flex u-col-start second-row">
                 <diao-yan-fen-lei-tong-ji class="u-flex-1" />
                 <wei-jie-jue-wen-ti class="u-flex-1" />
                 <wei-jie-jue-fen-lei-tong-ji class="u-flex-1" />
@@ -29,7 +29,8 @@ export default class LouZhangZhi extends Vue {
     get cardOpts() {
         return {
             title: '楼长制板块',
-            justify: 'start'
+            justify: 'start',
+            titleStyle: { 'margin-left': '20px' }
         }
     }
 }
@@ -47,8 +48,16 @@ export default class LouZhangZhi extends Vue {
 }
 .first-row {
     border-bottom: 1px solid #2d426d;
+    height: 231px;
+}
+.second-row {
+    height: 253px;
+}
+.overview {
+    padding: 20px;
 }
 .nian-du-tong-ji {
     border-left: 1px solid #2d426d;
+    padding: 20px;
 }
 </style>
