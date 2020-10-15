@@ -45,8 +45,8 @@ export default Vue.extend({
                 titleSize: 20,
                 titleStyle: { fontWeight: 'bold' },
                 borderWidth: 1,
-                borderColor: '#2d426d',
-                shadowColor: '#2d426d',
+                borderColor: '#32548F',
+                shadowColor: '#034D81',
                 cornerWidth: 2,
                 cornerLength: 15,
                 cornerColor: '#1356ee'

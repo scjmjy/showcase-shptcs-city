@@ -263,7 +263,7 @@ export default Vue.extend({
                             width: 20,
                             height: 30,
                             backgroundColor: {
-                                image: require('@/assets//img/arrow_up.png')
+                                image: require('@/assets/img/arrow_up.png')
                             }
                         }
                     }
@@ -296,7 +296,7 @@ export default Vue.extend({
                             width: 20,
                             height: 30,
                             backgroundColor: {
-                                image: require('@/assets//img/arrow_down.png')
+                                image: require('@/assets/img/arrow_down.png')
                             }
                         }
                     }

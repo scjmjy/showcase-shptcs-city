@@ -65,9 +65,7 @@ export default Vue.extend({
         buildTitle(title: string) {
             return `<div class="linkable" style="color: #0BB7FF; font-size: 18px;">${title}</div>`
         },
-        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-        // @ts-ignore
-        onClick({ row, ceil, rowIndex, columnIndex }) {
+        onClick({ row, ceil, rowIndex, columnIndex }: any) {
             console.log(row, ceil, rowIndex, columnIndex)
             this.$root.$emit('popup-xinxi', rowIndex)
         }

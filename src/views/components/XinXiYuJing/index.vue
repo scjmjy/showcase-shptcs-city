@@ -18,9 +18,9 @@ export default Vue.extend({
             return {
                 hoverable: true,
                 title: '信息预警板块',
-                width: 200,
+                width: 170,
                 titleStyle: {
-                    'right': '20px'
+                    right: '20px'
                 }
             }
         }

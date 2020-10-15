@@ -39,7 +39,7 @@ export default Vue.extend({
             return {
                 hoverable: false,
                 angle: 45,
-                width: 100,
+                width: 120,
                 height: 41,
                 justify: 'center',
                 align: 'center',
@@ -48,8 +48,8 @@ export default Vue.extend({
                 titleSize: 20,
                 titleStyle: { fontWeight: 'bold', right: '0px' },
                 borderWidth: 1,
-                borderColor: '#2d426d',
-                shadowColor: '#2d426d',
+                borderColor: '#32548F',
+                shadowColor: '#034D81',
                 cornerWidth: 2,
                 cornerLength: 15,
                 cornerColor: '#1356ee'

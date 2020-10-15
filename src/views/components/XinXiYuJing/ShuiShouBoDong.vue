@@ -1,5 +1,7 @@
 <template>
-    <div>
+    <div class="u-rela">
+        <div class="bg-earth-left"></div>
+        <div class="bg-earth-right"></div>
         <div ref="gaugeChart" style="display: inline-block;" :style="{ width: gaugeWidth + 'px', height: gaugeHeight + 'px' }"></div>
         <div ref="lineChart" style="display: inline-block;" :style="{ width: lineWidth + 'px', height: lineHeight + 'px' }"></div>
     </div>
@@ -42,8 +44,12 @@ export default Vue.extend({
                 title: {
                     text: '重点企业税收波动预警',
                     left: 'center',
+                    top: 25,
                     textStyle: {
-                        color: 'white'
+                        color: 'white',
+                        fontSize: 20,
+                        textShadowColor: '#88EEEE',
+                        textShadowBlur: 5
                     }
                 },
                 series: [
@@ -59,7 +65,7 @@ export default Vue.extend({
                             // 坐标轴线
                             lineStyle: {
                                 // 属性lineStyle控制线条样式
-                                width: 10,
+                                width: 8,
                                 color: [
                                     [upPercent / 100, 'rgb(255,76,53)'],
                                     [1, 'rgb(0,193,250)']
@@ -81,7 +87,7 @@ export default Vue.extend({
                         detail: {
                             // 其余属性默认使用全局文本样式，详见TEXTSTYLE
                             formatter: function(value) {
-                                return `{up|}${value}%`
+                                return `{up|}{v|${value}}{percent|%}`
                             },
                             ...this.gaugeUpOpts.detail
                         },
@@ -100,7 +106,7 @@ export default Vue.extend({
                             // 坐标轴线
                             lineStyle: {
                                 // 属性lineStyle控制线条样式
-                                width: 10,
+                                width: 8,
                                 color: [
                                     [downPercent / 100, 'rgb(0,255,120)'],
                                     [1, 'rgb(0,193,250)']
@@ -121,7 +127,7 @@ export default Vue.extend({
                         detail: {
                             // 其余属性默认使用全局文本样式，详见TEXTSTYLE
                             formatter: function(value) {
-                                return `{up|}${value}%`
+                                return `{down|}{v|${value}}{percent|%}`
                             },
                             ...this.gaugeDownOpts.detail
                         },
@@ -137,12 +143,13 @@ export default Vue.extend({
             }
             const { upLog, downLog } = this.shuiShouBoDong
             const opt = {
+                grid: {
+                    top: 70
+                },
                 title: {
-                    text: '{icon|}近180天税收波动预警',
-                    top: 4,
+                    text: '{icon|}{v|近180天税收波动预警}',
+                    top: 25,
                     textStyle: {
-                        color: 'rgb(0,184,248)',
-                        fontSize: 14,
                         rich: {
                             icon: {
                                 width: 20,
@@ -150,6 +157,12 @@ export default Vue.extend({
                                 backgroundColor: {
                                     image: require('@/assets/img/alarm_bell.png')
                                 }
+                            },
+                            v: {
+                                color: 'rgb(0,184,248)',
+                                fontWeight: 'bolder',
+                                fontSize: 14,
+                                padding: [0, 0, 0, 3]
                             }
                         }
                     }
@@ -166,7 +179,7 @@ export default Vue.extend({
                 },
                 legend: {
                     left: 165,
-                    top: 6,
+                    top: 27,
                     icon: 'roundRect',
                     textStyle: { color: 'white' },
                     data: [{ name: '上升' }, { name: '下降' }]
@@ -264,66 +277,80 @@ export default Vue.extend({
             dur: 3000,
             gaugeUpOpts: {
                 common: {
-                    center: ['25%', '50%'],
-                    radius: '45%'
+                    center: ['28%', '60%'],
+                    radius: '40%'
                 },
                 title: {
                     // 其余属性默认使用全局文本样式，详见TEXTSTYLE
                     offsetCenter: [0, '90%'],
-                    borderRadius: 50,
-                    backgroundColor: '#009bf8',
+                    // borderRadius: 50,
+                    // backgroundColor: '#009bf8',
+                    backgroundColor: {
+                        image: require('@/assets/img/pill.png')
+                    },
                     width: 65,
-                    fontSize: 20,
+                    fontSize: 14,
                     lineHeight: 23,
                     color: '#eee',
                     rich: {}
                 },
                 detail: {
                     offsetCenter: [0, '5%'],
-                    fontWeight: 'bolder',
-                    fontSize: 20,
-                    width: 65,
-                    color: 'rgb(255,76,53)',
                     rich: {
                         up: {
-                            width: 20,
-                            height: 30,
+                            width: 12,
+                            height: 17,
                             backgroundColor: {
-                                image: require('@/assets//img/arrow_up.png')
+                                image: require('@/assets/img/arrow_up.png')
                             }
+                        },
+                        v: {
+                            fontWeight: 'bolder',
+                            fontSize: 21,
+                            color: 'rgb(255,76,53)',
+                            padding: [0, 0, 0, 3]
+                        },
+                        percent: {
+                            fontSize: 14
                         }
                     }
                 }
             },
             gaugeDownOpts: {
                 common: {
-                    center: ['75%', '50%'],
-                    radius: '45%'
+                    center: ['75%', '60%'],
+                    radius: '40%'
                 },
                 title: {
                     // 其余属性默认使用全局文本样式，详见TEXTSTYLE
                     offsetCenter: [0, '90%'],
-                    borderRadius: 50,
-                    backgroundColor: '#009bf8',
+                    backgroundColor: {
+                        image: require('@/assets/img/pill.png')
+                    },
                     width: 65,
-                    fontSize: 20,
+                    fontSize: 14,
                     lineHeight: 23,
                     color: '#eee',
                     rich: {}
                 },
                 detail: {
                     offsetCenter: [0, '5%'],
-                    fontWeight: 'bolder',
-                    fontSize: 20,
-                    width: 65,
-                    color: 'rgb(0,255,120)',
                     rich: {
-                        up: {
-                            width: 20,
-                            height: 30,
+                        down: {
+                            width: 12,
+                            height: 17,
                             backgroundColor: {
-                                image: require('@/assets//img/arrow_down.png')
+                                image: require('@/assets/img/arrow_down.png')
                             }
+                        },
+                        v: {
+                            fontWeight: 'bolder',
+                            fontSize: 21,
+                            color: 'rgb(0,255,120)',
+                            padding: [0, 0, 0, 3]
+                        },
+                        percent: {
+                            fontSize: 14
                         }
                     }
                 }
@@ -364,4 +391,25 @@ export default Vue.extend({
 })
 </script>
 
-<style></style>
+<style scoped>
+.bg-earth-left {
+    position: absolute;
+    left: 18px;
+    top: 95px;
+    width: 90px;
+    height: 97px;
+    background-image: url(../../../assets/img/earth_small.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+.bg-earth-right {
+    position: absolute;
+    left: 128px;
+    top: 95px;
+    width: 90px;
+    height: 97px;
+    background-image: url(../../../assets/img/earth_small.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+</style>
