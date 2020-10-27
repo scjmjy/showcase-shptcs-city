@@ -8,7 +8,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import State, { XinXiFaBu } from '@/store/state'
+import { State, XinXiFaBu } from '@/store/state'
 import Enum from '@/utils/enum'
 import Card from '@/components/Card.vue'
 

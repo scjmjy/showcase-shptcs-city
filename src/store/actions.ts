@@ -1,5 +1,5 @@
 import { ActionTree } from 'vuex'
-import State from './state'
+import { State } from './state'
 import api from './api'
 
 const actions: ActionTree<State, State> = {
@@ -30,6 +30,34 @@ const actions: ActionTree<State, State> = {
             zhongDianQiYe
         }
         commit('setAll', all)
+    },
+
+    async login({ commit }, { username, passwd }) {
+        const res = (await api.login(username, passwd)).data
+        const auth = {
+            uid: res.uid,
+            token: res.token
+        }
+        commit('SET-AUTH', auth)
+        return auth
+    },
+
+    async requestOverview({ commit }) {
+        const res = (await api.requestOverview()).data
+        commit('SET-OVERVIEW', res)
+        return res
+    },
+
+    async requestLouZhangZhi({ commit }) {
+        const res = (await api.requestLouZhangZhi()).data
+        commit('SET-LOUZHANGZHI', res)
+        return res
+    },
+
+    async requestResearch({ commit }) {
+        const res = (await api.requestResearch()).data
+        commit('SET-RESEARCH', res)
+        return res
     }
 }
 export default actions

@@ -7,7 +7,6 @@
 <script>
 export default {
     created() {
-        this.$store.dispatch('requestAll')
     }
 }
 </script>
@@ -19,8 +18,11 @@ export default {
 html,
 body,
 #app {
-    width: 3840px;
-    height: 1080px !important;
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+    overflow: auto;
+    // overflow: hidden;
 }
 
 #app {

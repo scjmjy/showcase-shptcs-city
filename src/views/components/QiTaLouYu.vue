@@ -12,11 +12,16 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapState } from 'vuex'
+import { State } from '@/store/state'
 import Card from '@/components/Card.vue'
 import CardItem from '@/components/CardItem.vue'
 export default Vue.extend({
     components: { Card, CardItem },
     computed: {
+        ...mapState({
+            qiTaLouYuQiYe: state => (state as State).qiTaLouYuQiYe
+        }),
         cardOpts() {
             return {
                 title: '其他楼宇企业',
@@ -28,7 +33,7 @@ export default Vue.extend({
             return {
                 icon: '楼宇数',
                 iconColor: '#00FFFB',
-                value: '-',
+                value: this.qiTaLouYuQiYe.jiTuanZiGuan,
                 suffix: '',
                 title: '集团自管楼宇'
             }
@@ -37,7 +42,7 @@ export default Vue.extend({
             return {
                 icon: '四才企业',
                 iconColor: '#00DA8C',
-                value: '-',
+                value: this.qiTaLouYuQiYe.siCaiQiYe,
                 suffix: '',
                 title: '四才企业'
             }
@@ -46,7 +51,7 @@ export default Vue.extend({
             return {
                 icon: '虚拟注册企业',
                 iconColor: '#299BFF',
-                value: '-',
+                value: this.qiTaLouYuQiYe.xvNiZhuChe,
                 suffix: '',
                 title: '虚拟注册企业'
             }

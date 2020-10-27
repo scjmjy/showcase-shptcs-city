@@ -18,7 +18,7 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 import echarts from 'echarts'
-import State from '@/store/state'
+import { State } from '@/store/state'
 
 export default Vue.extend({
     data() {

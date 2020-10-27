@@ -6,11 +6,15 @@ import store from './store'
 import '@/styles/index.scss' // global css
 import '@/icons'
 
-import { Pagination, Table, TableColumn, Loading } from 'element-ui'
+import echarts from 'echarts'
+
+import { Pagination, Table, TableColumn, Loading, Input, Message } from 'element-ui'
 Vue.use(Pagination)
 Vue.use(Table)
 Vue.use(TableColumn)
+Vue.use(Input)
 Vue.use(Loading.directive);
+Vue.prototype.$message = Message
 
 import { scrollBoard } from '@jiaminghi/data-view'
 Vue.use(scrollBoard)

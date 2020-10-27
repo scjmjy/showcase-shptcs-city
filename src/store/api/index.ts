@@ -1,7 +1,11 @@
 import request from '@/utils/request'
 
-const API_URL_BASE = ''
+const API_URL_BASE = '/api/v1/zhly'
 const API_URLS = {
+    login_post: API_URL_BASE + '/user/login',
+    overview_get: API_URL_BASE + '/overview',
+    louzhangzhi_overview_get: API_URL_BASE + '/bsoverview',
+    research_get: API_URL_BASE + '/research',
     contract_list_post: API_URL_BASE + '/contract/list',
     contract_add_post: API_URL_BASE + '/contract/add',
     contract_update_post: API_URL_BASE + '/contract/update',
@@ -15,6 +19,37 @@ type PageParam = {
 }
 
 export default {
+    login(username: string, passwd: string) {
+        return request({
+            method: 'POST',
+            url: API_URLS.login_post,
+            data: {
+                username,
+                passwd
+            }
+        })
+    },
+    /** 获取大屏展示数据集合 */
+    requestOverview() {
+        return request({
+            method: 'GET',
+            url: API_URLS.overview_get
+        })
+    },
+    /** 获取楼长制模块的概览数据 */
+    requestLouZhangZhi() {
+        return request({
+            method: 'GET',
+            url: API_URLS.louzhangzhi_overview_get
+        })
+    },
+    /** 获取大调研年度统计数据 */
+    requestResearch() {
+        return request({
+            method: 'GET',
+            url: API_URLS.research_get
+        })
+    },
     getYiYuanLouYu() {
         const data = [
             { name: '万达广场', value: '2.2' },

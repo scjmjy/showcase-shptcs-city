@@ -1,14 +1,13 @@
 <template>
-    <div class="u-wh-100">
-        <div ref="barChart" class="u-wh-100" style="display: inline-block;"></div>
-    </div>
+    <div class="u-wh-100" style="display: inline-block;"></div>
 </template>
 
 <script lang="ts">
 import echarts from 'echarts'
+import Interval from '@/components/Interval.vue'
 import { Vue, Component } from 'vue-property-decorator'
 import { mapState } from 'vuex'
-import State, { DiaoYanNianDuTongJi } from '@/store/state'
+import { State, DiaoYanNianDuTongJi } from '@/store/state'
 
 @Component<DiaoYanNianDuTongJiCom>({
     props: {
@@ -32,12 +31,18 @@ import State, { DiaoYanNianDuTongJi } from '@/store/state'
                 this.barChart.setOption(opt)
             }
         }
-    }
+    },
+    mixins: [Interval]
 })
-export default class DiaoYanNianDuTongJiCom extends Vue {
+export default class DiaoYanNianDuTongJiCom extends Interval {
     diaoYanNianDuTongJi!: DiaoYanNianDuTongJi
     barChart: echarts.ECharts | null = null
     dur = 3000
+    created() {
+        this.newInterval(() => {
+            this.$store.dispatch('requestResearch')
+        }, 1000*60, true)
+    }
     mounted() {
         this.initChart()
     }
@@ -56,22 +61,6 @@ export default class DiaoYanNianDuTongJiCom extends Vue {
             zongShu.push(weiChuLi[index] + yiChuLi[index])
         }
         const opt = {
-            grid: {
-                containLabel: true,
-                left: 0,
-                right: 10,
-                top: 45,
-                bottom: 0
-            },
-            title: {
-                text: '大调研年度数据可视化统计',
-                textStyle: {
-                    color: 'white',
-                    fontSize: 20,
-                    textShadowColor: 'white',
-                    textShadowBlur: 5
-                }
-            },
             tooltip: {
                 trigger: 'axis',
                 backgroundColor: 'rgb(0,121,202)',
@@ -163,7 +152,25 @@ export default class DiaoYanNianDuTongJiCom extends Vue {
         return opt
     }
     initChart() {
-        this.barChart = echarts.init(this.$refs.barChart as HTMLDivElement)
+        this.barChart = echarts.init(this.$el as HTMLDivElement)
+        this.barChart.setOption({
+            grid: {
+                containLabel: true,
+                left: 0,
+                right: 10,
+                top: 45,
+                bottom: 0
+            },
+            title: {
+                text: '大调研年度数据可视化统计',
+                textStyle: {
+                    color: 'white',
+                    fontSize: 20,
+                    textShadowColor: 'white',
+                    textShadowBlur: 5
+                }
+            }
+        })
     }
 }
 </script>

@@ -1,5 +1,11 @@
 import { MutationTree } from 'vuex'
-import State, {
+import { setToken } from '@/utils/token'
+import {
+    State,
+    LouYuZongLan,
+    ChangShouShangHui,
+    QiTaLouYuQiYe,
+    ZhongDianQiYe,
     YiYuanLouYu,
     ZhongDianShuiShouTop5,
     XinXiFaBu,
@@ -9,9 +15,9 @@ import State, {
     LouZhangOverview,
     DiaoYanNianDuTongJi,
     DiaoYanFenLeiTongJi,
-    WeiJieJueFenLeiTongJi,
-    ZhongDianQiYe
+    WeiJieJueFenLeiTongJi
 } from './state'
+import service from '@/utils/request'
 const mutations: MutationTree<State> = {
     setAll(state, payload) {
         state.yiYuanLouYu = payload.yiYuanLouYu as YiYuanLouYu[]
@@ -29,6 +35,40 @@ const mutations: MutationTree<State> = {
         state.diaoYanFenLeiTongJi = payload.diaoYanFenLeiTongJi as DiaoYanFenLeiTongJi
         state.weiJieJueFenLeiTongJi = payload.weiJieJueFenLeiTongJi as WeiJieJueFenLeiTongJi
         state.zhongDianQiYe = payload.zhongDianQiYe as ZhongDianQiYe
+    },
+
+    ['SET-AUTH'](state, { uid, token }) {
+        state.uid = uid
+        state.token = token
+        setToken(token)
+    },
+
+    ['SET-OVERVIEW'](state, res) {
+        state.louYuZongLan = LouYuZongLan.fromServer(res)
+
+        state.changShouShangHui = ChangShouShangHui.fromServer(res)
+
+        state.qiTaLouYuQiYe = QiTaLouYuQiYe.fromServer(res)
+
+        state.zhongDianQiYe = ZhongDianQiYe.fromServer(res)
+        // 企业总数从 楼宇总览 获得
+        state.zhongDianQiYe.num = state.louYuZongLan.huGuanQiYeZongShu
+
+        state.yiYuanLouYu = YiYuanLouYu.fromServer(res)
+
+        state.zhongDianShuiShouTop5 = ZhongDianShuiShouTop5.fromServer(res)
+
+        state.shuiShouBoDong = ShuiShouBoDong.fromServer(res)
+
+        state.dangJian = DangJian.fromServer(res)
+    },
+
+    ['SET-LOUZHANGZHI'](state, res) {
+        state.louZhangOverview = LouZhangOverview.fromServer(res)
+    },
+
+    ['SET-RESEARCH'](state, res) {
+        state.diaoYanNianDuTongJi = DiaoYanNianDuTongJi.fromServer(res)
     }
 }
 export default mutations

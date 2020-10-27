@@ -35,6 +35,8 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
+import Interval from '@/components/Interval.vue'
+
 import SlopeHeader from '@/components/SlopeHeader.vue'
 import LouYuZongLan from './components/LouYuZongLan.vue'
 import ZhongDianQiYe from './components/ZhongDianQiYe.vue'
@@ -62,9 +64,10 @@ import LouZhangZhi from './components/LouZhangZhi/index.vue'
         XinXiYuJing,
         DangJian,
         LouZhangZhi
-    }
+    },
+    mixins: [Interval]
 })
-export default class Home extends Vue {
+export default class Home extends Interval {
     get headerOpts() {
         return {
             title: '长寿街楼宇服务经济管理系统',
@@ -72,17 +75,22 @@ export default class Home extends Vue {
             fontSize: 36
         }
     }
+    created() {
+        this.newInterval(() => {
+            this.$store.dispatch('requestOverview')
+        }, 1000*60, true)
+    }
 }
 </script>
 
 <style lang="scss" scoped>
 .page-container {
     position: relative;
-    width: 100%;
-    height: 100%;
+    width: 3840px;
+    height: 1080px;
     padding: 72px 30px 20px 30px;
     background-image: url('../assets/img/bg-cover.png');
-
+    // background-size: 3840px 1080px;
     .header {
         position: absolute;
         left: 0;

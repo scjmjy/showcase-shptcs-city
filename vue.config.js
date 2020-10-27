@@ -36,35 +36,14 @@ module.exports = {
     overlay: {
       warnings: false,
       errors: true
-    } //,
-    // after: require('./mock/mock-server.js'),
-    // proxy: {
-    //   '/property': {
-    //     // target: 'http://192.168.0.153:8088/',
-    //     target: 'http://192.168.0.141:8088/',
-    //     changeOrigin: true
-    //   },
-    //   '/unit': {
-    //     // target: 'http://192.168.0.153:8088/',
-    //     target: 'http://192.168.0.141:8088/',
-    //     changeOrigin: true
-    //   },
-    //   '/contract': {
-    //     // target: 'http://192.168.0.153:8088/',
-    //     target: 'http://192.168.0.141:8088/',
-    //     changeOrigin: true
-    //   },
-    //   '/filePush': {
-    //     // target: 'http://192.168.0.153:8088/',
-    //     target: 'http://192.168.0.141:8088/',
-    //     changeOrigin: true
-    //   },
-    //   '/getFile': {
-    //     // target: 'http://192.168.0.153:8088/',
-    //     target: 'http://192.168.0.141:8088/',
-    //     changeOrigin: true
-    //   }
-    // }
+    },
+    proxy: {
+      '/api': {
+        // target: 'http://192.168.0.153:8088/',
+        target: 'http://120.26.247.223:9988/',
+        changeOrigin: true
+      }
+    }
   },
   configureWebpack: {
     // provide the app's title in webpack's name field, so that

@@ -16,7 +16,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import { mapState } from 'vuex'
-import State, { DangJian } from '@/store/state'
+import { State, DangJian } from '@/store/state'
 import Card from '@/components/Card.vue'
 import CardItem from '@/components/CardItem.vue'
 

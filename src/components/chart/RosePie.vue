@@ -17,7 +17,8 @@ export default Vue.extend({
             type: Array as PropType<number[]>,
             default: () => []
         },
-        delay: { // 如果需要动画结束之后才销毁此 chart，那么可以传入一个大于 0 的毫秒延时， -1 代表立即销毁
+        delay: {
+            // 如果需要动画结束之后才销毁此 chart，那么可以传入一个大于 0 的毫秒延时， -1 代表立即销毁
             type: Number,
             default: -1
         }
@@ -25,13 +26,13 @@ export default Vue.extend({
     data() {
         return {
             barChart: undefined as echarts.ECharts | undefined,
-                grid: {
-                    containLabel: true,
-                    top: 40,
-                    left: 0,
-                    right: 0,
-                    bottom: 0
-                }
+            grid: {
+                containLabel: true,
+                top: 40,
+                left: 0,
+                right: 0,
+                bottom: 0
+            }
         }
     },
     created() {

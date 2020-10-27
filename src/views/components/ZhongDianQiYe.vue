@@ -8,7 +8,7 @@
             frameborder="0"
         ></iframe> -->
         <!-- <div ref="gaugeChart" style="display: inline-block;" :style="{ width: gaugeWidth + 'px', height: gaugeHeight + 'px' }"></div> -->
-        <div ref="gaugeChart" style="display: inline-block; width: 100%; height: 100%;"></div>
+        <div ref="gaugeChart" class="u-wh-100" style="display: inline-block;"></div>
     </card>
 </template>
 
@@ -17,6 +17,7 @@ import Vue from 'vue'
 import Card from '@/components/Card.vue'
 import echarts from 'echarts'
 import { mapState } from 'vuex'
+import { State } from '@/store/state'
 
 export default Vue.extend({
     components: { Card },
@@ -63,7 +64,7 @@ export default Vue.extend({
                 axisLabel: {
                     // 坐标轴小标记
                     fontWeight: 'bolder',
-                    fontSize: 10,
+                    fontSize: 8,
                     color: '#fff'
                 },
                 axisTick: {
@@ -91,9 +92,8 @@ export default Vue.extend({
                 detail: {
                     offsetCenter: [0, '85%'],
                     width: 80,
-                    lineHeight: 25,
+                    lineHeight: 20,
                     fontSize: 20,
-                    fontWeight: 'bolder',
                     color: '#eee',
                     backgroundColor: {
                         image: require('@/assets/img/pill.png')
@@ -122,38 +122,39 @@ export default Vue.extend({
         slopeOpts(): any {
             return {
                 clickable: true,
-                title: '重点企业分析'
+                title: `重点企业分析(${this.zhongDianQiYe.year}年)`
             }
         },
         ...mapState({
-            zhongDianQiYe: state => (state as any).zhongDianQiYe
+            zhongDianQiYe: state => (state as State).zhongDianQiYe
         }),
         gaugeChartOption(): any {
             if (!this.zhongDianQiYe) {
                 return {}
             }
             const { num60, num100, num500, num } = this.zhongDianQiYe
+            let maxNum = num - (num % 100) // 100的整数倍
             const opt = {
                 series: [
                     {
                         ...this.gaugeCommonOpts,
                         ...this.gaugeLeftOpts,
                         min: 0,
-                        max: num,
+                        max: maxNum,
                         data: [{ value: num60, name: '60万以上产业' }]
                     },
                     {
                         ...this.gaugeCommonOpts,
                         ...this.gaugeMiddleOpts,
                         min: 0,
-                        max: num,
+                        max: maxNum,
                         data: [{ value: num100, name: '100万以上企业' }]
                     },
                     {
                         ...this.gaugeCommonOpts,
                         ...this.gaugeRightOpts,
                         min: 0,
-                        max: num,
+                        max: maxNum,
                         data: [{ value: num500, name: '500万以上企业' }]
                     }
                 ]
@@ -162,7 +163,9 @@ export default Vue.extend({
         }
     },
     mounted() {
-        this.initChart()
+        this.$nextTick(() => {
+            this.initChart()
+        })
     },
     beforeDestroy() {
         if (this.gaugeChart) {
@@ -186,6 +189,7 @@ export default Vue.extend({
         },
         initChart() {
             this.gaugeChart = echarts.init(this.$refs.gaugeChart as HTMLDivElement)
+            this.gaugeChart.setOption({})
         }
     }
 })

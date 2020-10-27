@@ -16,11 +16,17 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapState } from 'vuex'
+import { State, LouYuZongLan } from '@/store/state'
 import SlopeCard from '@/components/SlopeCard.vue'
 import CardItem from '@/components/CardItem.vue'
+
 export default Vue.extend({
     components: { SlopeCard, CardItem },
     computed: {
+        ...mapState({
+            louYuZongLan: state => (state as State).louYuZongLan
+        }),
         slopeOpts() {
             return {
                 clickable: true,
@@ -34,7 +40,7 @@ export default Vue.extend({
             return {
                 icon: '户管企业总数',
                 iconColor: '#06DAD6',
-                value: 7500,
+                value: this.louYuZongLan.huGuanQiYeZongShu,
                 suffix: '+',
                 suffixStyle: {
                     'vertical-align': 'super'
@@ -46,7 +52,7 @@ export default Vue.extend({
             return {
                 icon: '税收总额',
                 iconColor: '#00D98B',
-                value: 3.2,
+                value: this.louYuZongLan.shuiShouZongE,
                 suffix: '亿',
                 title: '税收总额（2019）'
             }
@@ -55,7 +61,7 @@ export default Vue.extend({
             return {
                 icon: '重点企业数',
                 iconColor: '#FFD200',
-                value: 41,
+                value: this.louYuZongLan.zhongDianQiYeShu,
                 suffix: '家',
                 title: '重点企业数(500万以上)'
             }
@@ -64,7 +70,7 @@ export default Vue.extend({
             return {
                 icon: '重点企业税收总额',
                 iconColor: '#5654CE',
-                value: 2.5,
+                value: this.louYuZongLan.zhongDianQiYeShuiShouZongE,
                 suffix: '亿',
                 title: '重点企业税收总额'
             }
@@ -73,7 +79,7 @@ export default Vue.extend({
             return {
                 icon: '税收占比',
                 iconColor: '#00FFFB',
-                value: 67,
+                value: this.louYuZongLan.shuiShouZanBi,
                 suffix: '%',
                 title: '税收占比'
             }

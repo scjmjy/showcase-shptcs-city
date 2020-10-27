@@ -36,7 +36,7 @@ export default {
                     color: 'white',
                     'margin-right': '2px'
                 },
-                suffix: '-',
+                suffix: '',
                 suffixStyle: {
                     'font-size': '20px',
                     color: 'white',

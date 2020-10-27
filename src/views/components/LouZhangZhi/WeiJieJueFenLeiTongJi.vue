@@ -5,7 +5,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import State from '@/store/state'
+import { State } from '@/store/state'
 import RosePie from '@/components/chart/RosePie.vue'
 
 export default Vue.extend({
