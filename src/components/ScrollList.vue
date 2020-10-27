@@ -57,16 +57,19 @@ export default Vue.extend({
     flex-direction: column;
 }
 .title {
-    font-size: 16px;
+    font-size: 20px;
     font-weight: bold;
     color: white;
     margin-bottom: 10px;
+    text-shadow: 0 0 5px white;
 }
 .list-group {
-    overflow: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
     list-style-type: none;
     padding-inline-start: 0px;
     margin-block-start: 0px;
+    margin-block-end: 0px;
     border: 1px solid rgb(46, 69, 101);
 }
 .list-item {

@@ -26,7 +26,7 @@ export default Vue.extend({
         },
         louYu() {
             return {
-                icon: '楼宇',
+                icon: '楼宇数',
                 iconColor: '#00FFFB',
                 value: '-',
                 suffix: '',

@@ -59,6 +59,12 @@ export type DiaoYanFenLeiTongJi = {
     week: number[][],
     year: number[][]
 }
+export type ZhongDianQiYe = {
+    num: number
+    num60: number
+    num100: number
+    num500: number
+}
 export type WeiJieJueFenLeiTongJi = number[][]
 export default class State {
     yiYuanLouYu: YiYuanLouYu[] = []
@@ -71,4 +77,5 @@ export default class State {
     diaoYanNianDuTongJi?: DiaoYanNianDuTongJi = undefined
     diaoYanFenLeiTongJi?: DiaoYanFenLeiTongJi = undefined
     weiJieJueFenLeiTongJi: WeiJieJueFenLeiTongJi = []
+    zhongDianQiYe?: ZhongDianQiYe = undefined
 }

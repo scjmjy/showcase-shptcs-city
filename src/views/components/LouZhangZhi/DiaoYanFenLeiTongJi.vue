@@ -1,6 +1,6 @@
 <template>
     <div style="position: relative;">
-        <div ref="chart" :style="{ width: width + 'px', height: height + 'px' }"></div>
+        <div ref="chart" class="u-wh-100"></div>
         <div class="radio-group">
             <div class="radio-item" :class="{ active: period === 'year' }">
                 <input v-model="period" id="radio-year" class="radio" type="radio" name="period" value="year" />
@@ -21,20 +21,22 @@ import echarts from 'echarts'
 import State from '@/store/state'
 
 export default Vue.extend({
-    props: {
-        width: {
-            type: Number,
-            default: 400
-        },
-        height: {
-            type: Number,
-            default: 235
-        }
-    },
     data() {
         return {
             barChart: undefined as echarts.ECharts | undefined,
-            period: 'week'
+            period: 'week',
+            color: [
+                    'rgb(253,209,0)',
+                    'rgb(199,255,65)',
+                    'rgb(255,121,48)',
+                    'rgb(255,72,116)',
+                    'rgb(230,65,255)',
+                    'rgb(128,92,254)',
+                    'rgb(51,181,255)',
+                    'rgb(63,236,253)',
+                    'rgb(0,217,139)',
+                    'rgb(38,67,255)'
+                ]
         }
     },
     computed: {
@@ -46,20 +48,92 @@ export default Vue.extend({
                 return {}
             }
             const { week, year } = this.diaoYanFenLeiTongJi
-
-            let series = []
+            const { color } = this
+            const title = '调研分类统计'
+            let xAxis
+            let yAxis
+            let tooltip
+            let series
             if (this.period === 'year') {
-                series = [
-                    { type: 'bar', barWidth: 15, stack: 'year', datasetIndex: 0 },
-                    { type: 'bar', barWidth: 15, stack: 'year', datasetIndex: 0 },
-                    { type: 'bar', barWidth: 15, stack: 'year', datasetIndex: 0 },
-                    { type: 'bar', barWidth: 15, stack: 'year', datasetIndex: 0 },
-                    { type: 'bar', barWidth: 15, stack: 'year', datasetIndex: 0 },
-                    { type: 'bar', barWidth: 15, stack: 'year', datasetIndex: 0 },
-                    { type: 'bar', barWidth: 15, stack: 'year', datasetIndex: 0 },
-                    { type: 'bar', barWidth: 15, stack: 'year', datasetIndex: 0 }
-                ]
+                tooltip = {
+                    backgroundColor: 'rgb(0,121,202)'
+                }
+                series = {
+                    type: 'pie',
+                    name: title,
+                    radius: [10, 75],
+                    center: ['50%', '65%'],
+                    roseType: 'radius',
+                    datasetIndex: 0,
+                    label: {
+                        show: true,
+                        color: 'rgb(0, 247, 255)',
+                        alignTo: 'labelLine',
+                        padding: [-15, -70, 0, -70],
+                        bleedMargin: -100
+                    },
+                    labelLine: {
+                        length: 5,
+                        length2: 70
+                    }
+                }
             } else {
+                xAxis = {
+                    type: 'category',
+                    axisLabel: {
+                        color: 'white'
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: '#0a3053'
+                        }
+                    },
+                    splitLine: {
+                        lineStyle: {
+                            color: '#0a3053'
+                        }
+                    }
+                }
+
+                yAxis = {
+                    type: 'value',
+                    axisLabel: {
+                        color: 'white'
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: '#0a3053'
+                        }
+                    },
+                    splitLine: {
+                        lineStyle: {
+                            color: '#0a3053'
+                        }
+                    }
+                }
+                tooltip = {
+                    trigger: 'axis',
+                    axisPointer: {
+                        // 坐标轴指示器，坐标轴触发有效
+                        type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+                    },
+                    formatter: params => {
+                        if (Array.isArray(params)) {
+                            let tip = ''
+                            params.forEach(series => {
+                                if (series.value && series.seriesIndex !== undefined) {
+                                    const value = (series.value as number[])[series.seriesIndex + 1]
+                                    tip += `${series.seriesName}：${value}<br/>`
+                                }
+                            })
+                            return tip
+                        } else {
+                            return ''
+                        }
+                    },
+                    backgroundColor: 'rgb(0,121,202)'
+                }
+
                 series = [
                     { type: 'bar', barWidth: 15, stack: 'week', datasetIndex: 1 },
                     { type: 'bar', barWidth: 15, stack: 'week', datasetIndex: 1 },
@@ -72,35 +146,18 @@ export default Vue.extend({
                 ]
             }
             const option: echarts.EChartOption = {
+                color,
                 title: {
-                    text: '调研分类统计',
+                    text: title,
                     left: 'left',
                     textStyle: {
-                        color: 'white'
+                        color: 'white',
+                        fontSize: 20,
+                        textShadowColor: 'white',
+                        textShadowBlur: 5
                     }
                 },
-                tooltip: {
-                    trigger: 'axis',
-                    axisPointer: {
-                        // 坐标轴指示器，坐标轴触发有效
-                        type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
-                    },
-                    formatter: params => {
-                        if (Array.isArray(params)) {
-                            let tip = ''
-                            params.forEach(series => {
-                                if (series.value && series.seriesIndex) {
-                                    const value = (series.value as number[])[series.seriesIndex + 1]
-                                    tip += `${series.seriesName}：${value}<br/>`
-                                }
-                            })
-                            return tip
-                        } else {
-                            return ''
-                        }
-                    },
-                    backgroundColor: 'rgb(0,121,202)'
-                },
+                tooltip,
                 dataset: [{ source: year }, { source: week }],
                 grid: {
                     containLabel: true,
@@ -108,42 +165,8 @@ export default Vue.extend({
                     right: 0,
                     bottom: 0
                 },
-                xAxis: [
-                    {
-                        type: 'category',
-                        axisLabel: {
-                            color: 'white'
-                        },
-                        axisLine: {
-                            lineStyle: {
-                                color: '#0a3053'
-                            }
-                        },
-                        splitLine: {
-                            lineStyle: {
-                                color: '#0a3053'
-                            }
-                        }
-                    }
-                ],
-                yAxis: [
-                    {
-                        type: 'value',
-                        axisLabel: {
-                            color: 'white'
-                        },
-                        axisLine: {
-                            lineStyle: {
-                                color: '#0a3053'
-                            }
-                        },
-                        splitLine: {
-                            lineStyle: {
-                                color: '#0a3053'
-                            }
-                        }
-                    }
-                ],
+                xAxis,
+                yAxis,
                 series
             }
             return option
@@ -161,26 +184,12 @@ export default Vue.extend({
     methods: {
         initChart() {
             this.barChart = echarts.init(this.$refs.chart as HTMLDivElement)
-            this.barChart.setOption({
-                color: [
-                    'rgb(253,209,0)',
-                    'rgb(199,255,65)',
-                    'rgb(255,121,48)',
-                    'rgb(255,72,116)',
-                    'rgb(230,65,255)',
-                    'rgb(128,92,254)',
-                    'rgb(51,181,255)',
-                    'rgb(63,236,253)',
-                    'rgb(0,217,139)',
-                    'rgb(38,67,255)'
-                ]
-            })
         }
     },
     watch: {
         chartOption(opt) {
             if (this.barChart) {
-                this.barChart.setOption(opt)
+                this.barChart.setOption(opt, true)
             }
         }
     }
@@ -190,8 +199,8 @@ export default Vue.extend({
 <style scoped>
 .radio-group {
     position: absolute;
-    left: 140px;
-    top: 0px;
+    left: 175px;
+    top: 20px;
 }
 .radio-item {
     display: inline-flex;
@@ -225,6 +234,7 @@ export default Vue.extend({
     border: 4px solid rgb(214, 195, 67);
 }
 .label {
+    font-size: 14px;
     color: white;
     cursor: pointer !important;
 }

@@ -1,6 +1,6 @@
 <template>
-    <div>
-        <div ref="barChart" style="display: inline-block;" :style="{ width: barWidth + 'px', height: barHeight + 'px' }"></div>
+    <div class="u-wh-100">
+        <div ref="barChart" class="u-wh-100" style="display: inline-block;"></div>
     </div>
 </template>
 
@@ -9,6 +9,7 @@ import echarts from 'echarts'
 import { Vue, Component } from 'vue-property-decorator'
 import { mapState } from 'vuex'
 import State, { DiaoYanNianDuTongJi } from '@/store/state'
+
 @Component<DiaoYanNianDuTongJiCom>({
     props: {
         barWidth: {
@@ -58,14 +59,17 @@ export default class DiaoYanNianDuTongJiCom extends Vue {
             grid: {
                 containLabel: true,
                 left: 0,
-                right: 0,
+                right: 10,
+                top: 45,
                 bottom: 0
             },
             title: {
                 text: '大调研年度数据可视化统计',
                 textStyle: {
                     color: 'white',
-                    fontSize: 20
+                    fontSize: 20,
+                    textShadowColor: 'white',
+                    textShadowBlur: 5
                 }
             },
             tooltip: {
@@ -75,24 +79,28 @@ export default class DiaoYanNianDuTongJiCom extends Vue {
                     const weiChuLi = params[0].value
                     const yiChuLi = params[1].value
                     const zongShu = params[2].value
-                    return `未处理：${weiChuLi}<br/>已处理：${yiChuLi}<br/>总数：${zongShu}`
+                    return `未处理：${weiChuLi}个<br/>已处理：${yiChuLi}个<br/>总数：${zongShu}个`
                 },
                 axisPointer: {
                     type: 'shadow'
                 }
             },
             legend: {
-                left: 266,
+                left: 263,
                 top: 3,
                 icon: 'roundRect',
-                textStyle: { color: 'white' },
+                textStyle: { color: '#7698E6', fontSize: 12 },
                 data: [{ name: '未处理' }, { name: '已处理' }]
             },
             xAxis: {
                 type: 'category',
                 axisLabel: {
                     color: 'white',
-                    formatter: '{value}月'
+                    // formatter: '{value}月'
+                    formatter: (value) => {
+                        // return value + '月'
+                        return value == 12 ? '12月' : String(value)
+                    }
                 },
                 axisLine: {
                     lineStyle: {

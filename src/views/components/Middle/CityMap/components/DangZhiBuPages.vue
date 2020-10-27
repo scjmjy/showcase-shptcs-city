@@ -1,7 +1,7 @@
 <template>
     <div class="container">
-        <item-list />
-        <el-pagination :current-page="page.page" :page-size="1" layout="prev, pager, next, jumper" :total="page.total" @current-change="gotoPage">
+        <item-list :items="items" />
+        <el-pagination class="el-pagination-custom" :current-page="page.page" :page-size="1" layout="prev, pager, next, jumper" :total="page.total" @current-change="gotoPage" :small="true">
         </el-pagination>
     </div>
 </template>
@@ -30,23 +30,29 @@ export default Vue.extend({
     data() {
         return {
             page: new PageController(api.getDangZhiBu, 1),
-            currentDzb: {} as DangZhiBu
+            currentDzb: undefined as DangZhiBu | undefined
         }
     },
     computed: {
         items(): Item[] {
+            if (!this.currentDzb) {
+                return []
+            }
             const { name, address, members } = this.currentDzb
             const items = [
                 {
-                    icon: 'dolar',
+                    icon: '党支部数',
+                    iconColor: '#FF4005',
                     text: '党支部名称：' + name
                 },
                 {
-                    icon: 'dolar',
+                    icon: '开展企业组团服务',
+                    iconColor: '#00FFFB',
                     text: '党员人数：' + members
                 },
                 {
-                    icon: 'dolar',
+                    icon: '地址',
+                    iconColor: '#2BC8EC',
                     text: '党支部地址：' + address
                 }
             ]
@@ -58,16 +64,16 @@ export default Vue.extend({
     },
     methods: {
         fetch() {
-            this.gotoPage(1, true)
+            this.gotoPage(1)
         },
-        gotoPage(page: number, init = false) {
+        gotoPage(page: number) {
             this.page
-                .gotoPage(page, init)
-                .then(list => {
+                .gotoPage(page)
+                .then(({ conflict, list }) => {
                     this.currentDzb = list[0]
                 })
                 .catch(err => {
-                    this.$message({ type: 'error', message: `获取资产数据失败：${err.message}` })
+                    this.$message({ type: 'error', message: `获取党支部数据失败：${err.message}` })
                 })
         }
     }

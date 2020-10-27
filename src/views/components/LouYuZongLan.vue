@@ -23,7 +23,7 @@ export default Vue.extend({
     computed: {
         slopeOpts() {
             return {
-                hoverable: true,
+                clickable: true,
                 title: '楼宇总览',
                 titleStyle: {
                     'left': '20px'

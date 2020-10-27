@@ -9,7 +9,8 @@ import State, {
     LouZhangOverview,
     DiaoYanNianDuTongJi,
     DiaoYanFenLeiTongJi,
-    WeiJieJueFenLeiTongJi
+    WeiJieJueFenLeiTongJi,
+    ZhongDianQiYe
 } from './state'
 const mutations: MutationTree<State> = {
     setAll(state, payload) {
@@ -27,6 +28,7 @@ const mutations: MutationTree<State> = {
         state.diaoYanNianDuTongJi = payload.diaoYanNianDuTongJi as DiaoYanNianDuTongJi
         state.diaoYanFenLeiTongJi = payload.diaoYanFenLeiTongJi as DiaoYanFenLeiTongJi
         state.weiJieJueFenLeiTongJi = payload.weiJieJueFenLeiTongJi as WeiJieJueFenLeiTongJi
+        state.zhongDianQiYe = payload.zhongDianQiYe as ZhongDianQiYe
     }
 }
 export default mutations

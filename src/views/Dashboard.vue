@@ -22,7 +22,7 @@
                 </div>
             </div>
             <div class="middle">
-                <changshou-map class="u-wh-100" />
+                <middle class="u-wh-100" />
             </div>
             <div class="right-side">
                 <xin-xi-yu-jing class="rs-top" />
@@ -43,7 +43,7 @@ import QiTaLouYu from './components/QiTaLouYu.vue'
 import YiYuanLouYu from './components/YiYuanLouYu.vue'
 import ZhongDianShuiShouTop5 from './components/ZhongDianShuiShouTop5.vue'
 import XinXiFaBu from './components/XinXiFaBu.vue'
-import ChangshouMap from './components/ChangshouMap/index.vue'
+import Middle from './components/Middle/index.vue'
 import XinXiYuJing from './components/XinXiYuJing/index.vue'
 import DangJian from './components/DangJian.vue'
 import LouZhangZhi from './components/LouZhangZhi/index.vue'
@@ -58,7 +58,7 @@ import LouZhangZhi from './components/LouZhangZhi/index.vue'
         YiYuanLouYu,
         ZhongDianShuiShouTop5,
         XinXiFaBu,
-        ChangshouMap,
+        Middle,
         XinXiYuJing,
         DangJian,
         LouZhangZhi

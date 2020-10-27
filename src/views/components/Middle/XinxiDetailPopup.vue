@@ -1,5 +1,5 @@
 <template>
-    <popup :value="value" :title="`${xinxi.category}：${xinxi.title}`" position="bottom" @input="emitEvent('input', $event)">
+    <popup :value="value" :name="name" :title="xinxi.title" position="bottom" @input="emitEvent('input', $event)">
         <div class="content">
             <img class="xinxi-image" :src="xinxi.img" />
             <div class="xinxi-content">{{ xinxi.content }}</div>
@@ -8,14 +8,18 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import Popup from '@/components/Popup.vue'
+import Vue, { PropType } from 'vue'
+import Popup from '@/components/popup/Popup.vue'
 import api from '@/store/api'
 
 export default Vue.extend({
-    name: 'XinXiFaBuPopup',
+    name: 'XinxiDetailPopup',
     components: { Popup },
     props: {
+        name: {
+            type: String,
+            default: ''
+        },
         id: {
             type: Number,
             default: -1
@@ -55,20 +59,23 @@ export default Vue.extend({
 
 <style lang="scss" scoped>
 .content {
-    border: 1px solid rgb(0, 99, 167);
+    padding-top: 25px;
     display: flex;
 
     .xinxi-image {
         width: 300px;
         height: 200px;
-        margin-right: 10px;
         overflow: hidden;
+        vertical-align: top;
     }
     .xinxi-content {
+        margin-left: 24px;
         width: 820px;
-        height: 200px;
+        // height: 200px;
+        font-size: 18px;
         font-weight: bold;
         color: rgb(12, 182, 255);
+        vertical-align: top;
     }
 }
 </style>

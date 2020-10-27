@@ -36,7 +36,7 @@ export default Vue.extend({
     computed: {
         defaultOpts(): any {
             return {
-                hoverable: false,
+                clickable: false,
                 angle: 45,
                 width: 120,
                 height: 41,
@@ -164,7 +164,7 @@ export default Vue.extend({
         }
     },
     mounted() {
-        if (this.$refs.refTitle && this.opts_.hoverable) {
+        if (this.$refs.refTitle && this.opts_.clickable) {
             toggleClass(this.$refs.refTitle as HTMLElement, 'hoverable')
         }
     },

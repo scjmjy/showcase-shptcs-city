@@ -1,5 +1,5 @@
 <template>
-    <div></div>
+    <div class="u-wh-100"></div>
 </template>
 
 <script lang="ts">
@@ -9,14 +9,6 @@ import echarts from 'echarts'
 export default Vue.extend({
     name: 'RosePie',
     props: {
-        width: {
-            type: Number,
-            default: 400
-        },
-        height: {
-            type: Number,
-            default: 235
-        },
         title: {
             type: String,
             default: '我的标题'
@@ -25,14 +17,21 @@ export default Vue.extend({
             type: Array as PropType<number[]>,
             default: () => []
         },
-        delay: {
+        delay: { // 如果需要动画结束之后才销毁此 chart，那么可以传入一个大于 0 的毫秒延时， -1 代表立即销毁
             type: Number,
-            default: 0
+            default: -1
         }
     },
     data() {
         return {
-            barChart: undefined as echarts.ECharts | undefined
+            barChart: undefined as echarts.ECharts | undefined,
+                grid: {
+                    containLabel: true,
+                    top: 40,
+                    left: 0,
+                    right: 0,
+                    bottom: 0
+                }
         }
     },
     created() {
@@ -46,7 +45,7 @@ export default Vue.extend({
         console.log('RosePie beforeDestroy')
         const chart = this.barChart
         if (chart) {
-            if (this.delay === 0) {
+            if (this.delay === -1) {
                 chart.dispose()
                 this.barChart = undefined
             } else {
@@ -79,25 +78,21 @@ export default Vue.extend({
                     text: title,
                     left: 'left',
                     textStyle: {
-                        color: 'white'
+                        color: 'white',
+                        fontSize: 20,
+                        textShadowColor: 'white',
+                        textShadowBlur: 5
                     }
                 },
                 tooltip: {
                     backgroundColor: 'rgb(0,121,202)'
                 },
-                grid: {
-                    containLabel: true,
-                    top: 10,
-                    left: -40,
-                    right: -40,
-                    bottom: 0
-                },
                 series: [
                     {
                         type: 'pie',
-                        name: 'RosePie',
+                        name: title,
                         radius: [10, 75],
-                        center: ['50%', '60%'],
+                        center: ['50%', '65%'],
                         roseType: 'radius',
                         data,
                         label: {
@@ -105,9 +100,10 @@ export default Vue.extend({
                             color: 'rgb(0, 247, 255)',
                             alignTo: 'labelLine',
                             padding: [-15, -70, 0, -70],
-                            bleedMargin: -30
+                            bleedMargin: -100
                         },
                         labelLine: {
+                            length: 5,
                             length2: 70
                         }
                     }
@@ -121,7 +117,7 @@ export default Vue.extend({
             const opt: echarts.EChartOption = {
                 series: [
                     {
-                        name: 'RosePie',
+                        name: this.title,
                         data: newData
                     }
                 ]

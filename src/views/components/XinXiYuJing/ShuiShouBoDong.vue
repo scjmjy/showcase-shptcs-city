@@ -3,7 +3,7 @@
         <div class="bg-earth-left"></div>
         <div class="bg-earth-right"></div>
         <div ref="gaugeChart" style="display: inline-block;" :style="{ width: gaugeWidth + 'px', height: gaugeHeight + 'px' }"></div>
-        <div ref="lineChart" style="display: inline-block;" :style="{ width: lineWidth + 'px', height: lineHeight + 'px' }"></div>
+        <div ref="barChart" style="display: inline-block; margin-left: 10px;" :style="{ width: lineWidth + 'px', height: lineHeight + 'px' }"></div>
     </div>
 </template>
 
@@ -16,7 +16,7 @@ export default Vue.extend({
     props: {
         gaugeWidth: {
             type: Number,
-            default: 230
+            default: 250
         },
         gaugeHeight: {
             type: Number,
@@ -24,7 +24,7 @@ export default Vue.extend({
         },
         lineWidth: {
             type: Number,
-            default: 325
+            default: 350
         },
         lineHeight: {
             type: Number,
@@ -48,7 +48,7 @@ export default Vue.extend({
                     textStyle: {
                         color: 'white',
                         fontSize: 20,
-                        textShadowColor: '#88EEEE',
+                        textShadowColor: 'white',
                         textShadowBlur: 5
                     }
                 },
@@ -137,14 +137,23 @@ export default Vue.extend({
             }
             return opt
         },
-        lineChartOption() {
+        barChartOption() {
             if (!this.shuiShouBoDong) {
                 return {}
             }
             const { upLog, downLog } = this.shuiShouBoDong
+            const series = [
+                    { type: 'bar', barWidth: 15, stack: '1', datasetIndex: 0 },
+                    { type: 'bar', barWidth: 15, stack: '1', datasetIndex: 0 },
+                    { type: 'bar', barWidth: 15, stack: '1', datasetIndex: 0 },
+                    { type: 'bar', barWidth: 15, stack: '1', datasetIndex: 1 },
+                    { type: 'bar', barWidth: 15, stack: '1', datasetIndex: 1 },
+                    { type: 'bar', barWidth: 15, stack: '1', datasetIndex: 1 }
+                ]
             const opt = {
                 grid: {
-                    top: 70
+                    top: 70,
+                    bottom: 40
                 },
                 title: {
                     text: '{icon|}{v|近180天税收波动预警}',
@@ -169,102 +178,73 @@ export default Vue.extend({
                 },
                 tooltip: {
                     trigger: 'axis',
-                    backgroundColor: 'rgb(0,121,202)',
+                    axisPointer: {
+                        // 坐标轴指示器，坐标轴触发有效
+                        type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+                    },
                     formatter: params => {
-                        const month = params[0].value[0]
-                        const up = params[0].value[1]
-                        const down = params[1].value[1]
-                        return `${month}月<br/>税收上升：${up}家<br/>税收下降：${down}家`
-                    }
-                },
-                legend: {
-                    left: 165,
-                    top: 27,
-                    icon: 'roundRect',
-                    textStyle: { color: 'white' },
-                    data: [{ name: '上升' }, { name: '下降' }]
-                },
-                xAxis: {
-                    type: 'category',
-                    axisLabel: {
-                        color: 'white',
-                        formatter: '{value}月'
-                    },
-                    axisLine: {
-                        lineStyle: {
-                            color: '#0a3053'
+                        if (Array.isArray(params)) {
+                            let tip = ''
+                            params.forEach(series => {
+                                if (series.value && series.seriesIndex !== undefined) {
+                                    const index = (series.seriesIndex % (series.value.length - 1)) + 1
+                                    const value = Math.abs(series.value[index])
+                                    tip += `${series.seriesName}：${value}家<br/>`
+                                }
+                            })
+                            return tip
+                        } else {
+                            return ''
                         }
                     },
-                    splitLine: {
-                        lineStyle: {
-                            color: '#0a3053'
-                        }
-                    }
+                    backgroundColor: 'rgb(0,121,202)'
                 },
-                yAxis: {
-                    type: 'value',
-                    axisLabel: {
-                        color: 'white'
-                    },
-                    axisLine: {
-                        lineStyle: {
-                            color: '#0a3053'
-                        }
-                    },
-                    splitLine: {
-                        lineStyle: {
-                            color: '#0a3053'
-                        }
-                    }
-                },
-                series: [
+                // legend: {
+                //     left: 165,
+                //     top: 27,
+                //     icon: 'roundRect',
+                //     textStyle: { color: 'white' },
+                //     data: [{ name: '上升' }, { name: '下降' }]
+                // },
+                dataset: [{ source: upLog }, { source: downLog }],
+                xAxis: [
                     {
-                        name: '上升',
-                        type: 'line',
-                        data: upLog,
-                        itemStyle: {
-                            color: 'rgb(255,80,66)'
+                        type: 'category',
+                        axisLabel: {
+                            color: 'white'
                         },
-                        areaStyle: {
-                            color: {
-                                type: 'linear',
-                                x: 0,
-                                y: 0,
-                                x2: 0,
-                                y2: 1,
-                                colorStops: [
-                                    { offset: 0, color: 'rgb(255,80,66, 0.3)' },
-                                    { offset: 1, color: 'rgb(255,80,66, 0.05)' }
-                                ]
+                        axisLine: {
+                            lineStyle: {
+                                color: '#7389B9'
                             }
                         },
-                        symbol: 'circle',
-                        symbolSize: 6
-                    },
+                        splitLine: {
+                            lineStyle: {
+                                color: '#0a3053'
+                            }
+                        }
+                    }
+                ],
+                yAxis: [
                     {
-                        name: '下降',
-                        type: 'line',
-                        data: downLog,
-                        itemStyle: {
-                            color: 'rgb(0,215,143)'
+                        type: 'value',
+                        axisLabel: {
+                            color: 'white',
+                            formatter: value => Math.abs(value)
                         },
-                        areaStyle: {
-                            color: {
-                                type: 'linear',
-                                x: 0,
-                                y: 0,
-                                x2: 0,
-                                y2: 1,
-                                colorStops: [
-                                    { offset: 0, color: 'rgb(0,215,143, 0.3)' },
-                                    { offset: 1, color: 'rgb(0,215,143, 0.05)' }
-                                ]
+                        axisLine: {
+                            lineStyle: {
+                                color: '#0a3053'
                             }
                         },
-                        symbol: 'circle',
-                        symbolSize: 6
+                        splitLine: {
+                            lineStyle: {
+                                color: '#0a3053'
+                            }
+                        }
                     }
-                ]
+                ],
+                series
             }
 
             return opt
@@ -273,7 +253,7 @@ export default Vue.extend({
     data() {
         return {
             gaugeChart: null,
-            lineChart: null,
+            barChart: null,
             dur: 3000,
             gaugeUpOpts: {
                 common: {
@@ -283,8 +263,6 @@ export default Vue.extend({
                 title: {
                     // 其余属性默认使用全局文本样式，详见TEXTSTYLE
                     offsetCenter: [0, '90%'],
-                    // borderRadius: 50,
-                    // backgroundColor: '#009bf8',
                     backgroundColor: {
                         image: require('@/assets/img/pill.png')
                     },
@@ -365,9 +343,9 @@ export default Vue.extend({
             this.gaugeChart.dispose()
             this.gaugeChart = null
         }
-        if (this.lineChart) {
-            this.lineChart.dispose()
-            this.lineChart = null
+        if (this.barChart) {
+            this.barChart.dispose()
+            this.barChart = null
         }
     },
     watch: {
@@ -376,40 +354,31 @@ export default Vue.extend({
                 this.gaugeChart.setOption(opt)
             }
         },
-        lineChartOption(opt) {
-            if (this.lineChart) {
-                this.lineChart.setOption(opt)
+        barChartOption(opt) {
+            if (this.barChart) {
+                this.barChart.setOption(opt)
             }
         }
     },
     methods: {
         initChart() {
             this.gaugeChart = echarts.init(this.$refs.gaugeChart)
-            this.lineChart = echarts.init(this.$refs.lineChart)
+            this.barChart = echarts.init(this.$refs.barChart)
+            this.barChart.setOption({
+                color: [
+                    'rgb(253,209,0)',
+                    'rgb(199,255,65)',
+                    'rgb(255,121,48)',
+                    'rgb(51,181,255)',
+                    'rgb(63,236,253)',
+                    'rgb(0,217,139)',
+                    'rgb(38,67,255)'
+                ]
+            })
         }
     }
 })
 </script>
 
 <style scoped>
-.bg-earth-left {
-    position: absolute;
-    left: 18px;
-    top: 95px;
-    width: 90px;
-    height: 97px;
-    background-image: url(../../../assets/img/earth_small.png);
-    background-repeat: no-repeat;
-    background-size: contain;
-}
-.bg-earth-right {
-    position: absolute;
-    left: 128px;
-    top: 95px;
-    width: 90px;
-    height: 97px;
-    background-image: url(../../../assets/img/earth_small.png);
-    background-repeat: no-repeat;
-    background-size: contain;
-}
 </style>

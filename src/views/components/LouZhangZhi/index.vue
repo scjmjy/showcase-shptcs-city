@@ -1,14 +1,14 @@
 <template>
-    <card :opts="cardOpts">
-        <div class="u-flex-col u-wh-100">
-            <div class="u-flex first-row">
-                <overview class="u-flex-1 overview" />
-                <diao-yan-nian-du-tong-ji class="u-flex-1 nian-du-tong-ji" />
+    <card :opts="cardOpts" @click="onTitleClick">
+        <div class="u-wh-100">
+            <div class="first-row">
+                <overview class="overview" />
+                <diao-yan-nian-du-tong-ji class="nian-du-tong-ji" />
             </div>
-            <div class="u-flex u-col-start second-row">
-                <diao-yan-fen-lei-tong-ji class="u-flex-1" />
-                <wei-jie-jue-wen-ti class="u-flex-1" />
-                <wei-jie-jue-fen-lei-tong-ji class="u-flex-1" />
+            <div class="second-row">
+                <diao-yan-fen-lei-tong-ji class="fen-lei-tong-ji" />
+                <wei-jie-jue-wen-ti class="middle" />
+                <wei-jie-jue-fen-lei-tong-ji class="wei-jie-jue-tong-ji" />
             </div>
         </div>
     </card>
@@ -30,34 +30,57 @@ export default class LouZhangZhi extends Vue {
         return {
             title: '楼长制板块',
             justify: 'start',
-            titleStyle: { 'margin-left': '20px' }
+            titleStyle: { 'margin-left': '20px' },
+            clickable: true
         }
+    }
+
+    onTitleClick() {
+        this.$root.$emit('map-louzhangzhi')
     }
 }
 </script>
 
-<style scoped>
-.card-item-group {
-    padding: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.card-item {
-    flex: 1;
-}
+<style lang="scss" scoped>
 .first-row {
     border-bottom: 1px solid #2d426d;
     height: 231px;
+
+    .overview {
+        float: left;
+        height: 100%;
+        width: 50%;
+        padding: 40px 20px;
+    }
+
+    .nian-du-tong-ji {
+        float: right;
+        height: 100%;
+        width: 50%;
+        border-left: 1px solid #2d426d;
+        padding: 20px 30px;
+    }
 }
 .second-row {
-    height: 253px;
-}
-.overview {
-    padding: 20px;
-}
-.nian-du-tong-ji {
-    border-left: 1px solid #2d426d;
-    padding: 20px;
+    height: calc(100% - 231px);
+    display: flex;
+
+    .fen-lei-tong-ji {
+        flex: 1;
+        height: 100%;
+        padding: 16px 30px;
+    }
+    .middle {
+        flex: 1;
+        margin: 0px 20px;
+        padding: 16px 25px;
+        border-left: 1px solid #2d426d;
+        border-right: 1px solid #2d426d;
+    }
+    .wei-jie-jue-tong-ji {
+        flex: 1;
+        height: 100%;
+        padding: 16px 0px;
+    }
 }
 </style>

@@ -1,13 +1,13 @@
 <template>
-    <transition v-if="value" :name="aniamtionName">
-        <div class="popup-container" :style="popupContainerStyle">
+    <transition :name="aniamtionName">
+        <div v-if="value" class="popup-container" :style="popupContainerStyle">
             <div class="popup-title">
-                <div>
-                    <svg-icon :icon-class="icon"></svg-icon>
-                    <span style="margin-left: 5px;">{{ title }}</span>
-                </div>
+                <img v-if="img" :src="imgUrl" class="icon" />
+                <svg-icon v-if="icon" class="icon" :icon-class="icon" :style="iconStyle" />
+                <span v-if="label" class="label" :style="labelStyle">{{ label + '：' }}</span>
+                <span class="title" :style="titleStyle">{{ title }}</span>
             </div>
-            <span class="popup-close" @click="emitEvent('input', false)">X</span>
+            <span class="popup-close" @click="emitEvent('input', false)">×</span>
             <div class="popup-content">
                 <slot></slot>
             </div>
@@ -16,16 +16,42 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import Vue, { PropType } from 'vue'
+import PopupManager from './PopupManager'
+
 export default Vue.extend({
     props: {
+        pm: {
+            type: Object as PropType<PopupManager>,
+            default: () => new PopupManager()
+        },
+        img: {
+            type: String,
+            default: ''
+        },
         icon: {
             type: String,
-            default: 'dolar'
+            default: ''
+        },
+        iconColor: {
+            type: String,
+            default: 'red'
+        },
+        label: {
+            type: String,
+            default: ''
+        },
+        labelColor: {
+            type: String,
+            default: 'white'
         },
         title: {
             type: String,
             default: '我的标题'
+        },
+        titleColor: {
+            type: String,
+            default: 'white'
         },
         position: {
             type: String,
@@ -42,19 +68,26 @@ export default Vue.extend({
     },
     data() {
         return {
-            animated: false
+            animated: false,
+            zIndex: this.pm.nextZIndex()
         }
     },
     computed: {
-        aniamtionName() {
+        imgUrl(): string {
+            if (this.img) {
+                return require('../../assets/img/' + this.img)
+            }
+            return ''
+        },
+        aniamtionName(): string {
             if (this.aniamtion === 'fade') {
                 return this.aniamtion
             } else {
                 return this.aniamtion + '-' + this.position
             }
         },
-        popupContainerStyle() {
-            const { position } = this
+        popupContainerStyle(): any {
+            const { position, zIndex } = this
             let trbl = {}
             switch (position) {
                 case 'bottom-right':
@@ -81,12 +114,38 @@ export default Vue.extend({
                     break
             }
             return {
+                'z-index': zIndex,
                 ...trbl
+            }
+        },
+        iconStyle(): any {
+            return {
+                color: this.iconColor
+            }
+        },
+        labelStyle(): any {
+            return {
+                color: this.labelColor,
+                'text-shadow': `0 0 5px ${this.labelColor}`
+            }
+        },
+        titleStyle(): any {
+            return {
+                color: this.titleColor,
+                'text-shadow': `0 0 5px ${this.titleColor}`
             }
         }
     },
     mounted() {
         console.log('popup mounted')
+        this.pm.on('popup-show', ({ name, $el }) => {
+            console.log('xxxxxxx')
+            
+            if ($el === this.$el || $el === this.$parent) {
+                this.zIndex = this.pm.nextZIndex()
+                console.log('yyyyyyy')
+            }
+        })
     },
     beforeDestroy() {
         console.log('popup beforeDestroy')
@@ -103,19 +162,40 @@ export default Vue.extend({
 .popup-container {
     position: absolute;
     border: 1px solid rgb(0, 61, 105);
+    padding: 20px 15px 15px 15px;
     background-color: rgb(7, 22, 53);
     box-shadow: inset 0px 0px 15px 0px rgb(0, 61, 105);
+
     .popup-title {
-        color: white;
-        font-size: 30px;
+        font-size: 24px;
+        .icon {
+            margin-right: 5px;
+            width: 34px;
+            height: 40px;
+        }
+        .label {
+            vertical-align: super;
+            // margin-right: 5px;
+            // text-shadow: 0 0 5px #88EEEE;
+        }
+
+        .title {
+            vertical-align: super;
+            // text-shadow: 0 0 5px #88EEEE;
+        }
     }
 
     .popup-close {
         position: absolute;
-        right: 10px;
-        top: 10px;
+        display: inline-flex;
+        justify-content: center;
+        align-items: flex-end;
+        width: 20px;
+        height: 20px;
+        right: 12px;
+        top: 12px;
         color: rgb(0, 234, 255);
-        font-size: 24px;
+        font-size: 20px;
         transition: all 0.5s;
         cursor: pointer;
         &:hover {
@@ -130,12 +210,14 @@ export default Vue.extend({
         overflow: hidden;
     }
 }
+</style>
 
+<style lang="scss">
 .bounce-center-enter-active {
     animation: bounce-in-center 0.5s;
 }
 .bounce-center-leave-active {
-    animation: bounce-in-center 0.5s reverse;
+    // animation: bounce-in-center 0.5s reverse;
 }
 @keyframes bounce-in-center {
     0% {
@@ -153,7 +235,7 @@ export default Vue.extend({
     animation: bounce-in-bottom-right 0.5s;
 }
 .bounce-bottom-right-leave-active {
-    animation: bounce-in-bottom-right 0.5s reverse;
+    // animation: bounce-in-bottom-right 0.5s reverse;
 }
 @keyframes bounce-in-bottom-right {
     0% {
@@ -171,7 +253,7 @@ export default Vue.extend({
     animation: bounce-in-bottom 0.5s;
 }
 .bounce-bottom-leave-active {
-    animation: bounce-in-bottom 0.5s reverse;
+    // animation: bounce-in-bottom 0.5s reverse;
 }
 @keyframes bounce-in-bottom {
     0% {

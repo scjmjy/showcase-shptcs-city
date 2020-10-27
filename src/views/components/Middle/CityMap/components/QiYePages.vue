@@ -1,7 +1,7 @@
 <template>
     <div class="container">
-        <item-list />
-        <el-pagination :current-page="page.page" :page-size="1" layout="prev, pager, next, jumper" :total="page.total" @current-change="gotoPage">
+        <item-list :items="items" />
+        <el-pagination class="el-pagination-custom" :current-page="page.page" :page-size="1" layout="prev, pager, next, jumper" :total="page.total" @current-change="gotoPage" :small="true">
         </el-pagination>
     </div>
 </template>
@@ -34,39 +34,49 @@ export default Vue.extend({
     data() {
         return {
             page: new PageController(api.getQiYeInLouYu, 1),
-            currentQiYe: {} as QiYe
+            currentQiYe: undefined as QiYe | undefined
         }
     },
     computed: {
         items(): Item[] {
+            if (!this.currentQiYe) {
+                return []
+            }
             const { name, address, tax, area, contact, cc, tag } = this.currentQiYe
             const items = [
                 {
-                    icon: 'dolar',
+                    icon: '重点企业数',
+                    iconColor: '#FFD200',
                     text: '名称：' + name
                 },
                 {
-                    icon: 'dolar',
+                    icon: '地址',
+                    iconColor: '#2BC0EC',
                     text: '地址：' + address
                 },
                 {
-                    icon: 'dolar',
+                    icon: '税收总额',
+                    iconColor: '#00D98B',
                     text: '税收：' + tax
                 },
                 {
-                    icon: 'dolar',
+                    icon: '办公面积',
+                    iconColor: '#CDD41B',
                     text: '办公面积：' + area
                 },
                 {
-                    icon: 'dolar',
+                    icon: '新增会员数',
+                    iconColor: '#00D98B',
                     text: '联系人：' + contact
                 },
                 {
-                    icon: 'dolar',
+                    icon: '商会企业数',
+                    iconColor: '#EB6F49',
                     text: '商会名称：' + cc
                 },
                 {
-                    icon: 'dolar',
+                    icon: '标签',
+                    iconColor: '#8886FF',
                     text: '标签：' + tag
                 }
             ]
@@ -78,12 +88,12 @@ export default Vue.extend({
     },
     methods: {
         fetch() {
-            this.gotoPage(1, true)
+            this.gotoPage(1)
         },
-        gotoPage(page: number, init = false) {
+        gotoPage(page: number) {
             this.page
-                .gotoPage(page, init)
-                .then(list => {
+                .gotoPage(page)
+                .then(({ conflict, list }) => {
                     this.currentQiYe = list[0]
                 })
                 .catch(err => {
@@ -94,4 +104,6 @@ export default Vue.extend({
 })
 </script>
 
-<style></style>
+<style lang="scss">
+
+</style>

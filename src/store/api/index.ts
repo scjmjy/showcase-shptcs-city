@@ -63,20 +63,22 @@ export default {
                 downPercent: 67
             },
             upLog: [
-                [2, 100],
-                [3, 120],
-                [4, 90],
-                [5, 100],
-                [6, 180],
-                [7, 120]
+                ['月份', '上升20-50%', '上升50-80%', '上升>80%'],
+                ['2月', 100, 10, 30],
+                ['3月', 10, 110, 20],
+                ['4月', 100, 10, 30],
+                ['5月', 100, 10, 30],
+                ['6月', 200, 120, 30],
+                ['7月', 50, 110, 40]
             ],
             downLog: [
-                [2, 80],
-                [3, 100],
-                [4, 120],
-                [5, 140],
-                [6, 100],
-                [7, 140]
+                ['月份', '下降20-50%', '下降50-80%', '下降>80%'],
+                ['2月', -100, -10, -30],
+                ['3月', -10, -110, -20],
+                ['4月', -100, -10, -30],
+                ['5月', -100, -10, -30],
+                ['6月', -200, -120, -30],
+                ['7月', -50, -110, -40]
             ]
         }
         return Promise.resolve({ data })
@@ -150,11 +152,14 @@ export default {
             ['星期日', 120, 10, 70, 40, 44, 55, 22, 44]
         ]
         const year = [
-            ['年份', '党的建设类', '社会团期类', '共用事业类', '安全监管类', '交通建设类', '公安政法类', '科教文卫类', '社会管理类'],
-            ['2017年', 100, 10, 30, 40, 44, 55, 22, 44],
-            ['2018年', 10, 110, 20, 10, 54, 15, 52, 74],
-            ['2019年', 100, 10, 30, 40, 44, 55, 22, 44],
-            ['2020年', 100, 10, 30, 40, 44, 55, 22, 44]
+            { name: '党的建设类', value: 100 },
+            { name: '共用事业类', value: 200 },
+            { name: '安全监管类', value: 300 },
+            { name: '交通建设类', value: 100 },
+            { name: '公安政法类', value: 120 },
+            { name: '科教文卫类', value: 120 },
+            { name: '社会管理类', value: 110 },
+            { name: '其他', value: 100 }
         ]
         return Promise.resolve({ data: { week, year } })
     },
@@ -205,6 +210,18 @@ export default {
         const name = '谢太白'
         return Promise.resolve({ name, wenTi, fenLei })
     },
+    getWenTiDetail(id: number) {
+        const detail = {
+            louYu: '998广场',
+            qiYe: '上海市盒马科技有限公司',
+            louZhang: '张慧琴',
+            category: '经济综合类',
+            date: '2020.09.09',
+            content:
+                '经济九分是指经济法律关系主题之间因经济权利和经济义务的矛盾而引起去的正义。经济九分是指经济法律关系主题之间因经济权利和经济义务的矛盾而引起去的正义。经济九分是指经济法律关系主题之间因经济权利和经济义务的矛盾而引起去的正义。经济九分是指经济法律关系主题之间因经济权利和经济义务的矛盾而引起去的正义。经济九分是指经济法律关系主题之间因经济权利和经济义务的矛盾而引起去的正义。经济九分是指经济法律关系主题之间因经济权利和经济义务的矛盾而引起去的正义。经济九分是指经济法律关系主题之间因经济权利和经济义务的矛盾而引起去的正义。经济九分是指经济法律关系主题之间因经济权利和经济义务的矛盾而引起去的正义。经济九分是指经济法律关系主题之间因经济权利和经济义务的矛盾而引起去的正义。'
+        }
+        return Promise.resolve(detail)
+    },
     getXinXiDetail(id: number) {
         const xinxi = {
             category: '政策信息',
@@ -218,7 +235,7 @@ export default {
     getQiYeInLouYu(param: PageParam) {
         const data = {
             total: 10,
-            page: param.page,
+            pageNum: param.page,
             pageSize: param.pageSize,
             hasPreviousPage: param.page > 0,
             hasNextPage: param.page < 10,
@@ -227,7 +244,7 @@ export default {
                     name: 'xxx公司',
                     address: '莫某地址',
                     tax: '1000万',
-                    area: '300m2',
+                    area: '300㎡',
                     contact: '某摩巨人',
                     cc: '某某商会',
                     tag: '重点企业'
@@ -267,6 +284,15 @@ export default {
                 problems: 200,
                 rate: 86
             }
+        }
+        return Promise.resolve({ data })
+    },
+    getZhongDianQiYe() {
+        const data = {
+            num: 1000,
+            num60: 200,
+            num100: 100,
+            num500: 40
         }
         return Promise.resolve({ data })
     }

@@ -7,11 +7,22 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapState } from 'vuex'
+import State, { XinXiFaBu } from '@/store/state'
+import Enum from '@/utils/enum'
 import Card from '@/components/Card.vue'
+
+const nums = [0, 1, 2, 3, 4, 5]
+const strs = ['政策信息', '党建活动', '招商信息', '', '', '']
+const colors = ['#00FFFB', '#FF3838', '#FFF10B', '', '', '']
+const XinXiCategoryEnum = new Enum(nums, strs, colors)
 
 export default Vue.extend({
     components: { Card },
     computed: {
+        ...mapState({
+            xinXiOrigin: state => (state as State).xinXiFaBu
+        }),
         cardOpts(): any {
             return {
                 title: '信息发布',
@@ -21,9 +32,8 @@ export default Vue.extend({
         },
         xinXiFaBu(): any {
             const xinXiFaBu: any[] = []
-            const origin = this.$store.state.xinXiFaBu
-            origin.forEach((info: any) => {
-                const row = []
+            this.xinXiOrigin.forEach((info: any) => {
+                const row: string[] = []
                 row.push(this.buildCategory(info.category))
                 row.push(this.buildTitle(info.title))
                 xinXiFaBu.push(row)
@@ -45,34 +55,19 @@ export default Vue.extend({
     },
     methods: {
         buildCategory(category: string) {
-            let color = 'white'
-            switch (category) {
-                case '政策信息':
-                    color = '#00FFFB'
-                    break
-                case '党建活动':
-                    color = '#FF3838'
-                    break
-                case '招商信息':
-                    color = '#FFF10B'
-                    break
-                default :
-                    color = 'white'
-                    break
-            }
+            const color = XinXiCategoryEnum.str2more(category)
             return `<span style="color:${color}; font-size: 18px;">【${category}】</span>`
         },
         buildTitle(title: string) {
             return `<div class="linkable" style="color: #0BB7FF; font-size: 18px;">${title}</div>`
         },
         onClick({ row, ceil, rowIndex, columnIndex }: any) {
-            console.log(row, ceil, rowIndex, columnIndex)
-            this.$root.$emit('popup-xinxi', rowIndex)
+            const xinxi = this.xinXiOrigin[rowIndex]
+            this.$root.$emit('popup-xinxi', { label: xinxi.category, labelColor: XinXiCategoryEnum.str2more(xinxi.category), id: xinxi.id })
         }
     }
 })
 </script>
 
 <style lang="scss">
-
 </style>

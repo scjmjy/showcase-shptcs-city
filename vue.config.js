@@ -7,7 +7,7 @@ function resolve(dir) {
 }
 
 // const name = defaultSettings.title || 'vue Admin Template' // page title
-const name = '长寿街道楼宇服务'
+const title = '长寿街道楼宇服务'
 
 // If your port is set to 80,
 // use administrator privileges to execute the command line.
@@ -69,7 +69,7 @@ module.exports = {
   configureWebpack: {
     // provide the app's title in webpack's name field, so that
     // it can be accessed in index.html to inject the correct title.
-    name: name,
+    name: title,
     resolve: {
       alias: {
         '@': resolve('src')

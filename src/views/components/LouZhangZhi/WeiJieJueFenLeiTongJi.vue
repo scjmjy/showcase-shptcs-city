@@ -1,5 +1,5 @@
 <template>
-    <rose-pie style="width: 400px; height: 235px;" title="未解决问题分类统计" :data="data"></rose-pie>
+    <rose-pie title="未解决问题分类统计" :data="data"></rose-pie>
 </template>
 
 <script lang="ts">

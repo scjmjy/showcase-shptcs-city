@@ -1,7 +1,7 @@
 <template>
-    <slope-card-right :opts="cardOpts">
+    <slope-card-right :opts="cardOpts" @click="onTitleClick">
         <shui-shou-bo-dong style="display: inline-block;"></shui-shou-bo-dong>
-        <qian-ru-qian-chu style="display: inline-block;"></qian-ru-qian-chu>
+        <qian-ru-qian-chu style="display: inline-block; margin-left: 20px;"></qian-ru-qian-chu>
     </slope-card-right>
 </template>
 
@@ -16,13 +16,18 @@ export default Vue.extend({
     computed: {
         cardOpts() {
             return {
-                hoverable: true,
+                clickable: true,
                 title: '信息预警板块',
                 width: 170,
                 titleStyle: {
                     right: '20px'
                 }
             }
+        }
+    },
+    methods: {
+        onTitleClick() {
+            this.$root.$emit('map-xinxiyujing')
         }
     }
 })

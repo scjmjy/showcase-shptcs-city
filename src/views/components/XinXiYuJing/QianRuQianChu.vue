@@ -1,7 +1,9 @@
 <template>
-    <div>
+    <div class="u-rela">
+        <div class="bg-earth-left"></div>
+        <div class="bg-earth-right"></div>
         <div ref="gaugeChart" style="display: inline-block;" :style="{ width: gaugeWidth + 'px', height: gaugeHeight + 'px' }"></div>
-        <div ref="barChart" style="display: inline-block;" :style="{ width: barWidth + 'px', height: barHeight + 'px' }"></div>
+        <div ref="barChart" style="display: inline-block; margin-left: 10px;" :style="{ width: barWidth + 'px', height: barHeight + 'px' }"></div>
     </div>
 </template>
 
@@ -14,7 +16,7 @@ export default Vue.extend({
     props: {
         gaugeWidth: {
             type: Number,
-            default: 230
+            default: 250
         },
         gaugeHeight: {
             type: Number,
@@ -22,7 +24,7 @@ export default Vue.extend({
         },
         barWidth: {
             type: Number,
-            default: 325
+            default: 350
         },
         barHeight: {
             type: Number,
@@ -42,8 +44,12 @@ export default Vue.extend({
                 title: {
                     text: '迁入迁出企业统计',
                     left: 'center',
+                    top: 25,
                     textStyle: {
-                        color: 'white'
+                        color: 'white',
+                        fontSize: 20,
+                        textShadowColor: 'white',
+                        textShadowBlur: 5
                     }
                 },
                 series: [
@@ -81,7 +87,7 @@ export default Vue.extend({
                         detail: {
                             // 其余属性默认使用全局文本样式，详见TEXTSTYLE
                             formatter: function(value) {
-                                return `{up|}${value}%`
+                                return `{in|}{v|${value}}{percent|%}`
                             },
                             ...this.gaugeUpOpts.detail
                         },
@@ -121,7 +127,7 @@ export default Vue.extend({
                         detail: {
                             // 其余属性默认使用全局文本样式，详见TEXTSTYLE
                             formatter: function(value) {
-                                return `{up|}${value}%`
+                                return `{out|}{v|${value}}{percent|%}`
                             },
                             ...this.gaugeDownOpts.detail
                         },
@@ -137,12 +143,14 @@ export default Vue.extend({
             }
             const { inLog, outLog } = this.qianRuQianChu
             const opt = {
+                grid: {
+                    top: 70,
+                    bottom: 40
+                },
                 title: {
-                    text: '{icon|}近180天迁入迁出统计',
-                    top: 4,
+                    text: '{icon|}{v|近180天迁入迁出统计}',
+                    top: 25,
                     textStyle: {
-                        color: 'rgb(0,184,248)',
-                        fontSize: 14,
                         rich: {
                             icon: {
                                 width: 20,
@@ -150,6 +158,12 @@ export default Vue.extend({
                                 backgroundColor: {
                                     image: require('@/assets/img/alarm_bell.png')
                                 }
+                            },
+                            v: {
+                                color: 'rgb(0,184,248)',
+                                fontWeight: 'bolder',
+                                fontSize: 14,
+                                padding: [0, 0, 0, 3]
                             }
                         }
                     }
@@ -169,7 +183,7 @@ export default Vue.extend({
                 },
                 legend: {
                     left: 165,
-                    top: 6,
+                    top: 28,
                     icon: 'roundRect',
                     textStyle: { color: 'white' },
                     data: [{ name: '迁入' }, { name: '迁出' }]
@@ -238,66 +252,78 @@ export default Vue.extend({
             dur: 3000,
             gaugeUpOpts: {
                 common: {
-                    center: ['25%', '50%'],
-                    radius: '45%'
+                    center: ['28%', '60%'],
+                    radius: '40%'
                 },
                 title: {
                     // 其余属性默认使用全局文本样式，详见TEXTSTYLE
                     offsetCenter: [0, '90%'],
-                    borderRadius: 50,
-                    backgroundColor: '#009bf8',
+                    backgroundColor: {
+                        image: require('@/assets/img/pill.png')
+                    },
                     width: 65,
-                    fontSize: 20,
-                    barHeight: 23,
+                    fontSize: 14,
+                    lineHeight: 23,
                     color: '#eee',
                     rich: {}
                 },
                 detail: {
                     offsetCenter: [0, '5%'],
-                    fontWeight: 'bolder',
-                    fontSize: 20,
-                    width: 65,
-                    color: 'rgb(255,76,53)',
                     rich: {
-                        up: {
-                            width: 20,
-                            height: 30,
+                        in: {
+                            width: 16,
+                            height: 17,
                             backgroundColor: {
-                                image: require('@/assets/img/arrow_up.png')
+                                image: require('@/assets/img/in.png')
                             }
+                        },
+                        v: {
+                            fontWeight: 'bolder',
+                            fontSize: 21,
+                            color: 'rgb(255,76,53)',
+                            padding: [0, 0, 0, 3]
+                        },
+                        percent: {
+                            fontSize: 14
                         }
                     }
                 }
             },
             gaugeDownOpts: {
                 common: {
-                    center: ['75%', '50%'],
-                    radius: '45%'
+                    center: ['75%', '60%'],
+                    radius: '40%'
                 },
                 title: {
                     // 其余属性默认使用全局文本样式，详见TEXTSTYLE
                     offsetCenter: [0, '90%'],
-                    borderRadius: 50,
-                    backgroundColor: '#009bf8',
+                    backgroundColor: {
+                        image: require('@/assets/img/pill.png')
+                    },
                     width: 65,
-                    fontSize: 20,
-                    barHeight: 23,
+                    fontSize: 14,
+                    lineHeight: 23,
                     color: '#eee',
                     rich: {}
                 },
                 detail: {
                     offsetCenter: [0, '5%'],
-                    fontWeight: 'bolder',
-                    fontSize: 20,
-                    width: 65,
-                    color: 'rgb(0,255,120)',
                     rich: {
-                        up: {
-                            width: 20,
-                            height: 30,
+                        out: {
+                            width: 16,
+                            height: 17,
                             backgroundColor: {
-                                image: require('@/assets/img/arrow_down.png')
+                                image: require('@/assets/img/out.png')
                             }
+                        },
+                        v: {
+                            fontWeight: 'bolder',
+                            fontSize: 21,
+                            color: 'rgb(0,255,120)',
+                            padding: [0, 0, 0, 3]
+                        },
+                        percent: {
+                            fontSize: 14
                         }
                     }
                 }

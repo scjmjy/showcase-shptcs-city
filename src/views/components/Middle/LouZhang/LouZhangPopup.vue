@@ -1,15 +1,15 @@
 <template>
-    <popup :value="value" :title="`楼长：${weiJieJueWenTi.name}`" @input="emitEvent('input', $event)">
+    <popup :value="value" :img="img" :icon="icon" label="楼长" :title="weiJieJueWenTi.name" @input="emitEvent('input', $event)">
         <div class="content">
             <scroll-list class="list" title="未解决问题" :data="weiJieJueWenTi.wenTi" />
-            <rose-pie :delay="500" class="pie" title="未解决问题分类统计" :data="weiJieJueWenTi.fenLei" />
+            <rose-pie class="pie" title="未解决问题分类统计" :data="weiJieJueWenTi.fenLei" />
         </div>
     </popup>
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import Popup from '@/components/Popup.vue'
+import Vue, { PropType } from 'vue'
+import Popup from '@/components/popup/Popup.vue'
 import ScrollList from '@/components/ScrollList.vue'
 import RosePie from '@/components/chart/RosePie.vue'
 import api from '@/store/api'
@@ -18,6 +18,14 @@ export default Vue.extend({
     name: 'LouZhangPopup',
     components: { Popup, ScrollList, RosePie },
     props: {
+        img: {
+            type: String,
+            default: undefined
+        },
+        icon: {
+            type: String,
+            default: undefined
+        },
         id: {
             type: Number,
             default: -1
@@ -59,18 +67,22 @@ export default Vue.extend({
 
 <style lang="scss" scoped>
 .content {
+    width: 820px;
+    height: 273px;
+    margin: 15px 5px 5px 5px;
     border: 1px solid rgb(0, 99, 167);
     display: flex;
 
     .list {
-        width: 405px;
-        height: 270px;
-        padding: 10px;
+        width: 50%;
+        height: 100%;
+        padding: 25px 15px 15px 15px;
         border-right: 1px solid rgb(0, 99, 167);
     }
     .pie {
-        width: 405px;
-        height: 270px;
+        padding: 25px 15px 15px 15px;
+        width: 50%;
+        height: 100%;
     }
 }
 </style>
