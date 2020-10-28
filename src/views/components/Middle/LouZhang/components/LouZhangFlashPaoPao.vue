@@ -11,9 +11,10 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import Vue, { PropType } from 'vue'
 import FlashPoint from '@/components/FlashPoint.vue'
 import LouZhangPaoPao from './LouZhangPaoPao.vue'
+import { LouZhang } from '@/store/state'
 /**
  * 楼长泡泡对话框组件
  */
@@ -30,15 +31,8 @@ export default Vue.extend({
             default: 'bl'
         },
         data: {
-            type: Object,
-            default: () => ({
-                name: '楼长姓名',
-                qiYeShu: 0,
-                louYuShu: 0,
-                qiYeShu60: 0,
-                zouFang: 0,
-                weiJieJue: 0
-            })
+            type: Object as PropType<LouZhang>,
+            default: () => new LouZhang()
         }
     },
     computed: {

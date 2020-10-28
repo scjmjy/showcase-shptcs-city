@@ -1,43 +1,40 @@
-
 export class LouYuZongLan {
-    constructor(public huGuanQiYeZongShu = 0, public shuiShouZongE = 0, public zhongDianQiYeShu = 0, public zhongDianQiYeShuiShouZongE = 0, public shuiShouZanBi = 0) { }
+    constructor(
+        public huGuanQiYeZongShu = 0,
+        public shuiShouZongE = 0,
+        public zhongDianQiYeShu = 0,
+        public zhongDianQiYeShuiShouZongE = 0,
+        public shuiShouZanBi = 0
+    ) {}
     static fromServer(serverData) {
         return new LouYuZongLan(
             serverData.bdNumC,
             serverData.bdTax,
             serverData.bdNumFocusC,
-            serverData.bdTaxFocus,  // TODO 前端：重点企业税收总额 --- 后端：企业税收增加数
-            serverData.bdRatioTax,
+            serverData.bdTaxFocus, // TODO 前端：重点企业税收总额 --- 后端：企业税收增加数
+            serverData.bdRatioTax
         )
     }
 }
 export class ChangShouShangHui {
-    constructor(public shangHuiQiYeShu = 0, public shangHuiQiYeShuiShouZongE = 0, public xinZengHuiYuanShu = 0) { }
+    constructor(public shangHuiQiYeShu = 0, public shangHuiQiYeShuiShouZongE = 0, public xinZengHuiYuanShu = 0) {}
     static fromServer(serverData) {
-        return new ChangShouShangHui(
-            serverData.cmNum,
-            serverData.cmTax,
-            serverData.cmNumNew,
-        )
+        return new ChangShouShangHui(serverData.cmNum, serverData.cmTax, serverData.cmNumNew)
     }
 }
 export class QiTaLouYuQiYe {
-    constructor(public jiTuanZiGuan = '-', public siCaiQiYe = '-', public xvNiZhuChe = '-') { }
+    constructor(public jiTuanZiGuan = '-', public siCaiQiYe = '-', public xvNiZhuChe = '-') {}
     static fromServer(serverData) {
-        return new QiTaLouYuQiYe(
-            serverData.gpNumB,
-            serverData.gpNumF,
-            serverData.gpNumV,
-        )
+        return new QiTaLouYuQiYe(serverData.gpNumB, serverData.gpNumF, serverData.gpNumV)
     }
 }
 export class YiYuanLouYu {
     /**
-     * 
+     *
      * @param name 楼宇名称
      * @param value 金额
      */
-    constructor(public name = '', public value = 0) { }
+    constructor(public name = '', public value = 0) {}
     static fromServer(serverData) {
         const top5 = [
             new YiYuanLouYu(serverData.bnName1, serverData.bnTax1),
@@ -51,11 +48,11 @@ export class YiYuanLouYu {
 }
 export class ZhongDianShuiShouTop5 {
     /**
-     * 
+     *
      * @param name 重点企业名称
      * @param value 金额
      */
-    constructor(public name = '', public value = 0) { }
+    constructor(public name = '', public value = 0) {}
     static fromServer(serverData) {
         const top5 = [
             new ZhongDianShuiShouTop5(serverData.fsRsName1, serverData.fsRsTax1),
@@ -75,10 +72,10 @@ export type XinXiFaBu = {
     content: string
 }
 export class UpDown {
-    constructor(public upNum = 0, public upPercent = 0, public downNum = 0, public downPercent = 0 ) {}
+    constructor(public upNum = 0, public upPercent = 0, public downNum = 0, public downPercent = 0) {}
 }
 export class ShuiShouBoDong {
-    constructor(public upAndDown = new UpDown(), public upLog: number[][] = [], public downLog: number[][] = []) {}
+    constructor(public upAndDown = new UpDown(), public upLog: (number | string)[][] = [], public downLog: (number | string)[][] = []) {}
     static fromServer(serverData) {
         // const upAndDown = {
         //     upNum: serverData.wnNumTaxAsc,
@@ -145,7 +142,14 @@ export type QianRuQianChu = {
     outLog: number[][]
 }
 export class DangJian {
-    constructor(public dangZhiBu = 0, public qiYeZuTuan = 0, public dangJianHuoDong = 0, public huoDongPinTai = 0, public zhiYuanZhe = 0, public zhiYuanZheHuoDong = 0 ) {}
+    constructor(
+        public dangZhiBu = 0,
+        public qiYeZuTuan = 0,
+        public dangJianHuoDong = 0,
+        public huoDongPinTai = 0,
+        public zhiYuanZhe = 0,
+        public zhiYuanZheHuoDong = 0
+    ) {}
     static fromServer(serverData) {
         return new DangJian(
             serverData.partyNum,
@@ -158,7 +162,14 @@ export class DangJian {
     }
 }
 export class LouZhangOverview {
-    constructor(public louYuZongShu = 0, public zouFangCiShu = 0, public zouFangQiYeShu = 0, public wenTiZongShu = 0, public weiJieJueShu = 0, public wanChengLv = 0) { }
+    constructor(
+        public louYuZongShu = 0,
+        public zouFangCiShu = 0,
+        public zouFangQiYeShu = 0,
+        public wenTiZongShu = 0,
+        public weiJieJueShu = 0,
+        public wanChengLv = 0
+    ) {}
     static fromServer(serverData) {
         return new LouZhangOverview(
             serverData.numB,
@@ -171,10 +182,10 @@ export class LouZhangOverview {
     }
 }
 export class DiaoYanNianDuTongJi {
-    constructor(public months: string[] = [], public yiChuLi: number[] = [], public weiChuLi: number[] = []) { }
+    constructor(public months: string[] = [], public yiChuLi: number[] = [], public weiChuLi: number[] = []) {}
     static fromServer(serverData) {
         if (!Array.isArray(serverData)) {
-            throw new Error("大调研年度数据统计：数据格式错误")
+            throw new Error('大调研年度数据统计：数据格式错误')
         }
         const months: string[] = []
         const yiChuLi: number[] = []
@@ -188,22 +199,52 @@ export class DiaoYanNianDuTongJi {
     }
 }
 export type DiaoYanFenLeiTongJi = {
-    week: number[][],
+    week: number[][]
     year: number[][]
 }
 export class ZhongDianQiYe {
-    constructor(public year = '2020', public num = 0, public num60 = 0, public num100 = 0, public num500 = 0) { }
+    constructor(public year = '2020', public num = 0, public num60 = 0, public num100 = 0, public num500 = 0) {}
     static fromServer(serverData) {
-        return new ZhongDianQiYe(
-            serverData.fsYear,
-            10000,
-            serverData.fsNum60,
-            serverData.fsNum100,
-            serverData.fsNum500
-        )
+        return new ZhongDianQiYe(serverData.fsYear, 10000, serverData.fsNum60, serverData.fsNum100, serverData.fsNum500)
     }
 }
 export type WeiJieJueFenLeiTongJi = number[][]
+
+export class LouZhang {
+    constructor(
+        public id = -1,
+        public name = '',
+        public isZongLouZhang = false,
+        public qiYeShu = 0,
+        public louYuShu = 0,
+        public qiYeShu60 = 0,
+        public zouFangShu = 0,
+        public weiJieJue = 0,
+        public manYiDu = 98,
+        public wanChengLv = 95
+    ) {}
+    static fromServer(serverData) {
+        if (!Array.isArray(serverData)) {
+            throw new Error('楼长信息：数据格式错误')
+        }
+        return serverData.map(item => {
+            return new LouZhang(0, item.name, item.owner, item.companyCnt, item.buildsCnt, item.tax60Cnt, item.visitCnt, item.unresolveCnt, 98, 95)
+        })
+    }
+}
+
+export class XinXi {
+    constructor(public category = '', public title = '', public content = '') {}
+    static fromServer(serverData) {
+        if (!Array.isArray(serverData)) {
+            throw new Error('新闻信息：数据格式错误')
+        }
+        return serverData.map(item => {
+            return new XinXi(item.cname, item.title, item.content)
+        })
+    }
+}
+
 export class State {
     louYuZongLan = new LouYuZongLan()
     changShouShangHui = new ChangShouShangHui()
@@ -219,6 +260,8 @@ export class State {
     diaoYanFenLeiTongJi?: DiaoYanFenLeiTongJi = undefined
     weiJieJueFenLeiTongJi: WeiJieJueFenLeiTongJi = []
     zhongDianQiYe = new ZhongDianQiYe()
+    louZhang: LouZhang[] = []
+    xinXi: XinXi[] = []
 
     client_id = 'sh-ptcs-city'
     client_version = '1.0.0'

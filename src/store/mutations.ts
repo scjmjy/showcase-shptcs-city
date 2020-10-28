@@ -15,9 +15,10 @@ import {
     LouZhangOverview,
     DiaoYanNianDuTongJi,
     DiaoYanFenLeiTongJi,
-    WeiJieJueFenLeiTongJi
+    WeiJieJueFenLeiTongJi,
+    LouZhang
 } from './state'
-import service from '@/utils/request'
+
 const mutations: MutationTree<State> = {
     setAll(state, payload) {
         state.yiYuanLouYu = payload.yiYuanLouYu as YiYuanLouYu[]
@@ -35,6 +36,8 @@ const mutations: MutationTree<State> = {
         state.diaoYanFenLeiTongJi = payload.diaoYanFenLeiTongJi as DiaoYanFenLeiTongJi
         state.weiJieJueFenLeiTongJi = payload.weiJieJueFenLeiTongJi as WeiJieJueFenLeiTongJi
         state.zhongDianQiYe = payload.zhongDianQiYe as ZhongDianQiYe
+        state.louYuZongLan = payload.louYuZongLan as LouYuZongLan
+        state.changShouShangHui = payload.changShouShangHui as ChangShouShangHui
     },
 
     ['SET-AUTH'](state, { uid, token }) {
@@ -69,6 +72,14 @@ const mutations: MutationTree<State> = {
 
     ['SET-RESEARCH'](state, res) {
         state.diaoYanNianDuTongJi = DiaoYanNianDuTongJi.fromServer(res)
+    },
+
+    ['SET-LOUZHANG'](state, res) {
+        state.louZhang= LouZhang.fromServer(res)
+    },
+
+    ['SET-XINXI'](state, res) {
+        state.louZhang= LouZhang.fromServer(res)
     }
 }
 export default mutations

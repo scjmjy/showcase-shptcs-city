@@ -1,5 +1,5 @@
 import { ActionTree } from 'vuex'
-import { State } from './state'
+import { ChangShouShangHui, LouYuZongLan, State } from './state'
 import api from './api'
 
 const actions: ActionTree<State, State> = {
@@ -16,7 +16,12 @@ const actions: ActionTree<State, State> = {
         const { data: weiJieJueFenLeiTongJi } = await api.getWeiJieJueFenLeiTongJi()
         const { data: zhongDianQiYe } = await api.getZhongDianQiYe()
 
+        const louYuZongLan = new LouYuZongLan(5001, 5.0, 1000, 1.0, 20)
+        const changShouShangHui = new ChangShouShangHui(1000, 0.8, 200)
+
         const all = {
+            louYuZongLan,
+            changShouShangHui,
             yiYuanLouYu,
             zhongDianShuiShouTop5,
             xinXiFaBu,
@@ -57,6 +62,18 @@ const actions: ActionTree<State, State> = {
     async requestResearch({ commit }) {
         const res = (await api.requestResearch()).data
         commit('SET-RESEARCH', res)
+        return res
+    },
+
+    async requestLouZhang({ commit }) {
+        const res = (await api.requestLouZhang()).data
+        commit('SET-LOUZHANG', res)
+        return res
+    },
+
+    async requestXinxi({ commit }) {
+        const res = (await api.requestXinxi()).data
+        commit('SET-XINXI', res)
         return res
     }
 }

@@ -19,6 +19,10 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapState } from 'vuex'
+import { State } from '@/store/state'
+import Interval from '@/components/Interval.vue'
+
 import LouZhangFlashPaoPao from './components/LouZhangFlashPaoPao.vue'
 import ZongLouZhangPaoPao from './components/ZongLouZhangPaoPao.vue'
 import LouZhangPopup from './LouZhangPopup.vue'
@@ -30,12 +34,13 @@ import PopupGroup from '@/components/popup/PopupGroup.vue'
 export default Vue.extend({
     name: 'LouZhangFenBuTu',
     components: { PopupGroup, LouZhangFlashPaoPao, ZongLouZhangPaoPao, LouZhangPopup },
+    mixins: [Interval],
     data() {
         return {
             showPopup: false,
             topmostPopup: '',
             showLouZhang: {},
-            louZhangData: [
+            louZhangFixed: [
                 { avatar: '楼长1.png', type: 'bl', style: { left: '25px', top: '310px' } },
                 { avatar: '楼长2.png', type: 'br', style: { left: '185px', top: '130px' } },
                 { avatar: '楼长3.png', type: 'bl', style: { left: '490px', top: '35px' } },
@@ -51,6 +56,31 @@ export default Vue.extend({
                 { avatar: '总楼长2.png', style: { left: '570px', top: '295px' } }
             ]
         }
+    },
+    computed: {
+        ...mapState({
+            louZhang: state => (state as State).louZhang
+        }),
+        louZhangData() {
+            const data: any[] = []
+            this.louZhangFixed.forEach((item, index) => {
+                const info = this.louZhang[index]
+                if (info) {
+                    data.push({
+                        ...item,
+                        data: info
+                    })
+                } else {
+                    data.push(item)
+                }
+            })
+            return data
+        }
+    },
+    created() {
+        this.newInterval(() => {
+            this.$store.dispatch('requestLouZhang')
+        }, 1000*60, true)
     },
     methods: {
         onLouZhangClick(louZhang) {
