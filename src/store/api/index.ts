@@ -6,6 +6,8 @@ const API_URLS = {
     overview_get: API_URL_BASE + '/overview',
     louzhangzhi_overview_get: API_URL_BASE + '/bsoverview',
     research_get: API_URL_BASE + '/research',
+    louzhang_get: API_URL_BASE + '/masters',
+    xinxi_get: API_URL_BASE + '/information',
     contract_list_post: API_URL_BASE + '/contract/list',
     contract_add_post: API_URL_BASE + '/contract/add',
     contract_update_post: API_URL_BASE + '/contract/update',
@@ -48,6 +50,20 @@ export default {
         return request({
             method: 'GET',
             url: API_URLS.research_get
+        })
+    },
+    /** 获取楼长数据 */
+    requestLouZhang() {
+        return request({
+            method: 'GET',
+            url: API_URLS.louzhang_get
+        })
+    },
+    /** 获取信息新闻数据 */
+    requestXinxi() {
+        return request({
+            method: 'GET',
+            url: API_URLS.xinxi_get
         })
     },
     getLouYuZongLan() {

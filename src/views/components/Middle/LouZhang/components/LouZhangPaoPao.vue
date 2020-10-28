@@ -6,26 +6,23 @@
                 <div>{{ '负责企业数：' + data.qiYeShu }}</div>
                 <div>{{ '负责楼宇数：' + data.louYuShu }}</div>
                 <div>{{ '税收60万以上企业数：' + data.qiYeShu60 }}</div>
-                <div>{{ '走访次数：' + data.zouFang }}</div>
+                <div>{{ '走访次数：' + data.zouFangShu }}</div>
                 <div>{{ '未解决问题数：' + data.weiJieJue }}</div>
             </div>
         </div>
-        <div class="right-side"></div>
+        <div class="right-side">
+            <div ref="chart" class="u-wh-100"></div>
+            <div class="man-yi">{{ data.manYiDu }}%</div>
+            <div class="wan-cheng-lv">{{ data.wanChengLv }}%</div>
+        </div>
     </div>
 </template>
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+import { LouZhang } from '@/store/state'
 import FlashPoint from '@/components/FlashPoint.vue'
-
-type PaoPaoPropType = {
-    name: string
-    qiYeShu: number
-    louYuShu: number
-    qiYeShu60: number
-    zouFang: number
-    weiJieJue: number
-}
+import echarts from 'echarts'
 /**
  * 楼长泡泡对话框组件
  */
@@ -37,15 +34,67 @@ export default Vue.extend({
             default: '' // br / bl ...
         },
         data: {
-            type: Object as PropType<PaoPaoPropType>,
-            default: () => ({
-                name: '楼长姓名',
-                qiYeShu: 0,
-                louYuShu: 0,
-                qiYeShu60: 0,
-                zouFang: 0,
-                weiJieJue: 0
-            })
+            type: Object as PropType<LouZhang>,
+            default: () => new LouZhang()
+        }
+    },
+    data() {
+        const { manYiDu, wanChengLv } = this.data
+        const buManYiDu = 100 - manYiDu
+        const weiWanChengLv = 100 - wanChengLv
+
+        return {
+            chart: undefined as echarts.ECharts | undefined,
+            chartOption: {
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{a} <br/>{b}: {c}%',
+                    backgroundColor: 'rgb(0,121,202)'
+                },
+                legend: {
+                    data: ['满意', '完成率'],
+                    left: 'center',
+                    top: 5,
+                    itemWidth: 10,
+                    itemHeight: 6,
+                    itemGap: 10,
+                    padding: 0,
+                    textStyle: {
+                        fontSize: 10,
+                        color: '#07739A'
+                    }
+                },
+                series: [
+                    {
+                        name: '楼长评估',
+                        type: 'pie',
+                        radius: ['75%', '90%'],
+                        center: ['50%', '60%'],
+                        avoidLabelOverlap: false,
+                        startAngle: 0,
+                        label: {
+                            show: false,
+                            position: 'inside'
+                        },
+                        emphasis: {
+                            label: {
+                                show: true,
+                                fontSize: 16,
+                                fontWeight: 'bold'
+                            }
+                        },
+                        labelLine: {
+                            show: true
+                        },
+                        data: [
+                            { value: weiWanChengLv, name: '未完成率', itemStyle: { color: 'red' } },
+                            { value: wanChengLv, name: '完成率', itemStyle: { color: '#00D98B' } },
+                            { value: manYiDu, name: '满意', itemStyle: { color: '#FE693B' } },
+                            { value: buManYiDu, name: '不满意度', itemStyle: { color: 'red' } }
+                        ]
+                    }
+                ]
+            } as echarts.EChartOption
         }
     },
     computed: {
@@ -112,6 +161,31 @@ export default Vue.extend({
                 background: `url(${url})`
             }
         }
+    },
+    mounted() {
+        this.initChart()
+    },
+    beforeDestroy() {
+        if (this.chart) {
+            this.chart.dispose()
+            this.chart = undefined
+        }
+    },
+    methods: {
+        initChart() {
+            this.chart = echarts.init(this.$refs.chart as HTMLDivElement)
+            this.chart.setOption(this.chartOption)
+        }
+    },
+    watch: {
+        chartOption: {
+            handler(val) {
+                if (this.chart) {
+                    this.chart.setOption(val)
+                }
+            },
+            deep: true
+        }
     }
 })
 </script>
@@ -148,6 +222,28 @@ export default Vue.extend({
     }
     .right-side {
         width: 40%;
+        position: relative;
+
+        .man-yi {
+            position: absolute;
+            text-align: center;
+            left: 23px;
+            top: 44px;
+            width: 55px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #024676;
+            font-size: 15px;
+            color: #fe693b;
+        }
+        .wan-cheng-lv {
+            position: absolute;
+            text-align: center;
+            left: 23px;
+            top: 75px;
+            width: 55px;
+            font-size: 15px;
+            color: #00d98b;
+        }
     }
 
     &:hover {

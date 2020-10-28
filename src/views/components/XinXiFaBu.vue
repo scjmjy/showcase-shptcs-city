@@ -9,6 +9,7 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 import { State, XinXiFaBu } from '@/store/state'
+import Interval from '@/components/Interval.vue'
 import Enum from '@/utils/enum'
 import Card from '@/components/Card.vue'
 
@@ -19,6 +20,7 @@ const XinXiCategoryEnum = new Enum(nums, strs, colors)
 
 export default Vue.extend({
     components: { Card },
+    mixins: [Interval],
     computed: {
         ...mapState({
             xinXiOrigin: state => (state as State).xinXiFaBu
@@ -52,6 +54,11 @@ export default Vue.extend({
                 oddRowBGC: 'transparent'
             }
         }
+    },
+    created() {
+        this.newInterval(() => {
+            this.$store.dispatch('requestXinxi')
+        }, 1000*60, true)
     },
     methods: {
         buildCategory(category: string) {

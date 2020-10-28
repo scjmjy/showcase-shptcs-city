@@ -1,7 +1,7 @@
 <template>
     <popup :value="value" :img="img" :icon="icon" label="楼长" :title="weiJieJueWenTi.name" @input="emitEvent('input', $event)">
         <div class="content">
-            <scroll-list class="list" title="未解决问题" :data="weiJieJueWenTi.wenTi" />
+            <scroll-list class="list" title="未解决问题" :data="weiJieJueWenTi.wenTi" @click="openWenTiDetail" />
             <rose-pie class="pie" title="未解决问题分类统计" :data="weiJieJueWenTi.fenLei" />
         </div>
     </popup>
@@ -60,6 +60,9 @@ export default Vue.extend({
     methods: {
         emitEvent(evName: string, evArg: any) {
             this.$emit(evName, evArg)
+        },
+        openWenTiDetail(item, index) {
+            this.$root.$emit('popup-problem-detail', { id: index, category: '公共事业' })
         }
     }
 })
