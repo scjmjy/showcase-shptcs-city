@@ -15,6 +15,8 @@ const actions: ActionTree<State, State> = {
         const { data: diaoYanFenLeiTongJi } = await api.getDiaoYanFenLeiTongJi()
         const { data: weiJieJueFenLeiTongJi } = await api.getWeiJieJueFenLeiTongJi()
         const { data: zhongDianQiYe } = await api.getZhongDianQiYe()
+        const { data: louYuZongLan } = await api.getLouYuZongLan()
+        const { data: changShouShangHui } = await api.getChangShouShangHui()
 
         const all = {
             yiYuanLouYu,
@@ -27,7 +29,9 @@ const actions: ActionTree<State, State> = {
             diaoYanNianDuTongJi,
             diaoYanFenLeiTongJi,
             weiJieJueFenLeiTongJi,
-            zhongDianQiYe
+            zhongDianQiYe,
+            louYuZongLan,
+            changShouShangHui
         }
         commit('setAll', all)
     },

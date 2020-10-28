@@ -141,7 +141,7 @@ export default Vue.extend({
                         ...this.gaugeLeftOpts,
                         min: 0,
                         max: maxNum,
-                        data: [{ value: num60, name: '60万以上产业' }]
+                        data: [{ value: num60, name: '60万以上企业' }]
                     },
                     {
                         ...this.gaugeCommonOpts,

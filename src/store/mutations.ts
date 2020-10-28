@@ -35,6 +35,8 @@ const mutations: MutationTree<State> = {
         state.diaoYanFenLeiTongJi = payload.diaoYanFenLeiTongJi as DiaoYanFenLeiTongJi
         state.weiJieJueFenLeiTongJi = payload.weiJieJueFenLeiTongJi as WeiJieJueFenLeiTongJi
         state.zhongDianQiYe = payload.zhongDianQiYe as ZhongDianQiYe
+        state.louYuZongLan = payload.louYuZongLan as LouYuZongLan
+        state.changShouShangHui = payload.changShouShangHui as ChangShouShangHui
     },
 
     ['SET-AUTH'](state, { uid, token }) {

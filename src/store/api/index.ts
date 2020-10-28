@@ -50,6 +50,26 @@ export default {
             url: API_URLS.research_get
         })
     },
+    getLouYuZongLan() {
+        const data = {
+            huGuanQiYeZongShu: 5001,
+            shuiShouZongE: 5.3,
+            zhongDianQiYeShu: 100,
+            zhongDianQiYeShuiShouZongE: 2.1,
+            shuiShouZanBi: ((2.1 / 5.3) * 100).toFixed(1)
+        }
+
+        return Promise.resolve({ data })
+    },
+    getChangShouShangHui() {
+        const data = {
+            shangHuiQiYeShu: 897,
+            shangHuiQiYeShuiShouZongE: 1.3,
+            xinZengHuiYuanShu: 100
+        }
+
+        return Promise.resolve({ data })
+    },
     getYiYuanLouYu() {
         const data = [
             { name: '万达广场', value: '2.2' },
@@ -163,7 +183,7 @@ export default {
             zouFangQiYeShu: 3046,
             wenTiZongShu: 500,
             weiJieJueShu: 80,
-            wanChengLv: 87
+            wanChengLv: `${((80 / 500) * 100).toFixed(1)}%`
         }
         return Promise.resolve({ data })
     },
@@ -324,10 +344,11 @@ export default {
     },
     getZhongDianQiYe() {
         const data = {
-            num: 1000,
-            num60: 200,
-            num100: 100,
-            num500: 40
+            year: 2020,
+            num: 5000,
+            num60: 4001,
+            num100: 1300,
+            num500: 100
         }
         return Promise.resolve({ data })
     }
