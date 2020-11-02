@@ -8,15 +8,9 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { State } from '@/store/state'
-import Enum from '@/utils/enum'
+import { State, WentiCategoryEnum } from '@/store/state'
 import Interval from '@/components/Interval.vue'
 import ScrollList from '@/components/ScrollList.vue'
-
-const nums = [0, 1, 2, 3, 4, 5]
-const strs = ['经济纠纷类', '企业科技平台连接失败', '公共交通', '经济纠纷类', '安全监督', '']
-const colors = ['rgb(253,209,0)', 'rgb(253,209,0)', 'rgb(199,255,65)', 'rgb(255,121,48)', 'rgb(255,72,116)', 'rgb(230,65,255)']
-const WentiCategoryEnum = new Enum(nums, strs, colors)
 
 export default Vue.extend({
     name: 'WeiJieJueTable',
@@ -70,7 +64,7 @@ export default Vue.extend({
                 // index: true,
                 rowNum: 5,
                 align: ['center'],
-                columnWidth: [60, 100],
+                columnWidth: [80, 120],
                 headerBGC: 'transparent',
                 evenRowBGC: 'transparent',
                 oddRowBGC: 'transparent'
@@ -97,7 +91,8 @@ export default Vue.extend({
             return `<div class="linkable u-line-1" style="color: #0BB7FF; font-size: 15px;">${title}</div>`
         },
         onRowClick({ row, ceil, rowIndex, columnIndex }: any) {
-            this.$root.$emit('popup-problem-detail', { id: rowIndex, category: row.category })
+            const wenti = this.weiJieJueList[rowIndex]
+            this.$root.$emit('popup-problem-detail', { id: wenti.id, wenti, color: WentiCategoryEnum.str2more(wenti.category) })
         }
     }
 })

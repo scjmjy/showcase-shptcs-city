@@ -10,6 +10,7 @@ import Interval from '@/components/Interval.vue'
 import RosePie from '@/components/chart/RosePie.vue'
 
 export default Vue.extend({
+    name: 'WeiJieJueFenLeiTongJi',
     mixins: [Interval],
     components: { RosePie },
     computed: {

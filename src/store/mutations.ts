@@ -17,7 +17,11 @@ import {
     DiaoYanFenLeiTongJi,
     WeiJieJueFenLeiTongJi,
     LouZhang,
-    WenTi
+    WenTi,
+    XinXi,
+    YearValueType,
+    WeekValueType,
+    LouYu
 } from './state'
 
 const mutations: MutationTree<State> = {
@@ -76,20 +80,32 @@ const mutations: MutationTree<State> = {
         state.diaoYanNianDuTongJi = DiaoYanNianDuTongJi.fromServer(res)
     },
 
+    ['SET-CATEGORY-RESEARCH'](state, { year, week }) {
+        const dataYear = DiaoYanFenLeiTongJi.fromServer(year, 'year')
+        // const dataWeek = DiaoYanFenLeiTongJi.fromServer(week, 'week')
+        const dataWeek = DiaoYanFenLeiTongJi.fromServer(year, 'week')
+        state.diaoYanFenLeiTongJi.year = dataYear as YearValueType[]
+        state.diaoYanFenLeiTongJi.week = dataWeek as WeekValueType[][]
+    },
+
     ['SET-LOUZHANG'](state, res) {
-        state.louZhang= LouZhang.fromServer(res)
+        state.louZhang = LouZhang.fromServer(res)
     },
 
     ['SET-XINXI'](state, res) {
-        state.louZhang= LouZhang.fromServer(res)
+        state.xinXi = XinXi.fromServer(res)
     },
 
     ['SET-WEIJIEJUE'](state, res) {
-        state.weiJieJueList= WenTi.fromServer(res) as WenTi[]
+        state.weiJieJueList = WenTi.fromServer(res) as WenTi[]
     },
 
     ['SET-WEIJIEJUE-FENLEI'](state, res) {
-        state.weiJieJueFenLeiTongJi= WeiJieJueFenLeiTongJi.fromServer(res)
+        state.weiJieJueFenLeiTongJi = WeiJieJueFenLeiTongJi.fromServer(res)
+    },
+
+    ['SET-BUILDINGS'](state, res) {
+        state.louYuList = LouYu.fromServer(res)
     }
 }
 export default mutations

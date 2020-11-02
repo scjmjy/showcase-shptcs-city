@@ -68,7 +68,7 @@ export default class LouZhangZhi extends Vue {
     .fen-lei-tong-ji {
         flex: 1;
         height: 100%;
-        padding: 16px 30px;
+        padding-top: 16px;
     }
     .middle {
         flex: 1;

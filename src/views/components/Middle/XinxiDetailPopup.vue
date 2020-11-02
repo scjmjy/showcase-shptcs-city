@@ -1,14 +1,16 @@
 <template>
-    <popup :value="value" :name="name" :title="xinxi.title" position="bottom" @input="emitEvent('input', $event)">
+    <popup :value="value" :name="name" :label="xinXi.category" :labelColor="labelColor" :title="xinXi.title" position="bottom" @input="emitEvent('input', $event)">
         <div class="content">
-            <img class="xinxi-image" :src="xinxi.img" />
-            <div class="xinxi-content">{{ xinxi.content }}</div>
+            <img class="xinxi-image" :src="xinXi.img" />
+            <div class="xinxi-content">{{ xinXi.content }}</div>
         </div>
     </popup>
 </template>
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+import { mapState } from 'vuex'
+import { State, XinXi } from '@/store/state'
 import Popup from '@/components/popup/Popup.vue'
 import api from '@/store/api'
 
@@ -24,6 +26,14 @@ export default Vue.extend({
             type: Number,
             default: -1
         },
+        labelColor: {
+            type: String,
+            default: 'white'
+        },
+        xinXi: {
+            type: Object as PropType<XinXi>,
+            default: () => new XinXi()
+        },
         value: {
             type: Boolean,
             default: false
@@ -31,23 +41,17 @@ export default Vue.extend({
     },
     data() {
         return {
-            xinxi: {
-                category: '',
-                title: '',
-                img: '',
-                content: ''
-            }
         }
+    },
+    computed: {
+        ...mapState({
+            xinXiOrigin: state => {
+                return (state as State).xinXi
+            }
+        })
     },
     mounted() {
         console.log('LouZhangPopup mounted')
-        api.getXinXiDetail(this.id)
-            .then((res: any) => {
-                this.xinxi = res
-            })
-            .catch(err => {
-                console.log(err)
-            })
     },
     methods: {
         emitEvent(evName: string, evArg: any) {

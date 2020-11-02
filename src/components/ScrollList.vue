@@ -2,7 +2,7 @@
     <div class="container">
         <div class="title">{{ title }}</div>
         <ul class="list-group">
-            <li v-for="(item, i) of data" :key="i" class="list-item" :style="itemStyle(item, i)" @click="emitClick(item, i)">{{ item }}</li>
+            <li v-for="(item, i) of data" :key="i" class="list-item u-line-1" :style="itemStyle(item, i)" @click="emitClick(item, i)">{{ item }}</li>
         </ul>
     </div>
 </template>

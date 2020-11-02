@@ -74,6 +74,13 @@ const actions: ActionTree<State, State> = {
         return res
     },
 
+    async requestCategoryResearch({ commit }) {
+        const year = (await api.requestCategoryResearch('year')).data
+        const week = (await api.requestCategoryResearch('week')).data
+        commit('SET-CATEGORY-RESEARCH', { year, week })
+        return { year, week }
+    },
+
     async requestLouZhang({ commit }) {
         const res = (await api.requestLouZhang()).data
         commit('SET-LOUZHANG', res)
@@ -95,6 +102,12 @@ const actions: ActionTree<State, State> = {
     async requestWeiJieJueFenLeiTongJi({ commit }) {
         const res = (await api.requestWeiJieJueFenLeiTongJi()).data
         commit('SET-WEIJIEJUE-FENLEI', res)
+        return res
+    },
+
+    async requestBuildings({ commit }) {
+        const res = (await api.requestBuildings()).data
+        commit('SET-BUILDINGS', res)
         return res
     }
 }

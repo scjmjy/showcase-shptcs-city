@@ -39,9 +39,13 @@ service.interceptors.response.use(
         return response
     },
     error => {
-        // if (error.response.status === 401) {
-        //     relogin()
-        // }
+        if (error.response.status === 401) {
+            Message({
+                type: 'warning',
+                message: '登录过期，请重新登录。'
+            })
+            relogin()
+        }
         return Promise.reject(error)
     }
 )

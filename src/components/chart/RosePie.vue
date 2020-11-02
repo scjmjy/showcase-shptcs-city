@@ -25,14 +25,7 @@ export default Vue.extend({
     },
     data() {
         return {
-            barChart: undefined as echarts.ECharts | undefined,
-            grid: {
-                containLabel: true,
-                top: 40,
-                left: 0,
-                right: 0,
-                bottom: 0
-            }
+            roseChart: undefined as echarts.ECharts | undefined
         }
     },
     created() {
@@ -44,22 +37,22 @@ export default Vue.extend({
     },
     beforeDestroy() {
         console.log('RosePie beforeDestroy')
-        const chart = this.barChart
+        const chart = this.roseChart
         if (chart) {
             if (this.delay === -1) {
                 chart.dispose()
-                this.barChart = undefined
+                this.roseChart = undefined
             } else {
                 setTimeout(() => {
                     chart.dispose()
-                    this.barChart = undefined
+                    this.roseChart = undefined
                 }, this.delay)
             }
         }
     },
     methods: {
         initChart() {
-            this.barChart = echarts.init(this.$el as HTMLDivElement)
+            this.roseChart = echarts.init(this.$el as HTMLDivElement)
             const { title, data } = this
 
             const option: echarts.EChartOption = {
@@ -92,8 +85,8 @@ export default Vue.extend({
                     {
                         type: 'pie',
                         name: title,
-                        radius: [10, 75],
-                        center: ['50%', '65%'],
+                        radius: [10, '60%'],
+                        center: ['50%', '60%'],
                         roseType: 'radius',
                         data,
                         label: {
@@ -110,7 +103,7 @@ export default Vue.extend({
                     }
                 ]
             }
-            this.barChart.setOption(option)
+            this.roseChart.setOption(option)
         }
     },
     watch: {
@@ -123,8 +116,8 @@ export default Vue.extend({
                     }
                 ]
             }
-            if (this.barChart) {
-                this.barChart.setOption(opt)
+            if (this.roseChart) {
+                this.roseChart.setOption(opt)
             }
         }
     }

@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import state from '@/store/state'
 
 const API_URL_BASE = '/api/v1/zhly'
 const API_URLS = {
@@ -6,10 +7,12 @@ const API_URLS = {
     overview_get: API_URL_BASE + '/overview',
     louzhangzhi_overview_get: API_URL_BASE + '/bsoverview',
     research_get: API_URL_BASE + '/research',
+    research_category_get: API_URL_BASE + '/category/research/',
     louzhang_get: API_URL_BASE + '/masters',
     xinxi_get: API_URL_BASE + '/information',
     weijiejue_wenti_list: API_URL_BASE + '/problem/unresolve',
-    weijiejue_fenlei_stat: API_URL_BASE + '/category/problem/unresolve'
+    weijiejue_fenlei_stat_post: API_URL_BASE + '/category/problem/unresolve',
+    louyu_list_get: API_URL_BASE + '/buildings'
 }
 
 type PageParam = {
@@ -50,6 +53,16 @@ export default {
             url: API_URLS.research_get
         })
     },
+    /**
+     * 获取调研分类统计
+     * @param type 1: 年度，2：星期
+     */
+    requestCategoryResearch(type: 'year' | 'week') {
+        return request({
+            method: 'GET',
+            url: API_URLS.research_category_get + (type === 'year' ? '1' : '2')
+        })
+    },
     /** 获取楼长数据 */
     requestLouZhang() {
         return request({
@@ -68,7 +81,7 @@ export default {
      * 获取某楼长或所有楼长的未解决问题列表
      * @param louZhangId 楼长 id，如果没有填写，则获取所有楼长的未解决问题列表
      */
-    requestWeiJieJueWenTi(louZhangId = undefined) {
+    requestWeiJieJueWenTi(louZhangId: number| undefined = undefined) {
         return request({
             method: 'POST',
             url: API_URLS.weijiejue_wenti_list,
@@ -81,13 +94,22 @@ export default {
      * 获取某楼长或所有楼长的未解决问题的分类统计
      * @param louZhangId 楼长 id，如果没有填写，则获取所有楼长的数据
      */
-    requestWeiJieJueFenLeiTongJi(louZhangId = undefined) {
+    requestWeiJieJueFenLeiTongJi(louZhangId: number| undefined = undefined) {
         return request({
             method: 'POST',
-            url: API_URLS.weijiejue_fenlei_stat,
+            url: API_URLS.weijiejue_fenlei_stat_post,
             data: {
                 mid: louZhangId
             }
+        })
+    },
+    /**
+     * 获取楼宇列表
+     */
+    requestBuildings() {
+        return request({
+            method: 'GET',
+            url: API_URLS.louyu_list_get
         })
     },
 
@@ -319,14 +341,16 @@ export default {
         return Promise.resolve(detail)
     },
     getXinXiDetail(id: number) {
-        const xinxi = {
-            category: '政策信息',
-            title: '中国共产党第N届会议指南',
-            img: 'https://picsum.photos/300/200',
-            content:
-                '新华社长沙9月19日电 中共中央总书记、国家主席、中央军委主席习近平9月17日上午在湖南省长沙市主持召开基层代表座谈会并发表重要讲话，听取基层干部群众代表对“十四五”规划编制的意见和建议。他强调，人民对美好生活的向往就是我们的奋斗目标。五年规划编制涉及经济社会发展方方面面，同人民群众生产生活息息相关，需要把加强顶层设计和坚持问计于民统一起来，鼓励广大人民群众和社会各界以各种方式建言献策，推动“十四五”规划编制顺应人民意愿、符合人民所思所盼。'
-        }
-        return Promise.resolve(xinxi)
+        // const xinxi = {
+        //     category: '政策信息',
+        //     title: '中国共产党第N届会议指南',
+        //     img: 'https://picsum.photos/300/200',
+        //     content:
+        //         '新华社长沙9月19日电 中共中央总书记、国家主席、中央军委主席习近平9月17日上午在湖南省长沙市主持召开基层代表座谈会并发表重要讲话，听取基层干部群众代表对“十四五”规划编制的意见和建议。他强调，人民对美好生活的向往就是我们的奋斗目标。五年规划编制涉及经济社会发展方方面面，同人民群众生产生活息息相关，需要把加强顶层设计和坚持问计于民统一起来，鼓励广大人民群众和社会各界以各种方式建言献策，推动“十四五”规划编制顺应人民意愿、符合人民所思所盼。'
+        // }
+        // return Promise.resolve(xinxi)
+        const detail = state.xinXi.find(xinxi => xinxi.id == id)
+        return Promise.resolve({ data: detail })
     },
     getQiYeInLouYu(param: PageParam) {
         const data = {

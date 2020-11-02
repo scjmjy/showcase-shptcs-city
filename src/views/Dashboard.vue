@@ -82,7 +82,7 @@ export default class Home extends Interval {
         }
     }
     created() {
-        this.$store.dispatch('requestAll')
+        // this.$store.dispatch('requestAll')
         this.newInterval(() => {
             this.$store.dispatch('requestOverview')
         }, 1000*60, true)

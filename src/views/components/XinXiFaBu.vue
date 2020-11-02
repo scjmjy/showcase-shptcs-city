@@ -1,7 +1,7 @@
 <template>
     <card :opts="cardOpts">
-        <dv-scroll-board :config="scrollConfig" @click="onClick" style="width:610px; height:280px; display: inline-block; border-right: 1px solid #2d426d;" />
-        <dv-scroll-board :config="scrollConfig" @click="onClick" style="margin-left: 20px; width:610px; height:280px; display: inline-block;" />
+        <dv-scroll-board :config="scrollConfigLeft" @click="onClickLeft" style="width:610px; height:280px; display: inline-block; border-right: 1px solid #2d426d;" />
+        <dv-scroll-board :config="scrollConfigRight" @click="onClickRight" style="margin-left: 20px; width:610px; height:280px; display: inline-block;" />
     </card>
 </template>
 
@@ -14,16 +14,17 @@ import Enum from '@/utils/enum'
 import Card from '@/components/Card.vue'
 
 const nums = [0, 1, 2, 3, 4, 5]
-const strs = ['政策信息', '党建活动', '招商信息', '', '', '']
+const strs = ['档案', '', '', '', '', '']
 const colors = ['#00FFFB', '#FF3838', '#FFF10B', '', '', '']
 const XinXiCategoryEnum = new Enum(nums, strs, colors)
 
 export default Vue.extend({
+    name: 'XinXiFaBu',
     components: { Card },
     mixins: [Interval],
     computed: {
         ...mapState({
-            xinXiOrigin: state => (state as State).xinXiFaBu
+            xinXiOrigin: state => (state as State).xinXi
         }),
         cardOpts(): any {
             return {
@@ -32,24 +33,55 @@ export default Vue.extend({
                 titleStyle: { 'margin-left': '20px' }
             }
         },
-        xinXiFaBu(): any {
+        xinXiOriginLeft(): any[] {
+            const count = this.xinXiOrigin.length / 2
+            return this.xinXiOrigin.slice(0, count)
+        },
+        xinXiOriginRight(): any[] {
+            return this.xinXiOrigin.slice(this.xinXiOriginLeft.length)
+        },
+        xinXiFaBuLeft(): any[] {
             const xinXiFaBu: any[] = []
-            this.xinXiOrigin.forEach((info: any) => {
+            this.xinXiOriginLeft.forEach((info: any) => {
                 const row: string[] = []
                 row.push(this.buildCategory(info.category))
                 row.push(this.buildTitle(info.title))
+                row.push(this.buildContent(info.content))
                 xinXiFaBu.push(row)
             })
             return xinXiFaBu
         },
-        scrollConfig(): any {
+        xinXiFaBuRight(): any[] {
+            const xinXiFaBu: any[] = []
+            this.xinXiOriginRight.forEach((info: any) => {
+                const row: string[] = []
+                row.push(this.buildCategory(info.category))
+                row.push(this.buildTitle(info.title))
+                row.push(this.buildContent(info.content))
+                xinXiFaBu.push(row)
+            })
+            return xinXiFaBu
+        },
+        scrollConfigLeft(): any {
             return {
-                data: this.xinXiFaBu,
+                data: this.xinXiFaBuLeft,
                 // index: true,
                 rowNum: 6,
                 align: ['center'],
-                // columnWidth: [40, 140],
-                columnWidth: [130],
+                columnWidth: [130, 150],
+                // columnWidth: [130],
+                evenRowBGC: 'transparent',
+                oddRowBGC: 'transparent'
+            }
+        },
+        scrollConfigRight(): any {
+            return {
+                data: this.xinXiFaBuRight,
+                // index: true,
+                rowNum: 6,
+                align: ['center'],
+                columnWidth: [130, 150],
+                // columnWidth: [130],
                 evenRowBGC: 'transparent',
                 oddRowBGC: 'transparent'
             }
@@ -68,9 +100,18 @@ export default Vue.extend({
         buildTitle(title: string) {
             return `<div class="linkable" style="color: #0BB7FF; font-size: 18px;">${title}</div>`
         },
-        onClick({ row, ceil, rowIndex, columnIndex }: any) {
-            const xinxi = this.xinXiOrigin[rowIndex]
-            this.$root.$emit('popup-xinxi', { label: xinxi.category, labelColor: XinXiCategoryEnum.str2more(xinxi.category), id: xinxi.id })
+        buildContent(content: string) {
+            return `<div class="linkable u-line-1" style="color: #0BB7FF; font-size: 18px;">${content}</div>`
+        },
+        onClickLeft({ row, ceil, rowIndex, columnIndex }: any) {
+            const xinxi = this.xinXiOriginLeft[rowIndex]
+
+            this.$root.$emit('popup-xinxi', {labelColor: XinXiCategoryEnum.str2more(xinxi.category), id: xinxi.id, xinXi: xinxi })
+        },
+        onClickRight({ row, ceil, rowIndex, columnIndex }: any) {
+            const xinxi = this.xinXiOriginRight[rowIndex]
+
+            this.$root.$emit('popup-xinxi', {labelColor: XinXiCategoryEnum.str2more(xinxi.category), id: xinxi.id, xinXi: xinxi })
         }
     }
 })

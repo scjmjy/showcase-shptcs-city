@@ -1,16 +1,16 @@
 <template>
-    <popup :name="name" :value="value" :icon="icon" label="未解决问题" :title="detail.category" @input="emitEvent('input', $event)">
+    <popup :name="name" :value="value" :icon="icon" :labelColor="labelColor" label="未解决问题" :title="wenti.title" @input="emitEvent('input', $event)">
         <div class="content">
             <div class="left">
-                <div>楼宇名称：<span>{{ detail.louYu }}</span></div>
-                <div>企业名称：<span>{{ detail.qiYe }}</span></div>
-                <div>问题类别：<span>{{ detail.category }}</span></div>
-                <div>楼长：<span>{{ detail.louZhang }}</span></div>
-                <div>上报时间：<span>{{ detail.date }}</span></div>
+                <div>楼宇名称：<span>{{ wenti.louYu }}</span></div>
+                <div>企业名称：<span>{{ wenti.qiYe }}</span></div>
+                <div>问题类别：<span>{{ wenti.category }}</span></div>
+                <div>楼长：<span>{{ wenti.louZhang }}</span></div>
+                <div>上报时间：<span>{{ wenti.time }}</span></div>
             </div>
             <div class="right">
                 <div>问题详情：</div>
-                <div>{{ detail.content }}</div>
+                <div>{{ wenti.desc }}</div>
             </div>
         </div>
     </popup>
@@ -22,6 +22,7 @@ import Popup from '@/components/popup/Popup.vue'
 import ScrollList from '@/components/ScrollList.vue'
 import RosePie from '@/components/chart/RosePie.vue'
 import api from '@/store/api'
+import { WenTi } from '@/store/state'
 
 export default Vue.extend({
     name: 'ProblemDetailPopup',
@@ -38,6 +39,14 @@ export default Vue.extend({
         id: {
             type: Number,
             default: -1
+        },
+        labelColor: {
+            type: String,
+            default: 'white'
+        },
+        wenti: {
+            type: Object as PropType<WenTi>,
+            default: () => new WenTi()
         },
         value: {
             type: Boolean,
@@ -58,13 +67,13 @@ export default Vue.extend({
     },
     mounted() {
         console.log('LouZhangPopup mounted')
-        api.getWenTiDetail(this.id)
-            .then((res: any) => {
-                this.detail = res
-            })
-            .catch(err => {
-                console.log(err)
-            })
+        // api.getWenTiDetail(this.id)
+        //     .then((res: any) => {
+        //         this.detail = res
+        //     })
+        //     .catch(err => {
+        //         console.log(err)
+        //     })
     },
     beforeDestroy() {
         console.log('LouZhangPopup beforeDestroy')

@@ -17,14 +17,18 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
+import Interval, { IntervalTask } from '@/components/Interval.vue'
 import echarts from 'echarts'
 import { State } from '@/store/state'
 
 export default Vue.extend({
+    name: 'DiaoYanFenLeiTongJi',
+    mixins: [Interval],
     data() {
         return {
+            intervalTask: undefined  as IntervalTask | undefined,
             barChart: undefined as echarts.ECharts | undefined,
-            period: 'week',
+            period: 'year' as 'year' | 'week',
             color: [
                     'rgb(253,209,0)',
                     'rgb(199,255,65)',
@@ -48,6 +52,7 @@ export default Vue.extend({
                 return {}
             }
             const { week, year } = this.diaoYanFenLeiTongJi
+            const yearTop8 = year
             const { color } = this
             const title = '调研分类统计'
             let xAxis
@@ -61,8 +66,8 @@ export default Vue.extend({
                 series = {
                     type: 'pie',
                     name: title,
-                    radius: [10, 75],
-                    center: ['50%', '65%'],
+                    radius: [10, '50%'],
+                    center: ['60%', '75%'],
                     roseType: 'radius',
                     datasetIndex: 0,
                     label: {
@@ -149,7 +154,7 @@ export default Vue.extend({
                 color,
                 title: {
                     text: title,
-                    left: 'left',
+                    left: 30,
                     textStyle: {
                         color: 'white',
                         fontSize: 20
@@ -158,12 +163,12 @@ export default Vue.extend({
                     }
                 },
                 tooltip,
-                dataset: [{ source: year }, { source: week }],
+                dataset: [{ source: yearTop8 }, { source: week }],
                 grid: {
                     containLabel: true,
-                    left: 0,
-                    right: 0,
-                    bottom: 0
+                    left: 30,
+                    right: 10,
+                    bottom: 16
                 },
                 xAxis,
                 yAxis,
@@ -173,6 +178,9 @@ export default Vue.extend({
         }
     },
     mounted() {
+        this.intervalTask = this.newInterval(() => {
+            this.$store.dispatch('requestCategoryResearch')
+        }, 1000*60, true)
         this.initChart()
     },
     beforeDestroy() {

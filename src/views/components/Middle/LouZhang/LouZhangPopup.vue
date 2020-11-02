@@ -1,8 +1,8 @@
 <template>
     <popup :value="value" :img="img" :icon="icon" label="楼长" :title="weiJieJueWenTi.name" @input="emitEvent('input', $event)">
         <div class="content">
-            <scroll-list class="list" title="未解决问题" :data="weiJieJueWenTi.wenTi" @click="openWenTiDetail" />
-            <rose-pie class="pie" title="未解决问题分类统计" :data="weiJieJueWenTi.fenLei" />
+            <scroll-list class="list" title="未解决问题" :data="weiJieJueWenTi" @click="openWenTiDetail" />
+            <rose-pie class="pie" title="未解决问题分类统计" :data="weiJieJueFenLeiTongJi" />
         </div>
     </popup>
 </template>
@@ -13,6 +13,7 @@ import Popup from '@/components/popup/Popup.vue'
 import ScrollList from '@/components/ScrollList.vue'
 import RosePie from '@/components/chart/RosePie.vue'
 import api from '@/store/api'
+import { WeiJieJueFenLeiTongJi, WenTi, WentiCategoryEnum } from '@/store/state'
 
 export default Vue.extend({
     name: 'LouZhangPopup',
@@ -37,22 +38,45 @@ export default Vue.extend({
     },
     data() {
         return {
-            weiJieJueWenTi: {
-                name: '',
-                wenTi: [],
-                fenLei: [] as number[]
-            }
+            weiJieJueWenTiOrigin: [] as WenTi[],
+            weiJieJueFenLeiTongJiOrigin: [] as WeiJieJueFenLeiTongJi[]
+        }
+    },
+    computed: {
+        weiJieJueWenTi(): string[] {
+            return this.weiJieJueWenTiOrigin.map(wenti => {
+                return `${wenti.category}：${wenti.title}`
+            })
+        },
+        weiJieJueFenLeiTongJi(): any[] {
+            return this.weiJieJueFenLeiTongJiOrigin.map(item => {
+                return {
+                    name: item.category,
+                    value: item.count
+                }
+            })
         }
     },
     mounted() {
         console.log('LouZhangPopup mounted')
-        api.getLouZhangWeiJiejueWenTi(this.id)
-            .then((res: any) => {
-                this.weiJieJueWenTi = res
-            })
-            .catch(err => {
-                console.log(err)
-            })
+    },
+    watch: {
+        id(newId) {
+            api.requestWeiJieJueWenTi(newId)
+                .then((res: any) => {
+                    this.weiJieJueWenTiOrigin = WenTi.fromServer(res.data) as WenTi[]
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+            api.requestWeiJieJueFenLeiTongJi(newId)
+                .then((res: any) => {
+                    this.weiJieJueFenLeiTongJiOrigin = WeiJieJueFenLeiTongJi.fromServer(res.data)
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+        }
     },
     beforeDestroy() {
         console.log('LouZhangPopup beforeDestroy')
@@ -61,8 +85,9 @@ export default Vue.extend({
         emitEvent(evName: string, evArg: any) {
             this.$emit(evName, evArg)
         },
-        openWenTiDetail(item, index) {
-            this.$root.$emit('popup-problem-detail', { id: index, category: '公共事业' })
+        openWenTiDetail({ item, index }) {
+            const wenti = this.weiJieJueWenTiOrigin[index]
+            this.$root.$emit('popup-problem-detail', { id: wenti.id, labelColor: WentiCategoryEnum.str2more(wenti.category), wenti })
         }
     }
 })

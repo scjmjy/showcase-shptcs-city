@@ -20,20 +20,29 @@ export default class Enum {
 		}
 	}
 	_num2index(num: number) {
-		const index = this.nums.findIndex(n => n === num)
-		if (index === -1) throw new Error('无效的枚举值：' + num)
+		let index = this.nums.findIndex(n => n === num)
+		// if (index === -1) throw new Error('无效的枚举值：' + num)
+		if (index === -1) {
+			index = this.nums.length - 1
+		}
 		return index
 	}
 	_str2index(str: string) {
-		const index = this.strs.findIndex(s => s === str)
-		if (index === -1) throw new Error('无效的枚举字符串：' + str)
+		let index = this.strs.findIndex(s => s === str)
+		// if (index === -1) throw new Error('无效的枚举字符串：' + str)
+		if (index === -1) {
+			index = this.nums.length - 1
+		}
 		return index
 	}
 	_section2index(section: string, compare: (more: any, section: string) => boolean) {
 		//@ts-ignore
 		//@ts-nocheck
-		const index = this.more.findIndex(m => compare(m, section))
-		if (index === -1) throw new Error('无效的section：' + section)
+		let index = this.more.findIndex(m => compare(m, section))
+		// if (index === -1) throw new Error('无效的section：' + section)
+		if (index === -1) {
+			index = this.nums.length - 1
+		}
 		return index
 	}
 

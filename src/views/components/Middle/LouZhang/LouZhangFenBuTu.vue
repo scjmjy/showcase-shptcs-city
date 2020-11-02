@@ -12,7 +12,7 @@
         <zong-lou-zhang-pao-pao class="lou-zhang-paopao" v-bind="zongLouZhangData[0]" />
         <zong-lou-zhang-pao-pao class="lou-zhang-paopao" v-bind="zongLouZhangData[1]" />
         <popup-group v-model="topmostPopup">
-            <lou-zhang-popup :img="showLouZhang.avatar" v-model="showPopup" />
+            <lou-zhang-popup :img="showLouZhang.avatar" :id="showLouZhang.data.id" v-model="showPopup" />
         </popup-group>
     </div>
 </template>
@@ -39,7 +39,9 @@ export default Vue.extend({
         return {
             showPopup: false,
             topmostPopup: '',
-            showLouZhang: {},
+            showLouZhang: {
+                data: {}
+            } as any,
             louZhangFixed: [
                 { avatar: '楼长1.png', type: 'bl', style: { left: '25px', top: '310px' } },
                 { avatar: '楼长2.png', type: 'br', style: { left: '185px', top: '130px' } },
@@ -85,6 +87,9 @@ export default Vue.extend({
     methods: {
         onLouZhangClick(louZhang) {
             this.showLouZhang = louZhang
+            if (!this.showLouZhang.data.id) {
+                this.showLouZhang.data.id = 41
+            }
             this.showPopup = true
         }
     }

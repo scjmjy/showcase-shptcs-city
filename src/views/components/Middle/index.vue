@@ -1,14 +1,22 @@
 <template>
     <card :opts="{ hasTitle: false }" style="width: 100%; height: 100%;">
-        <component :is="currentComponent.name" v-bind="currentComponent.data" />
+        <keep-alive>
+            <component :is="currentComponent.name" v-bind="currentComponent.data" />
+        </keep-alive>
         <popup-group v-model="topmostPopup">
             <xinxi-detail-popup
                 name="popup-xinxi"
                 v-model="isShowXinxiPopup"
+                :id="xinXiId"
+                :xinXi="xinXi"
+                :labelColor="xinXiLabelColor"
             />
             <problem-detail-popup
                 name="popup-problem-detail"
                 v-model="isShowProblemDetailPopup"
+                :id="wentiId"
+                :wenti="wenti"
+                :labelColor="wentiLabelColor"
             />
         </popup-group>
     </card>
@@ -22,6 +30,7 @@ import ProblemDetailPopup from './ProblemDetailPopup.vue'
 import LouZhangFenBuTu from './LouZhang/LouZhangFenBuTu.vue'
 import ChangShouMap from './CityMap/ChangShouMap.vue'
 import PopupGroup from '@/components/popup/PopupGroup.vue'
+import { WenTi, XinXi } from '@/store/state'
 
 /**
  * 中间地图部分区域的组件，包括长寿街道的城建地图、楼长制分布图，以及一些 popup 弹窗
@@ -33,7 +42,13 @@ export default Vue.extend({
         // const pm = new PopupManager()
         return {
             isShowXinxiPopup: false,
+            xinXiId: -1,
+            xinXiLabelColor: '',
+            xinXi: new XinXi(),
             isShowProblemDetailPopup: false,
+            wentiId: -1,
+            wenti: new WenTi(),
+            wentiLabelColor: '',
             showMask: false,
             currentComponent: {
                 name: 'LouZhangFenBuTu', // LouZhangFenBuTu, ChangShouMap
@@ -58,11 +73,17 @@ export default Vue.extend({
         //         this.showMask = false
         //     }
         // })
-        this.$root.$on('popup-xinxi', ({ label, labelColor, id }) => {
+        this.$root.$on('popup-xinxi', ({ labelColor, id, xinXi }) => {
             this.topmostPopup = 'popup-xinxi'
+            this.xinXiId = id
+            this.xinXi = xinXi
+            this.xinXiLabelColor = labelColor
         })
-        this.$root.$on('popup-problem-detail', ({ id }) => {
+        this.$root.$on('popup-problem-detail', ({ id, wenti, color }) => {
             this.topmostPopup = 'popup-problem-detail'
+            this.wentiId = id,
+            this.wenti = wenti,
+            this.wentiLabelColor = color
         })
         // 显示城建地图，并且在地图上显示信息预警撒点
         this.$root.$on('map-xinxiyujing', () => {
