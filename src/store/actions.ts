@@ -16,9 +16,8 @@ const actions: ActionTree<State, State> = {
         const { data: diaoYanFenLeiTongJi } = await api.getDiaoYanFenLeiTongJi()
         const { data: weiJieJueFenLeiTongJi } = await api.getWeiJieJueFenLeiTongJi()
         const { data: zhongDianQiYe } = await api.getZhongDianQiYe()
-
-        const louYuZongLan = new LouYuZongLan(5001, 5.0, 1000, 1.0, 20)
-        const changShouShangHui = new ChangShouShangHui(1000, 0.8, 200)
+        const { data: louYuZongLan } = await api.getLouYuZongLan()
+        const { data: changShouShangHui } = await api.getChangShouShangHui()
 
         const all = {
             louYuZongLan,
