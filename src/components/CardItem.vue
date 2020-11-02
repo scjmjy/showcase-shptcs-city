@@ -36,6 +36,8 @@ export default {
                     color: 'white',
                     'margin-right': '2px'
                 },
+                nullValue: 0,
+                nullValuePlaceholder: '-',
                 suffix: '',
                 suffixStyle: {
                     'font-size': '20px',
@@ -68,6 +70,9 @@ export default {
             if (this.opts.titleStyle) {
                 const titleStyle = Object.assign({}, this.defaultOpts.titleStyle, this.opts.titleStyle)
                 opts.titleStyle = titleStyle
+            }
+            if (opts.value === opts.nullValue) {
+                opts.value = opts.nullValuePlaceholder
             }
             return opts
         }

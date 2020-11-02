@@ -47,9 +47,9 @@ export default Vue.extend({
                     top: 25,
                     textStyle: {
                         color: 'white',
-                        fontSize: 20,
-                        textShadowColor: 'white',
-                        textShadowBlur: 5
+                        fontSize: 20
+                        // textShadowColor: 'white',
+                        // textShadowBlur: 5
                     }
                 },
                 series: [

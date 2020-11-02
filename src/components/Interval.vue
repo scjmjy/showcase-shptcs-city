@@ -50,7 +50,7 @@ export default class Interval extends Vue {
         })
         this.intervalTasksMap.clear()
     }
-    newInterval(task, interval, immediately, ...args) {
+    newInterval(task, interval, immediately = true, ...args) {
         if (immediately) {
             task(...args)
         }

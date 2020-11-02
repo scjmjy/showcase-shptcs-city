@@ -60,8 +60,8 @@ export default Vue.extend({
                     itemGap: 10,
                     padding: 0,
                     textStyle: {
-                        fontSize: 10,
-                        color: '#07739A'
+                        fontSize: 12,
+                        color: 'white'
                     }
                 },
                 series: [
@@ -208,7 +208,7 @@ export default Vue.extend({
             font-size: 16px;
             font-weight: bold;
             color: white;
-            text-shadow: 0 0 5px white;
+            // text-shadow: 0 0 5px white;
         }
 
         .louzhang-data {

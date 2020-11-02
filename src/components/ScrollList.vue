@@ -61,7 +61,7 @@ export default Vue.extend({
     font-weight: bold;
     color: white;
     margin-bottom: 10px;
-    text-shadow: 0 0 5px white;
+    /* text-shadow: 0 0 5px white; */
 }
 .list-group {
     overflow-x: hidden;

@@ -16,7 +16,8 @@ import {
     DiaoYanNianDuTongJi,
     DiaoYanFenLeiTongJi,
     WeiJieJueFenLeiTongJi,
-    LouZhang
+    LouZhang,
+    WenTi
 } from './state'
 
 const mutations: MutationTree<State> = {
@@ -34,7 +35,7 @@ const mutations: MutationTree<State> = {
         state.louZhangOverview = payload.louZhangOverview as LouZhangOverview
         state.diaoYanNianDuTongJi = payload.diaoYanNianDuTongJi as DiaoYanNianDuTongJi
         state.diaoYanFenLeiTongJi = payload.diaoYanFenLeiTongJi as DiaoYanFenLeiTongJi
-        state.weiJieJueFenLeiTongJi = payload.weiJieJueFenLeiTongJi as WeiJieJueFenLeiTongJi
+        state.weiJieJueFenLeiTongJi = payload.weiJieJueFenLeiTongJi as WeiJieJueFenLeiTongJi[]
         state.zhongDianQiYe = payload.zhongDianQiYe as ZhongDianQiYe
         state.louYuZongLan = payload.louYuZongLan as LouYuZongLan
         state.changShouShangHui = payload.changShouShangHui as ChangShouShangHui
@@ -80,6 +81,14 @@ const mutations: MutationTree<State> = {
 
     ['SET-XINXI'](state, res) {
         state.louZhang= LouZhang.fromServer(res)
+    },
+
+    ['SET-WEIJIEJUE'](state, res) {
+        state.weiJieJueList= WenTi.fromServer(res) as WenTi[]
+    },
+
+    ['SET-WEIJIEJUE-FENLEI'](state, res) {
+        state.weiJieJueFenLeiTongJi= WeiJieJueFenLeiTongJi.fromServer(res)
     }
 }
 export default mutations

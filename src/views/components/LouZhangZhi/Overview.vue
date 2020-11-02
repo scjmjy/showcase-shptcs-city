@@ -55,7 +55,6 @@ export default class LouZhangOverviewComponent extends Interval {
             icon: '走访企业数',
             iconColor: '#06DAD6',
             value: this.overview.zouFangQiYeShu,
-            suffix: '次',
             title: '走访企业数'
         }
     }
@@ -82,7 +81,7 @@ export default class LouZhangOverviewComponent extends Interval {
             icon: '完成率',
             iconColor: '#00D98B',
             value: this.overview.wanChengLv,
-            // suffix: '%',
+            suffix: '%',
             title: '完成率'
         }
     }

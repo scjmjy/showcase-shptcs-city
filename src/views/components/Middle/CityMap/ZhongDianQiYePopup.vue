@@ -167,7 +167,7 @@ export default Vue.extend({
             width: 60px;
             font-size: 18px;
             color: white;
-            text-shadow: 0 0 5px white;
+            // text-shadow: 0 0 5px white;
         }
     }
 }

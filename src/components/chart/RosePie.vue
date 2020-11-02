@@ -80,9 +80,9 @@ export default Vue.extend({
                     left: 'left',
                     textStyle: {
                         color: 'white',
-                        fontSize: 20,
-                        textShadowColor: 'white',
-                        textShadowBlur: 5
+                        fontSize: 20
+                        // textShadowColor: 'white',
+                        // textShadowBlur: 5
                     }
                 },
                 tooltip: {
