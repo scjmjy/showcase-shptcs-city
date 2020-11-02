@@ -59,7 +59,8 @@ const mutations: MutationTree<State> = {
 
         state.yiYuanLouYu = YiYuanLouYu.fromServer(res)
 
-        state.zhongDianShuiShouTop5 = ZhongDianShuiShouTop5.fromServer(res)
+        // TODO 后台数据为 null
+        // state.zhongDianShuiShouTop5 = ZhongDianShuiShouTop5.fromServer(res)
 
         state.shuiShouBoDong = ShuiShouBoDong.fromServer(res)
 

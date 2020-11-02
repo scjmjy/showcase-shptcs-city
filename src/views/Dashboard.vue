@@ -35,7 +35,11 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
+import { Route } from "vue-router";
 import Interval from '@/components/Interval.vue'
+
+import store from '@/store'
+import { getToken } from '@/utils/token'
 
 import SlopeHeader from '@/components/SlopeHeader.vue'
 import LouYuZongLan from './components/LouYuZongLan.vue'
@@ -49,6 +53,8 @@ import Middle from './components/Middle/index.vue'
 import XinXiYuJing from './components/XinXiYuJing/index.vue'
 import DangJian from './components/DangJian.vue'
 import LouZhangZhi from './components/LouZhangZhi/index.vue'
+
+Component.registerHooks(['beforeRouteEnter'])
 
 @Component({
     components: {
@@ -80,6 +86,14 @@ export default class Home extends Interval {
         this.newInterval(() => {
             this.$store.dispatch('requestOverview')
         }, 1000*60, true)
+    }
+    beforeRouteEnter (to: Route, from: Route, next) {
+        const token = store.getters.token || getToken()
+        if (!token) {
+            next({ name: 'Login' })
+        } else {
+            next()
+        }
     }
 }
 </script>
