@@ -1,6 +1,7 @@
 import { ActionTree } from 'vuex'
 import { ChangShouShangHui, LouYuZongLan, State } from './state'
 import api from './api'
+import { removeToken } from '@/utils/token'
 
 const actions: ActionTree<State, State> = {
     async requestAll({ commit }) {
@@ -46,6 +47,15 @@ const actions: ActionTree<State, State> = {
         return auth
     },
 
+    // remove token
+    resetToken({ commit }) {
+        return new Promise(resolve => {
+            commit('SET-AUTH', { uid: -1, token: '' })
+            removeToken()
+            resolve()
+        })
+    },
+
     async requestOverview({ commit }) {
         const res = (await api.requestOverview()).data
         commit('SET-OVERVIEW', res)
@@ -73,6 +83,18 @@ const actions: ActionTree<State, State> = {
     async requestXinxi({ commit }) {
         const res = (await api.requestXinxi()).data
         commit('SET-XINXI', res)
+        return res
+    },
+
+    async requestWeiJieJueWenTi({ commit }) {
+        const res = (await api.requestWeiJieJueWenTi()).data
+        commit('SET-WEIJIEJUE', res)
+        return res
+    },
+
+    async requestWeiJieJueFenLeiTongJi({ commit }) {
+        const res = (await api.requestWeiJieJueFenLeiTongJi()).data
+        commit('SET-WEIJIEJUE-FENLEI', res)
         return res
     }
 }

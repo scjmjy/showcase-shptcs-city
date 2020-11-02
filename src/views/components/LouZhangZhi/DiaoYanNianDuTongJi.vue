@@ -165,9 +165,9 @@ export default class DiaoYanNianDuTongJiCom extends Interval {
                 text: '大调研年度数据可视化统计',
                 textStyle: {
                     color: 'white',
-                    fontSize: 20,
-                    textShadowColor: 'white',
-                    textShadowBlur: 5
+                    fontSize: 20
+                    // textShadowColor: 'white',
+                    // textShadowBlur: 5
                 }
             }
         })

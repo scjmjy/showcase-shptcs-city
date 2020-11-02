@@ -65,7 +65,7 @@ export default Vue.extend({
             font-size: 16px;
             font-weight: bold;
             color: white;
-            text-shadow: 0 0 5px white;
+            // text-shadow: 0 0 5px white;
         }
 
         .louzhang-data {

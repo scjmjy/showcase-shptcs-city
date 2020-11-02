@@ -23,7 +23,7 @@ export class ChangShouShangHui {
     }
 }
 export class QiTaLouYuQiYe {
-    constructor(public jiTuanZiGuan = '-', public siCaiQiYe = '-', public xvNiZhuChe = '-') {}
+    constructor(public jiTuanZiGuan = 0, public siCaiQiYe = 0, public xvNiZhuChe = 0) {}
     static fromServer(serverData) {
         return new QiTaLouYuQiYe(serverData.gpNumB, serverData.gpNumF, serverData.gpNumV)
     }
@@ -177,7 +177,7 @@ export class LouZhangOverview {
             serverData.numVisitB,
             serverData.numProblem,
             serverData.numUnresolve,
-            serverData.ratioCompletion
+            Number(serverData.ratioCompletion) * 100
         )
     }
 }
@@ -208,7 +208,17 @@ export class ZhongDianQiYe {
         return new ZhongDianQiYe(serverData.fsYear, 10000, serverData.fsNum60, serverData.fsNum100, serverData.fsNum500)
     }
 }
-export type WeiJieJueFenLeiTongJi = number[][]
+export class WeiJieJueFenLeiTongJi {
+    constructor(public category = '', public count = 0) {}
+    static fromServer(serverData) {
+        if (!Array.isArray(serverData)) {
+            throw new Error('未解决问题分类统计：数据格式错误')
+        }
+        return serverData.map(item => {
+            return new WeiJieJueFenLeiTongJi(item.cname, item.count)
+        })
+    }
+}
 
 export class LouZhang {
     constructor(
@@ -228,7 +238,7 @@ export class LouZhang {
             throw new Error('楼长信息：数据格式错误')
         }
         return serverData.map(item => {
-            return new LouZhang(0, item.name, item.owner, item.companyCnt, item.buildsCnt, item.tax60Cnt, item.visitCnt, item.unresolveCnt, 98, 95)
+            return new LouZhang(item.id, item.name, item.owner, item.companyCnt, item.buildsCnt, item.tax60Cnt, item.visitCnt, item.unresolveCnt, 98, 95)
         })
     }
 }
@@ -245,6 +255,19 @@ export class XinXi {
     }
 }
 
+export class WenTi {
+    constructor(public id = -1, public louZhang = '', public category = '', public title = '', public desc = '', public content = '') {}
+    static fromServer(serverData) {
+        if (Array.isArray(serverData)) {   
+            return serverData.map(item => {
+                return new WenTi(item.id, item.master, item.category, item.title, item.desc, item.content)
+            })
+        } else {
+            return new WenTi(serverData.id, serverData.master, serverData.category, serverData.title, serverData.desc, serverData.content)
+        }
+    }
+}
+
 export class State {
     louYuZongLan = new LouYuZongLan()
     changShouShangHui = new ChangShouShangHui()
@@ -258,10 +281,11 @@ export class State {
     louZhangOverview = new LouZhangOverview()
     diaoYanNianDuTongJi = new DiaoYanNianDuTongJi()
     diaoYanFenLeiTongJi?: DiaoYanFenLeiTongJi = undefined
-    weiJieJueFenLeiTongJi: WeiJieJueFenLeiTongJi = []
+    weiJieJueFenLeiTongJi: WeiJieJueFenLeiTongJi[] = []
     zhongDianQiYe = new ZhongDianQiYe()
     louZhang: LouZhang[] = []
     xinXi: XinXi[] = []
+    weiJieJueList: WenTi[] = []
 
     client_id = 'sh-ptcs-city'
     client_version = '1.0.0'

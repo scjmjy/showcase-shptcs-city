@@ -125,13 +125,15 @@ export default Vue.extend({
         labelStyle(): any {
             return {
                 color: this.labelColor,
-                'text-shadow': `0 0 5px ${this.labelColor}`
+                'font-weight': 'bold'
+                // 'text-shadow': `0 0 5px ${this.labelColor}`
             }
         },
         titleStyle(): any {
             return {
                 color: this.titleColor,
-                'text-shadow': `0 0 5px ${this.titleColor}`
+                'font-weight': 'bold'
+                // 'text-shadow': `0 0 5px ${this.titleColor}`
             }
         }
     },

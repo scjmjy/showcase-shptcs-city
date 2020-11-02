@@ -8,10 +8,8 @@ const API_URLS = {
     research_get: API_URL_BASE + '/research',
     louzhang_get: API_URL_BASE + '/masters',
     xinxi_get: API_URL_BASE + '/information',
-    contract_list_post: API_URL_BASE + '/contract/list',
-    contract_add_post: API_URL_BASE + '/contract/add',
-    contract_update_post: API_URL_BASE + '/contract/update',
-    contract_get_post: API_URL_BASE + '/contract/queryById/'
+    weijiejue_wenti_list: API_URL_BASE + '/problem/unresolve',
+    weijiejue_fenlei_stat: API_URL_BASE + '/category/problem/unresolve'
 }
 
 type PageParam = {
@@ -66,6 +64,33 @@ export default {
             url: API_URLS.xinxi_get
         })
     },
+    /**
+     * 获取某楼长或所有楼长的未解决问题列表
+     * @param louZhangId 楼长 id，如果没有填写，则获取所有楼长的未解决问题列表
+     */
+    requestWeiJieJueWenTi(louZhangId = undefined) {
+        return request({
+            method: 'POST',
+            url: API_URLS.weijiejue_wenti_list,
+            data: {
+                mid: louZhangId
+            }
+        })
+    },
+    /**
+     * 获取某楼长或所有楼长的未解决问题的分类统计
+     * @param louZhangId 楼长 id，如果没有填写，则获取所有楼长的数据
+     */
+    requestWeiJieJueFenLeiTongJi(louZhangId = undefined) {
+        return request({
+            method: 'POST',
+            url: API_URLS.weijiejue_fenlei_stat,
+            data: {
+                mid: louZhangId
+            }
+        })
+    },
+
     getLouYuZongLan() {
         const data = {
             huGuanQiYeZongShu: 5001,
@@ -236,14 +261,14 @@ export default {
     },
     getWeiJieJueFenLeiTongJi() {
         const data = [
-            { name: '党的建设类', value: 100 },
-            { name: '共用事业类', value: 200 },
-            { name: '安全监管类', value: 300 },
-            { name: '交通建设类', value: 100 },
-            { name: '公安政法类', value: 120 },
-            { name: '科教文卫类', value: 120 },
-            { name: '社会管理类', value: 110 },
-            { name: '其他', value: 100 }
+            { category: '党的建设类', count: 100 },
+            { category: '共用事业类', count: 200 },
+            { category: '安全监管类', count: 300 },
+            { category: '交通建设类', count: 100 },
+            { category: '公安政法类', count: 120 },
+            { category: '科教文卫类', count: 120 },
+            { category: '社会管理类', count: 110 },
+            { category: '其他', count: 100 }
         ]
         return Promise.resolve({ data })
     },
