@@ -58,10 +58,10 @@ export class ZhongDianShuiShouTop5 {
     static fromServer(serverData) {
         const top5 = [
             new ZhongDianShuiShouTop5(serverData.fsRsName1, serverData.fsRsTax1),
-            new YiYuanLouYu(serverData.fsRsName2, serverData.fsRsTax2),
-            new YiYuanLouYu(serverData.fsRsName3, serverData.fsRsTax3),
-            new YiYuanLouYu(serverData.fsRsName4, serverData.fsRsTax4),
-            new YiYuanLouYu(serverData.fsRsName5, serverData.fsRsTax5)
+            new ZhongDianShuiShouTop5(serverData.fsRsName2, serverData.fsRsTax2),
+            new ZhongDianShuiShouTop5(serverData.fsRsName3, serverData.fsRsTax3),
+            new ZhongDianShuiShouTop5(serverData.fsRsName4, serverData.fsRsTax4),
+            new ZhongDianShuiShouTop5(serverData.fsRsName5, serverData.fsRsTax5)
         ]
         return top5
     }
@@ -133,16 +133,34 @@ export class ShuiShouBoDong {
         return data
     }
 }
-export type QianRuQianChu = {
-    inAndOut: {
-        inNum: number
-        inPercent: number
-        outNum: number
-        outPercent: number
-    }
-    inLog: number[][]
-    outLog: number[][]
+
+class InAndOut {
+    constructor(public inNum = 0, public inPercent = 0, public outNum = 0, public outPercent = 0) {}
 }
+export class QianRuQianChu {
+    constructor(public inAndOut = new InAndOut(), public inLog: (string | number)[][] = [], public outLog: (string | number)[][] = []) {}
+    static fromServer(serverData) {
+        const inAndOut = new InAndOut(serverData.wnNumMoveIn, serverData.wnNumMoveInRate, serverData.wnNumMoveOut, serverData.wnNumMoveOutRate)
+        const inLog: (string | number)[][] = [
+            [serverData.wnNumMove180Name1, serverData.wnNumMove180upp1],
+            [serverData.wnNumMove180Name2, serverData.wnNumMove180upp2],
+            [serverData.wnNumMove180Name3, serverData.wnNumMove180upp3],
+            [serverData.wnNumMove180Name4, serverData.wnNumMove180upp4],
+            [serverData.wnNumMove180Name5, serverData.wnNumMove180upp5],
+            [serverData.wnNumMove180Name6, serverData.wnNumMove180upp6]
+        ]
+        const outLog: (string | number)[][] = [
+            [serverData.wnNumMove180Name1, serverData.wnNumMove180downp1],
+            [serverData.wnNumMove180Name2, serverData.wnNumMove180downp2],
+            [serverData.wnNumMove180Name3, serverData.wnNumMove180downp3],
+            [serverData.wnNumMove180Name4, serverData.wnNumMove180downp4],
+            [serverData.wnNumMove180Name5, serverData.wnNumMove180downp5],
+            [serverData.wnNumMove180Name6, serverData.wnNumMove180downp6]
+        ]
+        return new QianRuQianChu(inAndOut, inLog, outLog)
+    }
+}
+
 export class DangJian {
     constructor(
         public dangZhiBu = 0,
@@ -403,22 +421,32 @@ export class QiYe {
     }
 }
 
+export class LouZhangZhi {
+    constructor(public louZhang = '', public zouFangCiShu = 0, public weiJieJue = 0, public wanChengLv = 0) {}
+}
+
+export class DangZhiBu {
+    constructor(public name = '', public num = 0, public address = '') {}
+}
+
 export class LouYu {
-    constructor(public id = -1, public name = '', public address = '', public area = 0, public shuiShou = '', public qiYeList: QiYe[] = [], public coordx = 0, public coordy = 0) {}
+    constructor(public id = -1, public name = '', public address = '', public area = 0, public shuiShou = '', public louZhangZhi = new LouZhangZhi(), public dangZhiBu: DangZhiBu[] = [], public qiYeList: QiYe[] = [], public coordx = 0, public coordy = 0) {}
     static fromServer(serverData) {
         if (Array.isArray(serverData)) {
             return serverData.map(item => {
-                const qiYeList = QiYe.fromServer(item.companyDetailsResponseList)
+                const qiYeList = QiYe.fromServer(item.companyDetailsResponseList) || []
+                const louZhangZhi = new LouZhangZhi(item.master, item.visitcnt, item.unresolvecnt, Number(item.rate)*100)
 
-                const x = (Math.random() * 100) + (-2039.7808672166966)
-                const y = (Math.random() * 100) + (1370.848078007506)
-
-                return new LouYu(item.id, item.name, item.address, item.area, item.tax, qiYeList, x, y)
+                return new LouYu(item.id, item.name, item.address, item.area, item.tax, louZhangZhi, [], qiYeList, undefined, undefined)
             })
         } else {
             throw new Error("不合法的楼宇数据格式：期待数组")
         }
     }
+}
+
+export class LouYuCoord {
+    constructor(public id = -1, public x = 0, public y = 0) {}
 }
 
 export class State {
@@ -429,7 +457,7 @@ export class State {
     zhongDianShuiShouTop5: ZhongDianShuiShouTop5[] = []
     xinXiFaBu: XinXiFaBu[] = []
     shuiShouBoDong = new ShuiShouBoDong()
-    qianRuQianChu?: QianRuQianChu = undefined
+    qianRuQianChu = new QianRuQianChu()
     dangJian = new DangJian()
     louZhangOverview = new LouZhangOverview()
     diaoYanNianDuTongJi = new DiaoYanNianDuTongJi()
@@ -440,6 +468,7 @@ export class State {
     xinXi: XinXi[] = []
     weiJieJueList: WenTi[] = []
     louYuList: LouYu[] = []
+    louYuCoords: LouYuCoord[] = []
 
     client_id = 'sh-ptcs-city'
     client_version = '1.0.0'

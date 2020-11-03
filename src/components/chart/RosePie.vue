@@ -1,5 +1,8 @@
 <template>
-    <div class="u-wh-100"></div>
+    <div class="u-wh-100" style="position: relative;">
+        <div ref="chart" class="u-wh-100"></div>
+        <div class="placehoder">暂无数据</div>
+    </div>
 </template>
 
 <script lang="ts">
@@ -52,7 +55,7 @@ export default Vue.extend({
     },
     methods: {
         initChart() {
-            this.roseChart = echarts.init(this.$el as HTMLDivElement)
+            this.roseChart = echarts.init(this.$refs.chart as HTMLDivElement)
             const { title, data } = this
 
             const option: echarts.EChartOption = {
@@ -123,3 +126,14 @@ export default Vue.extend({
     }
 })
 </script>
+
+<style lang="scss">
+.placehoder {
+    position: absolute;
+    left: 50%;
+    top: 40%;
+    transform: translate(-50%);
+    color: white;
+    font-size: 25px;
+}
+</style>

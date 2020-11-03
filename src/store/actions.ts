@@ -109,6 +109,11 @@ const actions: ActionTree<State, State> = {
         const res = (await api.requestBuildings()).data
         commit('SET-BUILDINGS', res)
         return res
+    },
+
+    async queryBuildingCoordinates({ commit, state }) {
+        commit('SET-BUILDING-COORDINATES')
+        return true
     }
 }
 export default actions

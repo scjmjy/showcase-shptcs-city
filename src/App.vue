@@ -124,7 +124,9 @@ body,
         display: inline-block;
     }
     .el-icon-arrow-right:before {
-        content: "\25BA";
+        content: "\25B2";
+        transform: rotateZ(90deg);
+        display: inline-block;
     }
 }
 </style>

@@ -45,6 +45,9 @@ export default Vue.extend({
                     console.log('LOG-INFO login: ', res)
                     this.$router.push('/')
                 })
+                .catch(err => {
+                    this.$message.error('登录失败')
+                })
                 .finally(() => {
                     this.loginLoading = false
                 })

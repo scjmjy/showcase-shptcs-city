@@ -1,5 +1,5 @@
 <template>
-    <popup icon="楼宇总数" iconColor="#00FFFB" :name="name" :value="value" :title="`楼宇名称：${louYu.name}`" position="bottom-right" @input="emitEvent('input', $event)">
+    <popup icon="楼宇总数" iconColor="#00FFFB" :name="name" :value="value" label="楼宇名称" :title="louYu.name" position="bottom-right" @input="emitEvent('input', $event)">
         <div class="content">
             <div class="row">
                 <span>楼宇</span>
@@ -23,26 +23,14 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapState } from 'vuex'
+import { LouYu, State } from '@/store/state'
 import Popup from '@/components/popup/Popup.vue'
 import QiYePages from './components/QiYePages.vue'
 import DangZhiBuPages from './components/DangZhiBuPages.vue'
 import ItemList, { Item } from './components/ItemList.vue'
 import api from '@/store/api'
 
-type LouYu = {
-    name: string
-    address: string
-    qiYe: number
-    area: string
-    tax: string
-
-    louZhangZhi: {
-        louZhang: string
-        visit: number
-        problems: number
-        rate: number
-    }
-}
 export default Vue.extend({
     name: 'ZhongDianQiYePopup',
     components: { Popup, ItemList, QiYePages, DangZhiBuPages },
@@ -63,32 +51,41 @@ export default Vue.extend({
     },
     data() {
         return {
-            louYu: {} as LouYu
         }
     },
     computed: {
+        ...mapState({
+            louYuList: state => (state as State).louYuList
+        }),
+        louYu(): LouYu {
+            if (this.id === -1) {
+                return new LouYu()
+            } else {
+                return this.louYuList.find(l => l.id === this.id) || new LouYu()
+            }
+        },
         louYuInfo(): Item[] {
-            const { address, qiYe, area, tax } = this.louYu
+            const { address, qiYeList, area, shuiShou } = this.louYu
             const items = [
                 {
                     icon: '地址',
                     iconColor: '#2BC0EC',
-                    text: '地址：' + address
+                    text: '地址：' + (address || '-')
                 },
                 {
                     icon: '走访企业数',
                     iconColor: '#06DAD6',
-                    text: '企业数：' + qiYe
+                    text: '企业数：' + qiYeList.length
                 },
                 {
                     icon: '办公面积',
                     iconColor: '#CDD41B',
-                    text: '办公面积：' + area
+                    text: '办公面积：' + (area || '-')
                 },
                 {
                     icon: '税收总额',
                     iconColor: '#00D98B',
-                    text: '税收：' + tax
+                    text: '税收：' + (shuiShou || '-')
                 }
             ]
             return items
@@ -97,7 +94,7 @@ export default Vue.extend({
             if (!this.louYu.louZhangZhi) {
                 return []
             }
-            const { louZhang, visit, problems, rate } = this.louYu.louZhangZhi
+            const { louZhang, zouFangCiShu, weiJieJue, wanChengLv } = this.louYu.louZhangZhi
             const items = [
                 {
                     icon: '户管企业总数',
@@ -107,24 +104,23 @@ export default Vue.extend({
                 {
                     icon: '走访次数',
                     iconColor: '#41A6FF',
-                    text: '走访次数：' + visit
+                    text: '走访次数：' + zouFangCiShu
                 },
                 {
                     icon: '问题总数',
                     iconColor: '#EB6F49',
-                    text: '未解决问题数：' + problems
+                    text: '未解决问题数：' + weiJieJue
                 },
                 {
                     icon: '完成率',
                     iconColor: '#00D98B',
-                    text: '完成率：' + rate
+                    text: '完成率：' + wanChengLv
                 }
             ]
             return items
         }
     },
     created() {
-        this.fetch()
     },
     mounted() {
         // console.log('LouZhangPopup mounted')
@@ -139,11 +135,6 @@ export default Vue.extend({
     methods: {
         emitEvent(evName: string, evArg: any) {
             this.$emit(evName, evArg)
-        },
-        fetch() {
-            api.getLouYuInfo(this.id).then(res => {
-                this.louYu = res.data
-            })
         }
     }
 })

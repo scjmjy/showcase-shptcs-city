@@ -14,7 +14,7 @@ import Enum from '@/utils/enum'
 import Card from '@/components/Card.vue'
 
 const nums = [0, 1, 2, 3, 4, 5]
-const strs = ['档案', '', '', '', '', '']
+const strs = ['档案', '文章', '', '', '', '']
 const colors = ['#00FFFB', '#FF3838', '#FFF10B', '', '', '']
 const XinXiCategoryEnum = new Enum(nums, strs, colors)
 
@@ -80,7 +80,7 @@ export default Vue.extend({
                 // index: true,
                 rowNum: 6,
                 align: ['center'],
-                columnWidth: [130, 150],
+                columnWidth: [130, 130],
                 // columnWidth: [130],
                 evenRowBGC: 'transparent',
                 oddRowBGC: 'transparent'

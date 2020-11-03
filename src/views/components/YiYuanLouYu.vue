@@ -28,6 +28,10 @@ export default Vue.extend({
         ...mapState({
             yiYuanLouYu: state => state.yiYuanLouYu
         }),
+        yiyuan() {
+            const yiyuan = [...this.yiYuanLouYu]
+            return yiyuan.sort((a, b) => a.value - b.value)
+        },
         cardOpts() {
             return {
                 title: '亿元楼宇一览'
@@ -36,8 +40,8 @@ export default Vue.extend({
         chartOption() {
             const yData = []
             const data = []
-            for (let index = 0; index < this.yiYuanLouYu.length; index++) {
-                const yi = this.yiYuanLouYu[index]
+            for (let index = 0; index < this.yiyuan.length; index++) {
+                const yi = this.yiyuan[index]
                 data.push({
                     value: yi.value,
                     itemStyle: {

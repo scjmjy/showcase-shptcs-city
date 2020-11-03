@@ -1,7 +1,7 @@
 <template>
     <div class="pao-pao-container">
         <div class="left-side">
-            <div class="louzhang-name">{{ '楼长：' + data.name }}</div>
+            <div class="louzhang-name">{{ '总楼长：' + data.name }}</div>
             <div class="louzhang-data"></div>
             <img class="pao-pao-avatar" :src="avatarUrl" />
         </div>

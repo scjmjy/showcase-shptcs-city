@@ -4,8 +4,8 @@
         <button @click="toggle('LouYuPopup')">toggleLouYu</button> -->
         <iframe id="id-city-map" class="city-map-iframe" frameborder="no" scrolling="no" allowtransparency="true" />
         <popup-group v-model="topmostPopup">
-            <zhong-dian-qi-ye-popup name="zhong-dian-qi-ye" v-model="isShowZhongDianQiYePopup" :id="1" />
-            <lou-yu-popup name="lou-yu" v-model="isShowLouYuPopup" :id="1" />
+            <zhong-dian-qi-ye-popup name="zhong-dian-qi-ye" v-model="isShowZhongDianQiYePopup" :id="louYuId" />
+            <lou-yu-popup name="lou-yu" v-model="isShowLouYuPopup" :id="louYuId" />
         </popup-group>
     </div>
 </template>
@@ -13,33 +13,35 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { State } from '@/store/state'
+import { LouYu, State } from '@/store/state'
 import PopupGroup from '@/components/popup/PopupGroup.vue'
 import Popup from '@/components/popup/Popup.vue'
 import ZhongDianQiYePopup from './ZhongDianQiYePopup.vue'
 import LouYuPopup from './LouYuPopup.vue'
 import Interval, { IntervalTask } from '@/components/Interval.vue'
 
-const icon_louyu = require('../../../../assets/img/louyu.png')
-const icon_yujing1 = require('../../../../assets/img/信息预警1.png')
-const icon_yujing2 = require('../../../../assets/img/信息预警2.png')
-const icon_yujing3 = require('../../../../assets/img/信息预警3.png')
-const icon_yujing4 = require('../../../../assets/img/信息预警4.png')
-const icon_yujing5 = require('../../../../assets/img/信息预警5.png')
-const icon_yujing6 = require('../../../../assets/img/信息预警6.png')
-const icon_yujing7 = require('../../../../assets/img/信息预警7.png')
-const icon_yujing8 = require('../../../../assets/img/信息预警8.png')
-const icon_yujing9 = require('../../../../assets/img/信息预警9.png')
+const icon_louyu = 'http://localhost:9528' + require('../../../../assets/img/louyu.png')
+// const icon_louyu = 'http://10.81.71.51/citygis/citymap/Assets/image/RealTimeLocation/Soldie/online.png'
 
-const icon_zhongdian1 = require('../../../../assets/img/重点企业1.png')
-const icon_zhongdian2 = require('../../../../assets/img/重点企业2.png')
-const icon_zhongdian3 = require('../../../../assets/img/重点企业3.png')
-const icon_zhongdian4 = require('../../../../assets/img/重点企业4.png')
-const icon_zhongdian5 = require('../../../../assets/img/重点企业5.png')
-const icon_zhongdian6 = require('../../../../assets/img/重点企业6.png')
-const icon_zhongdian7 = require('../../../../assets/img/重点企业7.png')
-const icon_zhongdian8 = require('../../../../assets/img/重点企业8.png')
-const icon_zhongdian9 = require('../../../../assets/img/重点企业9.png')
+const icon_yujing1 = 'http://localhost:9528' + require('../../../../assets/img/信息预警1.png')
+const icon_yujing2 = 'http://localhost:9528' + require('../../../../assets/img/信息预警2.png')
+const icon_yujing3 = 'http://localhost:9528' + require('../../../../assets/img/信息预警3.png')
+const icon_yujing4 = 'http://localhost:9528' + require('../../../../assets/img/信息预警4.png')
+const icon_yujing5 = 'http://localhost:9528' + require('../../../../assets/img/信息预警5.png')
+const icon_yujing6 = 'http://localhost:9528' + require('../../../../assets/img/信息预警6.png')
+const icon_yujing7 = 'http://localhost:9528' + require('../../../../assets/img/信息预警7.png')
+const icon_yujing8 = 'http://localhost:9528' + require('../../../../assets/img/信息预警8.png')
+const icon_yujing9 = 'http://localhost:9528' + require('../../../../assets/img/信息预警9.png')
+
+const icon_zhongdian1 = 'http://localhost:9528' + require('../../../../assets/img/重点企业1.png')
+const icon_zhongdian2 = 'http://localhost:9528' + require('../../../../assets/img/重点企业2.png')
+const icon_zhongdian3 = 'http://localhost:9528' + require('../../../../assets/img/重点企业3.png')
+const icon_zhongdian4 = 'http://localhost:9528' + require('../../../../assets/img/重点企业4.png')
+const icon_zhongdian5 = 'http://localhost:9528' + require('../../../../assets/img/重点企业5.png')
+const icon_zhongdian6 = 'http://localhost:9528' + require('../../../../assets/img/重点企业6.png')
+const icon_zhongdian7 = 'http://localhost:9528' + require('../../../../assets/img/重点企业7.png')
+const icon_zhongdian8 = 'http://localhost:9528' + require('../../../../assets/img/重点企业8.png')
+const icon_zhongdian9 = 'http://localhost:9528' + require('../../../../assets/img/重点企业9.png')
 
 /**
  * 从1-9个预警图片中获取一个，目前只支持9个
@@ -73,6 +75,7 @@ export default Vue.extend({
             topmostPopup: '',
             isShowZhongDianQiYePopup: false,
             isShowLouYuPopup: false,
+            louYuId: -1,
             bridge: undefined as CityGis.Bridge | undefined
         }
     },
@@ -87,8 +90,10 @@ export default Vue.extend({
                         return {
                             coordx: louyu.coordx,
                             coordy: louyu.coordy,
-                            iconType: 'picture-marker',
-                            id: louyu.id
+                            coordz: 100,
+                            iconType: '楼宇',
+                            id: louyu.id,
+                            name: louyu.name
                         }
                     })
                     return {
@@ -116,34 +121,54 @@ export default Vue.extend({
         const vue = this
         this.bridge = new CityGis.Bridge({
             id: 'id-city-map',
-            url: 'http://158.10.0.222/citygis/areamap/WidgetPages/WidgetGIS.html?code=0715&themeid=Gis&devicetype=lg',
-            onReady() {
-                vue.mapToggleMenu()
-                vue.mapToggleJingMo()
-                vue.mapToggleMarkers()
+            url: 'http://158.10.0.222/citygis/areamap/WidgetPages/WidgetGIS.html?debug=false&maptype=3d&code=0715&themeid=Gis&devicetype=null',
+            onReady(bridge) {
+                vue.mapShowMenu()
+                // vue.mapShowJingMo()
+                vue.mapShowMarkers()
             }
         })
+        //回发消息处理
+        this.bridge.addEventListener(arg => {
+            console.log(JSON.stringify(arg, null, 4))
+            if (arg.action === 'mapclick') {
+                this.showDetail(arg.data)
+            }
+        }, this)
     },
     watch: {
         type(type) {
-            this.mapToggleMarkers()
+            this.mapShowMarkers()
+        },
+        markerData(data) {
+            this.mapShowMarkers()
         }
     },
     methods: {
-        toggle(which) {
-            switch (which) {
-                case 'ZhongDianQiYePopup':
-                    this.isShowZhongDianQiYePopup = true
-                    break
-                case 'LouYuPopup':
-                    this.isShowLouYuPopup = true
-                    break
+        // toggle(which) {
+        //     switch (which) {
+        //         case 'ZhongDianQiYePopup':
+        //             this.isShowZhongDianQiYePopup = true
+        //             break
+        //         case 'LouYuPopup':
+        //             this.isShowLouYuPopup = true
+        //             break
 
-                default:
-                    break
+        //         default:
+        //             break
+        //     }
+        // },
+        showDetail(data) {
+            if (!data.eventLayerFilter || data.eventLayerFilter.length === 0) {
+                return
+            }
+            const louyu = data.eventLayerFilter[0] as LouYu
+            if (louyu) {
+                this.louYuId = louyu.id
+                this.isShowZhongDianQiYePopup = true
             }
         },
-        mapToggleMenu() {
+        mapShowMenu() {
             if (this.bridge) {
                 this.bridge.Invoke({
                     ActionName: 'userMenu',
@@ -155,13 +180,13 @@ export default Vue.extend({
                 })
             }
         },
-        mapToggleJingMo() {
+        mapShowJingMo() {
             if (this.bridge) {
                 this.bridge.Invoke({
                     ActionName: 'themeLayer',
                     Parameters: {
                         name: '建筑精模',
-                        visible: true //为true则显示反之则隐藏
+                        visible: true
                     }
                 })
             }
@@ -177,7 +202,7 @@ export default Vue.extend({
                 })
             }
         },
-        mapToggleMarkers() {
+        mapShowMarkers() {
             if (!this.bridge) {
                 return
             }
@@ -206,7 +231,7 @@ export default Vue.extend({
                     mode: 'replace',
                     data: {
                         content: markers,
-                        parsegeometry: 'function(item){return {x:item.coordx, y:item.coordy}}'
+                        parsegeometry: 'function(item){return {x:item.coordx, y:item.coordy, z:item.coordz}}'
                     },
                     legendVisible: false,
                     popupEnabled: false,
@@ -221,171 +246,171 @@ export default Vue.extend({
                                 value: '楼宇',
                                 symbol: {
                                     type: 'picture-marker',
-                                    url: 'http://localhost:9528' + icon_louyu,
-                                    width: '52px',
-                                    height: '86px'
+                                    url: icon_louyu,
+                                    width: '17px',
+                                    height: '28px'
                                 }
                             },
                             {
                                 value: '预警1',
                                 symbol: {
                                     type: 'picture-marker',
-                                    url: 'http://localhost:9528' + icon_yujing1,
-                                    width: '52px',
-                                    height: '86px'
+                                    url: icon_yujing1,
+                                    width: '17px',
+                                    height: '28px'
                                 }
                             },
                             {
                                 value: '预警2',
                                 symbol: {
                                     type: 'picture-marker',
-                                    url: 'http://localhost:9528' + icon_yujing2,
-                                    width: '52px',
-                                    height: '86px'
+                                    url: icon_yujing2,
+                                    width: '17px',
+                                    height: '28px'
                                 }
                             },
                             {
                                 value: '预警3',
                                 symbol: {
                                     type: 'picture-marker',
-                                    url: 'http://localhost:9528' + icon_yujing3,
-                                    width: '52px',
-                                    height: '86px'
+                                    url: icon_yujing3,
+                                    width: '17px',
+                                    height: '28px'
                                 }
                             },
                             {
                                 value: '预警4',
                                 symbol: {
                                     type: 'picture-marker',
-                                    url: 'http://localhost:9528' + icon_yujing4,
-                                    width: '52px',
-                                    height: '86px'
+                                    url: icon_yujing4,
+                                    width: '17px',
+                                    height: '28px'
                                 }
                             },
                             {
                                 value: '预警5',
                                 symbol: {
                                     type: 'picture-marker',
-                                    url: 'http://localhost:9528' + icon_yujing5,
-                                    width: '52px',
-                                    height: '86px'
+                                    url: icon_yujing5,
+                                    width: '17px',
+                                    height: '28px'
                                 }
                             },
                             {
                                 value: '预警6',
                                 symbol: {
                                     type: 'picture-marker',
-                                    url: 'http://localhost:9528' + icon_yujing6,
-                                    width: '52px',
-                                    height: '86px'
+                                    url: icon_yujing6,
+                                    width: '17px',
+                                    height: '28px'
                                 }
                             },
                             {
                                 value: '预警7',
                                 symbol: {
                                     type: 'picture-marker',
-                                    url: 'http://localhost:9528' + icon_yujing7,
-                                    width: '52px',
-                                    height: '86px'
+                                    url: icon_yujing7,
+                                    width: '17px',
+                                    height: '28px'
                                 }
                             },
                             {
                                 value: '预警8',
                                 symbol: {
                                     type: 'picture-marker',
-                                    url: 'http://localhost:9528' + icon_yujing8,
-                                    width: '52px',
-                                    height: '86px'
+                                    url: icon_yujing8,
+                                    width: '17px',
+                                    height: '28px'
                                 }
                             },
                             {
                                 value: '预警9',
                                 symbol: {
                                     type: 'picture-marker',
-                                    url: 'http://localhost:9528' + icon_yujing9,
-                                    width: '52px',
-                                    height: '86px'
+                                    url: icon_yujing9,
+                                    width: '17px',
+                                    height: '28px'
                                 }
                             },
                             {
                                 value: '重点1',
                                 symbol: {
                                     type: 'picture-marker',
-                                    url: 'http://localhost:9528' + icon_zhongdian1,
-                                    width: '52px',
-                                    height: '86px'
+                                    url: icon_zhongdian1,
+                                    width: '17px',
+                                    height: '28px'
                                 }
                             },
                             {
                                 value: '重点2',
                                 symbol: {
                                     type: 'picture-marker',
-                                    url: 'http://localhost:9528' + icon_zhongdian2,
-                                    width: '52px',
-                                    height: '86px'
+                                    url: icon_zhongdian2,
+                                    width: '17px',
+                                    height: '28px'
                                 }
                             },
                             {
                                 value: '重点3',
                                 symbol: {
                                     type: 'picture-marker',
-                                    url: 'http://localhost:9528' + icon_zhongdian3,
-                                    width: '52px',
-                                    height: '86px'
+                                    url: icon_zhongdian3,
+                                    width: '17px',
+                                    height: '28px'
                                 }
                             },
                             {
                                 value: '重点4',
                                 symbol: {
                                     type: 'picture-marker',
-                                    url: 'http://localhost:9528' + icon_zhongdian4,
-                                    width: '52px',
-                                    height: '86px'
+                                    url: icon_zhongdian4,
+                                    width: '17px',
+                                    height: '28px'
                                 }
                             },
                             {
                                 value: '重点5',
                                 symbol: {
                                     type: 'picture-marker',
-                                    url: 'http://localhost:9528' + icon_zhongdian5,
-                                    width: '52px',
-                                    height: '86px'
+                                    url: icon_zhongdian5,
+                                    width: '17px',
+                                    height: '28px'
                                 }
                             },
                             {
                                 value: '重点6',
                                 symbol: {
                                     type: 'picture-marker',
-                                    url: 'http://localhost:9528' + icon_zhongdian6,
-                                    width: '52px',
-                                    height: '86px'
+                                    url: icon_zhongdian6,
+                                    width: '17px',
+                                    height: '28px'
                                 }
                             },
                             {
                                 value: '重点7',
                                 symbol: {
                                     type: 'picture-marker',
-                                    url: 'http://localhost:9528' + icon_zhongdian7,
-                                    width: '52px',
-                                    height: '86px'
+                                    url: icon_zhongdian7,
+                                    width: '17px',
+                                    height: '28px'
                                 }
                             },
                             {
                                 value: '重点8',
                                 symbol: {
                                     type: 'picture-marker',
-                                    url: 'http://localhost:9528' + icon_zhongdian8,
-                                    width: '52px',
-                                    height: '86px'
+                                    url: icon_zhongdian8,
+                                    width: '17px',
+                                    height: '28px'
                                 }
                             },
                             {
                                 value: '重点9',
                                 symbol: {
                                     type: 'picture-marker',
-                                    url: 'http://localhost:9528' + icon_zhongdian9,
-                                    width: '52px',
-                                    height: '86px'
+                                    url: icon_zhongdian9,
+                                    width: '17px',
+                                    height: '28px'
                                 }
                             }
                         ]

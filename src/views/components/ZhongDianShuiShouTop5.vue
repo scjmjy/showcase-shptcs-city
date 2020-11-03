@@ -4,9 +4,10 @@
     </card>
 </template>
 
-<script>
+<script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
+import { State, ZhongDianShuiShouTop5 } from '@/store/state'
 import echarts from 'echarts'
 import Card from '@/components/Card.vue'
 
@@ -26,19 +27,23 @@ export default Vue.extend({
     },
     computed: {
         ...mapState({
-            zhongDianShuiShouTop5: state => state.zhongDianShuiShouTop5
+            zhongDianShuiShouTop5: state => (state as State).zhongDianShuiShouTop5
         }),
-        cardOpts() {
+        top5(): ZhongDianShuiShouTop5[] {
+            const top5 = [...this.zhongDianShuiShouTop5]
+            return top5.sort((a, b) => a.value - b.value)
+        },
+        cardOpts(): any {
             return {
                 title: '重点企业税收Top5'
             }
         },
-        chartOption() {
-            const yData = []
-            const data = []
+        chartOption(): echarts.EChartOption {
+            const yData: string[] = []
+            const data: any[] = []
             let max = 0
-            for (let index = 0; index < this.zhongDianShuiShouTop5.length; index++) {
-                const yi = this.zhongDianShuiShouTop5[index]
+            for (let index = 0; index < this.top5.length; index++) {
+                const yi = this.top5[index]
                 data.push({
                     value: yi.value,
                     itemStyle: {
@@ -48,10 +53,10 @@ export default Vue.extend({
                 yData.push(yi.name)
                 max = Math.max(max, yi.value)
             }
-            const opt = {
+            const opt: echarts.EChartOption = {
                 tooltip: {
                     trigger: 'axis',
-                    formatter: '{b}<br />{c}万元',
+                    formatter: '{b}<br />{c}亿元',
                     backgroundColor: 'rgb(0,121,202)'
                 },
                 polar: {},
@@ -85,10 +90,10 @@ export default Vue.extend({
                         interval: 0
                     }
                 },
-                barWidth: 15,
-                series: {
+                series: [{
                     type: 'bar',
                     coordinateSystem: 'polar',
+                    barWidth: 15,
                     data,
                     label: {
                         show: true,
@@ -97,14 +102,14 @@ export default Vue.extend({
                         align: 'left'
                     },
                     animationDuration: this.dur
-                }
+                }]
             }
             return opt
         }
     },
     data() {
         return {
-            chart: null,
+            chart: undefined as echarts.ECharts | undefined,
             dur: 3000
         }
     },
@@ -114,7 +119,7 @@ export default Vue.extend({
     beforeDestroy() {
         if (this.chart) {
             this.chart.dispose()
-            this.chart = null
+            this.chart = undefined
         }
     },
     watch: {
@@ -126,7 +131,7 @@ export default Vue.extend({
     },
     methods: {
         initChart() {
-            this.chart = echarts.init(this.$refs.chartContainer)
+            this.chart = echarts.init(this.$refs.chartContainer as HTMLDivElement)
         }
     }
 })

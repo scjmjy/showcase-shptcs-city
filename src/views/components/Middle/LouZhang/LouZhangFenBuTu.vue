@@ -12,7 +12,7 @@
         <zong-lou-zhang-pao-pao class="lou-zhang-paopao" v-bind="zongLouZhangData[0]" />
         <zong-lou-zhang-pao-pao class="lou-zhang-paopao" v-bind="zongLouZhangData[1]" />
         <popup-group v-model="topmostPopup">
-            <lou-zhang-popup :img="showLouZhang.avatar" :id="showLouZhang.data.id" v-model="showPopup" />
+            <lou-zhang-popup :img="showLouZhang.avatar" :id="showLouZhang.data.id" :name="showLouZhang.data.name" v-model="showPopup" />
         </popup-group>
     </div>
 </template>

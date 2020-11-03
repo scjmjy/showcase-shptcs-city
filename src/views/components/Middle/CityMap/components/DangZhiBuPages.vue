@@ -1,16 +1,26 @@
 <template>
     <div class="container">
         <item-list :items="items" />
-        <el-pagination class="el-pagination-custom" :current-page="page.page" :page-size="1" layout="prev, pager, next, jumper" :total="page.total" @current-change="gotoPage" :small="true">
+        <div v-if="items.length === 0" class="placeholder">暂无数据</div>
+        <el-pagination
+            class="el-pagination-custom"
+            :current-page="currentPage"
+            :page-size="1"
+            layout="prev, pager, next, jumper"
+            :total="pageTotal"
+            @current-change="gotoPage"
+            :small="true"
+        >
         </el-pagination>
     </div>
 </template>
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+import { mapState } from 'vuex'
+import { LouYu, State } from '@/store/state'
 import ItemList, { Item } from './ItemList.vue'
 import api from '@/store/api'
-import PageController from '@/utils/page-controller'
 
 type DangZhiBu = {
     name: string
@@ -29,31 +39,46 @@ export default Vue.extend({
     },
     data() {
         return {
-            page: new PageController(api.getDangZhiBu, 1),
+            currentPage: 0,
             currentDzb: undefined as DangZhiBu | undefined
         }
     },
     computed: {
+        ...mapState({
+            louYuList: state => (state as State).louYuList
+        }),
+        pageTotal(): number {
+            const louyu = this.louYuList.find(louyu => louyu.id === this.id)
+            if (!louyu) {
+                return 0
+            }
+            return louyu.dangZhiBu.length
+        },
         items(): Item[] {
-            if (!this.currentDzb) {
+            const louyu = this.louYuList.find(louyu => louyu.id === this.id)
+            if (!louyu) {
                 return []
             }
-            const { name, address, members } = this.currentDzb
+            const dangzhibu = louyu.dangZhiBu[this.currentPage - 1]
+            if (!dangzhibu) {
+                return []
+            }
+            const { name, address, num } = dangzhibu
             const items = [
                 {
                     icon: '党支部数',
                     iconColor: '#FF4005',
-                    text: '党支部名称：' + name
+                    text: '党支部名称：' + (name || '-')
                 },
                 {
                     icon: '开展企业组团服务',
                     iconColor: '#00FFFB',
-                    text: '党员人数：' + members
+                    text: '党员人数：' + (num || '-')
                 },
                 {
                     icon: '地址',
                     iconColor: '#2BC8EC',
-                    text: '党支部地址：' + address
+                    text: '党支部地址：' + (address || '-')
                 }
             ]
             return items
@@ -67,17 +92,17 @@ export default Vue.extend({
             this.gotoPage(1)
         },
         gotoPage(page: number) {
-            this.page
-                .gotoPage(page)
-                .then(({ conflict, list }) => {
-                    this.currentDzb = list[0]
-                })
-                .catch(err => {
-                    this.$message({ type: 'error', message: `获取党支部数据失败：${err.message}` })
-                })
+            this.currentPage = page
         }
     }
 })
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+.container {
+    .placeholder {
+        font-size: 25px;
+        color: white;
+    }
+}
+</style>

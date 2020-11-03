@@ -1,5 +1,5 @@
 <template>
-    <popup :value="value" :img="img" :icon="icon" label="楼长" :title="weiJieJueWenTi.name" @input="emitEvent('input', $event)">
+    <popup :value="value" :img="img" :icon="icon" label="楼长" :title="name" @input="emitEvent('input', $event)">
         <div class="content">
             <scroll-list class="list" title="未解决问题" :data="weiJieJueWenTi" @click="openWenTiDetail" />
             <rose-pie class="pie" title="未解决问题分类统计" :data="weiJieJueFenLeiTongJi" />
@@ -24,6 +24,10 @@ export default Vue.extend({
             default: undefined
         },
         icon: {
+            type: String,
+            default: undefined
+        },
+        name: {
             type: String,
             default: undefined
         },

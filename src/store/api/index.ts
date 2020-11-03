@@ -1,5 +1,6 @@
 import request from '@/utils/request'
 import state from '@/store/state'
+import { AxiosPromise } from 'axios'
 
 const API_URL_BASE = '/api/v1/zhly'
 const API_URLS = {
@@ -21,7 +22,48 @@ type PageParam = {
     pageSize: number // 每页个数
 }
 
+const COORDINATE_QUERY_URL = 'http://10.81.71.51/Search/ api/Address/Search?keyWord='
+export type Coord = {
+    x: number
+    y: number
+}
+type ResultType = {
+    matchCount: number
+    result: Coord[]
+}
 export default {
+    queryCoordinates(addresses: string[]) {
+        const promise = new Promise<Coord[]>((resolve, reject) => {
+            const p = addresses.map(address => {
+                return request({
+                    method: 'GET',
+                    url: COORDINATE_QUERY_URL + address
+                })
+            }) as AxiosPromise<ResultType>[]
+            Promise.all(p)
+                .then(results => {
+                    const coords = results.map(result => {
+                        const resultData = result.data
+                        if (resultData.matchCount > 0) {
+                            return {
+                                x: resultData.result[0].x,
+                                y: resultData.result[0].y
+                            }
+                        } else {
+                            return {
+                                x: NaN,
+                                y: NaN
+                            }
+                        }
+                    })
+                    resolve(coords)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+        return promise
+    },
     login(username: string, passwd: string) {
         return request({
             method: 'POST',
@@ -81,7 +123,7 @@ export default {
      * 获取某楼长或所有楼长的未解决问题列表
      * @param louZhangId 楼长 id，如果没有填写，则获取所有楼长的未解决问题列表
      */
-    requestWeiJieJueWenTi(louZhangId: number| undefined = undefined) {
+    requestWeiJieJueWenTi(louZhangId: number | undefined = undefined) {
         return request({
             method: 'POST',
             url: API_URLS.weijiejue_wenti_list,
@@ -94,7 +136,7 @@ export default {
      * 获取某楼长或所有楼长的未解决问题的分类统计
      * @param louZhangId 楼长 id，如果没有填写，则获取所有楼长的数据
      */
-    requestWeiJieJueFenLeiTongJi(louZhangId: number| undefined = undefined) {
+    requestWeiJieJueFenLeiTongJi(louZhangId: number | undefined = undefined) {
         return request({
             method: 'POST',
             url: API_URLS.weijiejue_fenlei_stat_post,
