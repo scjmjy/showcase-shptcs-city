@@ -404,12 +404,16 @@ export class QiYe {
 }
 
 export class LouYu {
-    constructor(public id = -1, public name = '', public address = '', public area = 0, public shuiShou = '', public qiYeList: QiYe[] = []) {}
+    constructor(public id = -1, public name = '', public address = '', public area = 0, public shuiShou = '', public qiYeList: QiYe[] = [], public coordx = 0, public coordy = 0) {}
     static fromServer(serverData) {
         if (Array.isArray(serverData)) {
             return serverData.map(item => {
                 const qiYeList = QiYe.fromServer(item.companyDetailsResponseList)
-                return new LouYu(item.id, item.name, item.address, item.area, item.tax, qiYeList)
+
+                const x = (Math.random() * 100) + (-2039.7808672166966)
+                const y = (Math.random() * 100) + (1370.848078007506)
+
+                return new LouYu(item.id, item.name, item.address, item.area, item.tax, qiYeList, x, y)
             })
         } else {
             throw new Error("不合法的楼宇数据格式：期待数组")

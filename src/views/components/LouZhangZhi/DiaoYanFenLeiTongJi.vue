@@ -28,7 +28,7 @@ export default Vue.extend({
         return {
             intervalTask: undefined  as IntervalTask | undefined,
             barChart: undefined as echarts.ECharts | undefined,
-            period: 'year' as 'year' | 'week',
+            period: 'week' as 'year' | 'week',
             color: [
                     'rgb(253,209,0)',
                     'rgb(199,255,65)',
@@ -52,7 +52,7 @@ export default Vue.extend({
                 return {}
             }
             const { week, year } = this.diaoYanFenLeiTongJi
-            const yearTop8 = year
+            const yearTop8 = year.sort((a, b) => b.value - a.value).slice(0, 8)
             const { color } = this
             const title = '调研分类统计'
             let xAxis
@@ -67,7 +67,7 @@ export default Vue.extend({
                     type: 'pie',
                     name: title,
                     radius: [10, '50%'],
-                    center: ['60%', '75%'],
+                    center: ['60%', '65%'],
                     roseType: 'radius',
                     datasetIndex: 0,
                     label: {

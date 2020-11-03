@@ -12,6 +12,8 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapState } from 'vuex'
+import { State } from '@/store/state'
 import PopupGroup from '@/components/popup/PopupGroup.vue'
 import Popup from '@/components/popup/Popup.vue'
 import ZhongDianQiYePopup from './ZhongDianQiYePopup.vue'
@@ -19,6 +21,39 @@ import LouYuPopup from './LouYuPopup.vue'
 import Interval, { IntervalTask } from '@/components/Interval.vue'
 
 const icon_louyu = require('../../../../assets/img/louyu.png')
+const icon_yujing1 = require('../../../../assets/img/信息预警1.png')
+const icon_yujing2 = require('../../../../assets/img/信息预警2.png')
+const icon_yujing3 = require('../../../../assets/img/信息预警3.png')
+const icon_yujing4 = require('../../../../assets/img/信息预警4.png')
+const icon_yujing5 = require('../../../../assets/img/信息预警5.png')
+const icon_yujing6 = require('../../../../assets/img/信息预警6.png')
+const icon_yujing7 = require('../../../../assets/img/信息预警7.png')
+const icon_yujing8 = require('../../../../assets/img/信息预警8.png')
+const icon_yujing9 = require('../../../../assets/img/信息预警9.png')
+
+const icon_zhongdian1 = require('../../../../assets/img/重点企业1.png')
+const icon_zhongdian2 = require('../../../../assets/img/重点企业2.png')
+const icon_zhongdian3 = require('../../../../assets/img/重点企业3.png')
+const icon_zhongdian4 = require('../../../../assets/img/重点企业4.png')
+const icon_zhongdian5 = require('../../../../assets/img/重点企业5.png')
+const icon_zhongdian6 = require('../../../../assets/img/重点企业6.png')
+const icon_zhongdian7 = require('../../../../assets/img/重点企业7.png')
+const icon_zhongdian8 = require('../../../../assets/img/重点企业8.png')
+const icon_zhongdian9 = require('../../../../assets/img/重点企业9.png')
+
+/**
+ * 从1-9个预警图片中获取一个，目前只支持9个
+ */
+function getYuJingPic(index: number) {
+    return '预警' + ((index + 1) % 9)
+}
+
+/**
+ * 从1-9个重点企业图片中获取一个，目前只支持9个
+ */
+function randomZhongDian(index: number) {
+    return '重点' + ((index + 1) % 9)
+}
 
 /**
  * 长寿街道的城建地图组件，用来撒点显示楼宇相关地理信息
@@ -27,6 +62,12 @@ export default Vue.extend({
     name: 'ChangShouMap',
     components: { PopupGroup, Popup, ZhongDianQiYePopup, LouYuPopup },
     mixins: [Interval],
+    props: {
+        type: {
+            type: String, // louyu  qiyeTop5 yujing yiyuanlouyu qiyeshuishouTop5
+            default: 'louyu'
+        }
+    },
     data() {
         return {
             topmostPopup: '',
@@ -34,6 +75,35 @@ export default Vue.extend({
             isShowLouYuPopup: false,
             bridge: undefined as CityGis.Bridge | undefined
         }
+    },
+    computed: {
+        ...mapState({
+            louYuList: state => (state as State).louYuList
+        }),
+        markerData(): any {
+            switch (this.type) {
+                case 'louyu':
+                    const markers = this.louYuList.map(louyu => {
+                        return {
+                            coordx: louyu.coordx,
+                            coordy: louyu.coordy,
+                            iconType: 'picture-marker',
+                            id: louyu.id
+                        }
+                    })
+                    return {
+                        markers,
+                        texts: []
+                    }
+                    break
+
+                default:
+                    break
+            }
+        }
+    },
+    created() {
+        // this.
     },
     mounted() {
         this.newInterval(
@@ -50,9 +120,14 @@ export default Vue.extend({
             onReady() {
                 vue.mapToggleMenu()
                 vue.mapToggleJingMo()
-                vue.mapTogglePoints()
+                vue.mapToggleMarkers()
             }
         })
+    },
+    watch: {
+        type(type) {
+            this.mapToggleMarkers()
+        }
     },
     methods: {
         toggle(which) {
@@ -102,10 +177,27 @@ export default Vue.extend({
                 })
             }
         },
-        mapTogglePoints() {
+        mapToggleMarkers() {
             if (!this.bridge) {
                 return
             }
+            const { markers, texts } = this.markerData
+
+            const uniqueInfos = texts.map(text => {
+                return {
+                    value: 'text-marker',
+                    symbol: {
+                        type: 'text',
+                        color: '#ffffff',
+                        text,
+                        xoffset: 0,
+                        yoffset: -25,
+                        font: {
+                            size: 10
+                        }
+                    }
+                }
+            })
             this.bridge.Invoke({
                 ActionName: 'ShowData',
                 Parameters: {
@@ -113,23 +205,7 @@ export default Vue.extend({
                     type: 'point',
                     mode: 'replace',
                     data: {
-                        content: [
-                            {
-                                coordx: '-2039.7808672166966',
-                                coordy: '1370.848078007506',
-                                iconType: '楼宇'
-                            },
-                            {
-                                coordx: '-2239.7808672166966',
-                                coordy: '1370.848078007506',
-                                iconType: '小区管理网格'
-                            },
-                            {
-                                coordx: '-1839.7808672166966',
-                                coordy: '1370.848078007506',
-                                iconType: 'text-marker'
-                            }
-                        ],
+                        content: markers,
                         parsegeometry: 'function(item){return {x:item.coordx, y:item.coordy}}'
                     },
                     legendVisible: false,
@@ -140,19 +216,7 @@ export default Vue.extend({
                         type: 'unique-value',
                         field: 'iconType',
                         uniqueValueInfos: [
-                            {
-                                value: 'text-marker',
-                                symbol: {
-                                    type: 'text',
-                                    color: '#ffffff',
-                                    text: 'This is my location!',
-                                    xoffset: 0,
-                                    yoffset: -25,
-                                    font: {
-                                        size: 24
-                                    }
-                                }
-                            },
+                            ...uniqueInfos,
                             {
                                 value: '楼宇',
                                 symbol: {
@@ -163,102 +227,165 @@ export default Vue.extend({
                                 }
                             },
                             {
-                                value: '小区管理110非警情',
+                                value: '预警1',
                                 symbol: {
                                     type: 'picture-marker',
-                                    url: 'http://10.81.71.38/chengyun/chengyun_town/mapIcon/communityAndPolice.png',
+                                    url: 'http://localhost:9528' + icon_yujing1,
                                     width: '52px',
-                                    height: '72px'
+                                    height: '86px'
                                 }
                             },
                             {
-                                value: '小区管理市场监管',
+                                value: '预警2',
                                 symbol: {
                                     type: 'picture-marker',
-                                    url: 'http://10.81.71.38/chengyun/chengyun_town/mapIcon/communityAndMarket.png',
+                                    url: 'http://localhost:9528' + icon_yujing2,
                                     width: '52px',
-                                    height: '72px'
+                                    height: '86px'
                                 }
                             },
                             {
-                                value: '小区管理综治',
+                                value: '预警3',
                                 symbol: {
                                     type: 'picture-marker',
-                                    url: 'http://10.81.71.38/chengyun/chengyun_town/mapIcon/communityAndAdmin.png',
+                                    url: 'http://localhost:9528' + icon_yujing3,
                                     width: '52px',
-                                    height: '72px'
+                                    height: '86px'
                                 }
                             },
                             {
-                                value: '综合管理网格',
+                                value: '预警4',
                                 symbol: {
                                     type: 'picture-marker',
-                                    url: 'http://10.81.71.38/chengyun/chengyun_town/mapIcon/allAndGrid.png',
+                                    url: 'http://localhost:9528' + icon_yujing4,
                                     width: '52px',
-                                    height: '72px'
+                                    height: '86px'
                                 }
                             },
                             {
-                                value: '综合管理110非警情',
+                                value: '预警5',
                                 symbol: {
                                     type: 'picture-marker',
-                                    url: 'http://10.81.71.38/chengyun/chengyun_town/mapIcon/allAndPolice.png',
+                                    url: 'http://localhost:9528' + icon_yujing5,
                                     width: '52px',
-                                    height: '72px'
+                                    height: '86px'
                                 }
                             },
                             {
-                                value: '综合管理市场监管',
+                                value: '预警6',
                                 symbol: {
                                     type: 'picture-marker',
-                                    url: 'http://10.81.71.38/chengyun/chengyun_town/mapIcon/allAndMarket.png',
+                                    url: 'http://localhost:9528' + icon_yujing6,
                                     width: '52px',
-                                    height: '72px'
+                                    height: '86px'
                                 }
                             },
                             {
-                                value: '综合管理综治',
+                                value: '预警7',
                                 symbol: {
                                     type: 'picture-marker',
-                                    url: 'http://10.81.71.38/chengyun/chengyun_town/mapIcon/allAndAdmin.png',
+                                    url: 'http://localhost:9528' + icon_yujing7,
                                     width: '52px',
-                                    height: '72px'
+                                    height: '86px'
                                 }
                             },
                             {
-                                value: '街面管理网格',
+                                value: '预警8',
                                 symbol: {
                                     type: 'picture-marker',
-                                    url: 'http://10.81.71.38/chengyun/chengyun_town/mapIcon/streetAndGrid.png',
+                                    url: 'http://localhost:9528' + icon_yujing8,
                                     width: '52px',
-                                    height: '72px'
+                                    height: '86px'
                                 }
                             },
                             {
-                                value: '街面管理110非警情',
+                                value: '预警9',
                                 symbol: {
                                     type: 'picture-marker',
-                                    url: 'http://10.81.71.38/chengyun/chengyun_town/mapIcon/streetAndPolice.png',
+                                    url: 'http://localhost:9528' + icon_yujing9,
                                     width: '52px',
-                                    height: '72px'
+                                    height: '86px'
                                 }
                             },
                             {
-                                value: '街面管理市场监管',
+                                value: '重点1',
                                 symbol: {
                                     type: 'picture-marker',
-                                    url: 'http://10.81.71.38/chengyun/chengyun_town/mapIcon/streetAndMarket.png',
+                                    url: 'http://localhost:9528' + icon_zhongdian1,
                                     width: '52px',
-                                    height: '72px'
+                                    height: '86px'
                                 }
                             },
                             {
-                                value: '街面管理综治',
+                                value: '重点2',
                                 symbol: {
                                     type: 'picture-marker',
-                                    url: 'http://10.81.71.38/chengyun/chengyun_town/mapIcon/streetAndAdmin.png',
+                                    url: 'http://localhost:9528' + icon_zhongdian2,
                                     width: '52px',
-                                    height: '72px'
+                                    height: '86px'
+                                }
+                            },
+                            {
+                                value: '重点3',
+                                symbol: {
+                                    type: 'picture-marker',
+                                    url: 'http://localhost:9528' + icon_zhongdian3,
+                                    width: '52px',
+                                    height: '86px'
+                                }
+                            },
+                            {
+                                value: '重点4',
+                                symbol: {
+                                    type: 'picture-marker',
+                                    url: 'http://localhost:9528' + icon_zhongdian4,
+                                    width: '52px',
+                                    height: '86px'
+                                }
+                            },
+                            {
+                                value: '重点5',
+                                symbol: {
+                                    type: 'picture-marker',
+                                    url: 'http://localhost:9528' + icon_zhongdian5,
+                                    width: '52px',
+                                    height: '86px'
+                                }
+                            },
+                            {
+                                value: '重点6',
+                                symbol: {
+                                    type: 'picture-marker',
+                                    url: 'http://localhost:9528' + icon_zhongdian6,
+                                    width: '52px',
+                                    height: '86px'
+                                }
+                            },
+                            {
+                                value: '重点7',
+                                symbol: {
+                                    type: 'picture-marker',
+                                    url: 'http://localhost:9528' + icon_zhongdian7,
+                                    width: '52px',
+                                    height: '86px'
+                                }
+                            },
+                            {
+                                value: '重点8',
+                                symbol: {
+                                    type: 'picture-marker',
+                                    url: 'http://localhost:9528' + icon_zhongdian8,
+                                    width: '52px',
+                                    height: '86px'
+                                }
+                            },
+                            {
+                                value: '重点9',
+                                symbol: {
+                                    type: 'picture-marker',
+                                    url: 'http://localhost:9528' + icon_zhongdian9,
+                                    width: '52px',
+                                    height: '86px'
                                 }
                             }
                         ]

@@ -58,21 +58,6 @@ export default Vue.extend({
         }
     },
     mounted() {
-        // const pm = this.popupManager
-        // pm.addPopup('popup-xinxi', this.$refs.popupXinxi as Vue, { id: -1 })
-        // pm.addPopup('popup-problem-detail', this.$refs.popupProblem as Vue, { id: -1 })
-        // this.popupManager.on('popup-show', ({ name, isShowing, totalShowCount }) => {
-        //     console.log('popup-show', name, isShowing, totalShowCount)
-        //     if (totalShowCount > 0) {
-        //         this.showMask = true
-        //     }
-        // })
-        // this.popupManager.on('popup-hide', ({ name, isShowing, totalShowCount }) => {
-        //     console.log('popup-hide', name, isShowing, totalShowCount)
-        //     if (totalShowCount === 0) {
-        //         this.showMask = false
-        //     }
-        // })
         this.$root.$on('popup-xinxi', ({ labelColor, id, xinXi }) => {
             this.topmostPopup = 'popup-xinxi'
             this.xinXiId = id
@@ -90,7 +75,7 @@ export default Vue.extend({
             this.currentComponent = {
                 name: 'ChangShouMap',
                 data: {
-                    type: 'xinxiyujing'
+                    type: 'yujing'
                 }
             }
         })
@@ -99,7 +84,16 @@ export default Vue.extend({
             this.currentComponent = {
                 name: 'ChangShouMap',
                 data: {
-                    type: 'zhongdianqiye'
+                    type: 'qiyeTop5'
+                }
+            }
+        })
+        // 显示城建地图，并且在地图上显示楼宇撒点
+        this.$root.$on('map-zhongdianqiye', () => {
+            this.currentComponent = {
+                name: 'ChangShouMap',
+                data: {
+                    type: 'louyu'
                 }
             }
         })
