@@ -70,6 +70,8 @@ export default Vue.extend({
         height: 500px;
         vertical-align: middle;
         text-align: center;
+        border-radius: 10px;
+        overflow: hidden;
         .left,
         .right {
             display: inline-block;

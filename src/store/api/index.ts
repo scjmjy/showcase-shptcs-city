@@ -13,7 +13,8 @@ const API_URLS = {
     xinxi_get: API_URL_BASE + '/information',
     weijiejue_wenti_list: API_URL_BASE + '/problem/unresolve',
     weijiejue_fenlei_stat_post: API_URL_BASE + '/category/problem/unresolve',
-    louyu_list_get: API_URL_BASE + '/buildings'
+    louyu_list_get: API_URL_BASE + '/buildings',
+    yujing_louyu_list_get: API_URL_BASE + '/warn'
 }
 
 type PageParam = {
@@ -152,6 +153,15 @@ export default {
         return request({
             method: 'GET',
             url: API_URLS.louyu_list_get
+        })
+    },
+    /**
+     * 获取预警楼宇列表
+     */
+    requestYuJingList() {
+        return request({
+            method: 'GET',
+            url: API_URLS.yujing_louyu_list_get
         })
     },
 

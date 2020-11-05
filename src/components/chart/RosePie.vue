@@ -128,12 +128,4 @@ export default Vue.extend({
 </script>
 
 <style lang="scss">
-.placehoder {
-    position: absolute;
-    left: 50%;
-    top: 40%;
-    transform: translate(-50%);
-    color: white;
-    font-size: 25px;
-}
 </style>

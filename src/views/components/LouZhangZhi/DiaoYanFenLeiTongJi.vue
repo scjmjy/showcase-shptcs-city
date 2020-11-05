@@ -214,53 +214,5 @@ export default Vue.extend({
 </script>
 
 <style scoped>
-.placehoder {
-    position: absolute;
-    left: 50%;
-    top: 40%;
-    transform: translate(-50%);
-    color: white;
-    font-size: 25px;
-}
-.radio-group {
-    position: absolute;
-    left: 175px;
-    top: 20px;
-}
-.radio-item {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    padding: 2px 15px;
-    cursor: pointer !important;
-}
-.radio-item.active {
-    border: 1px solid rgb(47, 96, 154);
-    border-radius: 4px;
-    box-shadow: inset 5px -5px 10px rgb(47, 96, 154), inset -5px 5px 10px rgb(47, 96, 154);
-}
-.radio-group .radio-item:first-of-type {
-    margin-right: 10px;
-}
-.radio {
-    cursor: pointer !important;
-    appearance: none;
-    outline: none;
-    border-radius: 50%;
-    border: 1px solid rgb(47, 96, 154);
-    width: 16px;
-    height: 16px;
-    margin: 0px 3px 0px 0px;
-    background-color: transparent;
-    transition: all 0.5s linear;
-}
-.radio:checked {
-    background-color: rgb(196, 75, 28);
-    border: 4px solid rgb(214, 195, 67);
-}
-.label {
-    font-size: 14px;
-    color: white;
-    cursor: pointer !important;
-}
+
 </style>

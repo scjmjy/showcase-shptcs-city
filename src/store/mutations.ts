@@ -22,7 +22,8 @@ import {
     XinXi,
     YearValueType,
     WeekValueType,
-    LouYu
+    LouYu,
+    YuJingList
 } from './state'
 
 const coords = [
@@ -158,16 +159,17 @@ const mutations: MutationTree<State> = {
 
     ['SET-BUILDINGS'](state, res) {
         state.louYuList = LouYu.fromServer(res)
-        state.louYuList.forEach(louyu => {
-            const coord = coords.find(c => c.id === louyu.id)
-            if (coord) {
-                louyu.coordx = coord.x
-                louyu.coordy = coord.y
-            }
-        })
+        // state.louYuList.forEach(louyu => {
+        //     const coord = coords.find(c => c.id === louyu.id)
+        //     if (coord) {
+        //         louyu.coordx = coord.x
+        //         louyu.coordy = coord.y
+        //     }
+        // })
     },
-    ['SET-BUILDING-COORDINATES']() {
-        
+
+    ['SET-YUJING-LIST'](state, res) {
+        state.yuJingList = YuJingList.fromServer(res)
     }
 }
 export default mutations

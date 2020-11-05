@@ -87,7 +87,7 @@ export default Vue.extend({
     },
     methods: {
         onTitleClick() {
-            alert('楼宇总览 click')
+            this.$root.$emit('map-louyu')
         }
     }
 })

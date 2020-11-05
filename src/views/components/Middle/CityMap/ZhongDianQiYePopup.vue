@@ -104,7 +104,7 @@ export default Vue.extend({
                 {
                     icon: '走访次数',
                     iconColor: '#41A6FF',
-                    text: '走访次数：' + zouFangCiShu
+                    text: '走访次数：' + (zouFangCiShu ? zouFangCiShu : '-')
                 },
                 {
                     icon: '问题总数',

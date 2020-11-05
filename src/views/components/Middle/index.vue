@@ -1,8 +1,8 @@
 <template>
     <card :opts="{ hasTitle: false }" style="width: 100%; height: 100%;">
-        <keep-alive>
+        <!-- <keep-alive> -->
             <component :is="currentComponent.name" v-bind="currentComponent.data" />
-        </keep-alive>
+        <!-- </keep-alive> -->
         <popup-group v-model="topmostPopup">
             <xinxi-detail-popup
                 name="popup-xinxi"
@@ -80,20 +80,38 @@ export default Vue.extend({
             }
         })
         // 显示城建地图，并且在地图上显示重点企业撒点
-        this.$root.$on('map-zhongdianqiye', () => {
-            this.currentComponent = {
-                name: 'ChangShouMap',
-                data: {
-                    type: 'qiyeTop5'
-                }
-            }
-        })
-        // 显示城建地图，并且在地图上显示楼宇撒点
-        this.$root.$on('map-zhongdianqiye', () => {
+        this.$root.$on('map-louyu', () => {
             this.currentComponent = {
                 name: 'ChangShouMap',
                 data: {
                     type: 'louyu'
+                }
+            }
+        })
+        // 显示城建地图，并且在地图上显示重点企业撒点
+        this.$root.$on('map-zhongdianqiye', () => {
+            this.currentComponent = {
+                name: 'ChangShouMap',
+                data: {
+                    type: 'zhongdianqiye'
+                }
+            }
+        })
+        // 显示城建地图，并且在地图上显示重点企业所对应的楼宇撒点
+        this.$root.$on('map-shuishoutop5', () => {
+            this.currentComponent = {
+                name: 'ChangShouMap',
+                data: {
+                    type: 'shuishoutop5'
+                }
+            }
+        })
+        // 显示城建地图，并且在地图上显示亿元楼宇撒点
+        this.$root.$on('map-yiyuanlouyu', () => {
+            this.currentComponent = {
+                name: 'ChangShouMap',
+                data: {
+                    type: 'yiyuanlouyu'
                 }
             }
         })

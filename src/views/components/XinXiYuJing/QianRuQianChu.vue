@@ -175,7 +175,7 @@ export default Vue.extend({
                         const month = params[0].value[0]
                         const up = params[0].value[1]
                         const down = Math.abs(params[1].value[1])
-                        return `${month}月<br/>迁入：${up}家<br/>迁出：${down}家`
+                        return `${month}<br/>迁入：${up}家<br/>迁出：${down}家`
                     },
                     axisPointer: {
                         type: 'shadow'
@@ -192,7 +192,7 @@ export default Vue.extend({
                     type: 'category',
                     axisLabel: {
                         color: 'white',
-                        formatter: '{value}月'
+                        formatter: '{value}'
                     },
                     axisLine: {
                         lineStyle: {
