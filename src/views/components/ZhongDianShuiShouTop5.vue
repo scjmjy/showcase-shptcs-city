@@ -64,7 +64,13 @@ export default Vue.extend({
                     type: 'value',
                     max: (max * 4) / 3, // 让极坐标的左上角1/4空出来
                     axisLabel: {
-                        color: 'white'
+                        color: 'white',
+                        formatter(value) {
+                            if (value > max) {
+                                return ''
+                            }
+                            return value + '亿'
+                        }
                     },
                     axisLine: {
                         lineStyle: {
@@ -95,12 +101,6 @@ export default Vue.extend({
                     coordinateSystem: 'polar',
                     barWidth: 15,
                     data,
-                    label: {
-                        show: true,
-                        formatter: '{c}亿',
-                        color: '#003c8e',
-                        align: 'left'
-                    },
                     animationDuration: this.dur
                 }]
             }

@@ -135,8 +135,7 @@ const mutations: MutationTree<State> = {
 
     ['SET-CATEGORY-RESEARCH'](state, { year, week }) {
         const dataYear = DiaoYanFenLeiTongJi.fromServer(year, 'year')
-        // const dataWeek = DiaoYanFenLeiTongJi.fromServer(week, 'week')
-        const dataWeek = DiaoYanFenLeiTongJi.fromServer(year, 'week')
+        const dataWeek = DiaoYanFenLeiTongJi.fromServer(week, 'week')
         state.diaoYanFenLeiTongJi.year = dataYear as YearValueType[]
         state.diaoYanFenLeiTongJi.week = dataWeek as WeekValueType[][]
     },

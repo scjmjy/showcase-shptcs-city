@@ -1,7 +1,7 @@
 <template>
     <div class="u-wh-100" style="position: relative;">
         <div ref="chart" class="u-wh-100"></div>
-        <div class="placehoder">暂无数据</div>
+        <div v-if="data.length === 0" class="placehoder">暂无数据</div>
     </div>
 </template>
 

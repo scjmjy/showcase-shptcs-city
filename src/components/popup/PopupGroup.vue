@@ -1,5 +1,5 @@
 <template>
-    <div :class="{ mask: show }" :style="{ 'z-index': groupStartZIndex }">
+    <div v-if="show" class="mask" :style="{ 'z-index': groupStartZIndex }">
         <slot />
     </div>
 </template>

@@ -1,6 +1,10 @@
 <template>
     <card :opts="cardOpts">
-        <dv-scroll-board :config="scrollConfigLeft" @click="onClickLeft" style="width:610px; height:280px; display: inline-block; border-right: 1px solid #2d426d;" />
+        <dv-scroll-board
+            :config="scrollConfigLeft"
+            @click="onClickLeft"
+            style="width:610px; height:280px; display: inline-block; border-right: 1px solid #2d426d;"
+        />
         <dv-scroll-board :config="scrollConfigRight" @click="onClickRight" style="margin-left: 20px; width:610px; height:280px; display: inline-block;" />
     </card>
 </template>
@@ -13,10 +17,28 @@ import Interval from '@/components/Interval.vue'
 import Enum from '@/utils/enum'
 import Card from '@/components/Card.vue'
 
-const nums = [0, 1, 2, 3, 4, 5]
-const strs = ['档案', '文章', '', '', '', '']
-const colors = ['#00FFFB', '#FF3838', '#FFF10B', '', '', '']
-const XinXiCategoryEnum = new Enum(nums, strs, colors)
+const imgWenZhang = require('../../assets/img/文章.jpg')
+const imgQiYeWenZhang = require('../../assets/img/企业文章.jpg')
+const imgDiaoYanDuiXiang = require('../../assets/img/调研对象类型.jpg')
+const imgDiaoYanFangShi = require('../../assets/img/调研方式.jpg')
+const imgJianYiChuLi = require('../../assets/img/建议处理单位.jpg')
+const imgSuQiuLeiXing = require('../../assets/img/诉求类型.jpg')
+const imgTongYong = require('../../assets/img/通用.jpg')
+const imgDangAn = imgTongYong
+
+const nums = [0, 1, 2, 3, 4, 5, 6, 10000]
+const strs = ['文章', '企业文章', '调研方式', '建议处理单位', '诉求类型', '调研对象类型', '档案', '通用']
+const more = [
+    { color: '#00FFFB', img: imgWenZhang },
+    { color: '#FF3838', img: imgQiYeWenZhang },
+    { color: '#FFF10B', img: imgDiaoYanFangShi },
+    { color: 'rgb(128,92,254)', img: imgJianYiChuLi },
+    { color: 'rgb(255,121,48)', img: imgSuQiuLeiXing },
+    { color: 'rgb(253,209,0)', img: imgDiaoYanDuiXiang },
+    { color: 'rgb(0,217,139)', img: imgDangAn },
+    { color: 'white', img: imgTongYong }
+]
+const XinXiCategoryEnum = new Enum(nums, strs, more)
 
 export default Vue.extend({
     name: 'XinXiFaBu',
@@ -88,13 +110,17 @@ export default Vue.extend({
         }
     },
     created() {
-        this.newInterval(() => {
-            this.$store.dispatch('requestXinxi')
-        }, 1000*60, true)
+        this.newInterval(
+            () => {
+                this.$store.dispatch('requestXinxi')
+            },
+            1000 * 60,
+            true
+        )
     },
     methods: {
         buildCategory(category: string) {
-            const color = XinXiCategoryEnum.str2more(category)
+            const color = XinXiCategoryEnum.str2more(category).color
             return `<span style="color:${color}; font-size: 18px;">【${category}】</span>`
         },
         buildTitle(title: string) {
@@ -105,13 +131,15 @@ export default Vue.extend({
         },
         onClickLeft({ row, ceil, rowIndex, columnIndex }: any) {
             const xinxi = this.xinXiOriginLeft[rowIndex]
-
-            this.$root.$emit('popup-xinxi', {labelColor: XinXiCategoryEnum.str2more(xinxi.category), id: xinxi.id, xinXi: xinxi })
+            const more = XinXiCategoryEnum.str2more(xinxi.category)
+            xinxi.img = more.img
+            this.$root.$emit('popup-xinxi', { labelColor: more.color, id: xinxi.id, xinXi: xinxi })
         },
         onClickRight({ row, ceil, rowIndex, columnIndex }: any) {
             const xinxi = this.xinXiOriginRight[rowIndex]
-
-            this.$root.$emit('popup-xinxi', {labelColor: XinXiCategoryEnum.str2more(xinxi.category), id: xinxi.id, xinXi: xinxi })
+            const more = XinXiCategoryEnum.str2more(xinxi.category)
+            xinxi.img = more.img
+            this.$root.$emit('popup-xinxi', { labelColor: more.color, id: xinxi.id, xinXi: xinxi })
         }
     }
 })

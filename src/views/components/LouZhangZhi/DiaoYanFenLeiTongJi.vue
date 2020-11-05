@@ -1,6 +1,7 @@
 <template>
     <div style="position: relative;">
         <div ref="chart" class="u-wh-100"></div>
+        <div v-if="isShowPlaceholder" class="placehoder">暂无数据</div>
         <div class="radio-group">
             <div class="radio-item" :class="{ active: period === 'year' }">
                 <input v-model="period" id="radio-year" class="radio" type="radio" name="period" value="year" />
@@ -47,6 +48,14 @@ export default Vue.extend({
         ...mapState({
             diaoYanFenLeiTongJi: state => (state as State).diaoYanFenLeiTongJi
         }),
+        isShowPlaceholder(): boolean {
+            const { week, year } = this.diaoYanFenLeiTongJi
+            if (this.period === 'year') {
+                return year.length === 0
+            } else {
+                return week.length === 0
+            }
+        },
         chartOption(): echarts.EChartOption {
             if (!this.diaoYanFenLeiTongJi) {
                 return {}
@@ -75,10 +84,10 @@ export default Vue.extend({
                         color: 'rgb(0, 247, 255)',
                         alignTo: 'labelLine',
                         padding: [-15, -70, 0, -70],
-                        bleedMargin: -100
+                        bleedMargin: -120
                     },
                     labelLine: {
-                        length: 5,
+                        length: 10,
                         length2: 70
                     }
                 }
@@ -205,6 +214,14 @@ export default Vue.extend({
 </script>
 
 <style scoped>
+.placehoder {
+    position: absolute;
+    left: 50%;
+    top: 40%;
+    transform: translate(-50%);
+    color: white;
+    font-size: 25px;
+}
 .radio-group {
     position: absolute;
     left: 175px;

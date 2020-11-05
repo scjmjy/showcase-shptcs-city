@@ -114,7 +114,7 @@ export default Vue.extend({
                 {
                     icon: '完成率',
                     iconColor: '#00D98B',
-                    text: '完成率：' + wanChengLv
+                    text: '完成率：' + wanChengLv + '%'
                 }
             ]
             return items
