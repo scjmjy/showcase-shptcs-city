@@ -1,5 +1,5 @@
 <template>
-    <card :opts="cardOpts">
+    <card :opts="cardOpts" @click="onTitleClick">
         <div ref="chartContainer" :style="{ width: width + 'px', height: height + 'px' }"></div>
     </card>
 </template>
@@ -34,7 +34,8 @@ export default Vue.extend({
         },
         cardOpts() {
             return {
-                title: '亿元楼宇一览'
+                title: '亿元楼宇一览',
+                clickable: true
             }
         },
         chartOption() {
@@ -136,6 +137,9 @@ export default Vue.extend({
     methods: {
         initChart() {
             this.chart = echarts.init(this.$refs.chartContainer)
+        },
+        onTitleClick() {
+            this.$root.$emit('map-yiyuanlouyu')
         }
     }
 })

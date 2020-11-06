@@ -14,7 +14,7 @@ type ActiveType = {
 
 let _groupStartZIndex = 200
 function nextGroupStartZIndex() {
-    return _groupStartZIndex += 200
+    return (_groupStartZIndex += 200)
 }
 
 export default Vue.extend({
@@ -44,17 +44,15 @@ export default Vue.extend({
     },
     watch: {
         value(newVal, oldVal) {
-            this.$children.forEach((c: any) => {
-                const popup = this.findPopupChild(c) as any
-                if (popup) {
-                    if (popup.name === newVal) {
-                        popup.changeValue(true)
-                        popup.zIndex = this.nextZIndex()
-                    }
-                } else {
-                    throw new Error('没有找到 Popup 组件')
-                }
-            })
+            if (!oldVal) {
+                // 如果 oldVal 是 ""，说明此 PopupGroup 组件此时是第一次加载，所以没有子组件，所以等下一个 tick 时才会有子组件
+                this.groupStartZIndex = nextGroupStartZIndex() // 确保此 PopupGroup 在其他 PopupGroup 之上
+                this.$nextTick(() => {
+                    this.onValueChange(newVal)
+                })
+            } else {
+                this.onValueChange(newVal)
+            }
         }
     },
     methods: {
@@ -82,7 +80,8 @@ export default Vue.extend({
                     let topmost = ''
                     this.$children.forEach((c: any) => {
                         const p = this.findPopupChild(c) as any
-                        if (p && p.name !== popup.name && p.value === true) { // 不是当前隐藏的popup，并且是出于显示的popup
+                        if (p && p.name !== popup.name && p.value === true) {
+                            // 不是当前隐藏的popup，并且是出于显示的popup
                             if (p.zIndex > maxIndex) {
                                 maxIndex = p.zIndex
                                 topmost = p.name
@@ -92,6 +91,19 @@ export default Vue.extend({
                     this.$emit('input', topmost) // v-model
                 }
             }
+        },
+        onValueChange(newVal) {
+            this.$children.forEach((c: any) => {
+                const popup = this.findPopupChild(c) as any
+                if (popup) {
+                    if (popup.name === newVal) {
+                        popup.changeValue(true)
+                        popup.zIndex = this.nextZIndex()
+                    }
+                } else {
+                    throw new Error('没有找到 Popup 组件')
+                }
+            })
         }
     }
 })

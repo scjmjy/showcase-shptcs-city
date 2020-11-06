@@ -1,5 +1,5 @@
 <template>
-    <card :opts="cardOpts">
+    <card :opts="cardOpts" @click="onTitleClick">
         <div ref="chartContainer" :style="{ width: width + 'px', height: height + 'px' }"></div>
     </card>
 </template>
@@ -30,12 +30,18 @@ export default Vue.extend({
             zhongDianShuiShouTop5: state => (state as State).zhongDianShuiShouTop5
         }),
         top5(): ZhongDianShuiShouTop5[] {
-            const top5 = [...this.zhongDianShuiShouTop5]
+            const top5 = this.zhongDianShuiShouTop5.map(qiye => {
+                return {
+                    name: qiye.name.replace(/有限公司$/g, ''),
+                    value: qiye.value
+                }
+            })
             return top5.sort((a, b) => a.value - b.value)
         },
         cardOpts(): any {
             return {
-                title: '重点企业税收Top5'
+                title: '重点企业税收Top5',
+                clickable: true
             }
         },
         chartOption(): echarts.EChartOption {
@@ -132,6 +138,9 @@ export default Vue.extend({
     methods: {
         initChart() {
             this.chart = echarts.init(this.$refs.chartContainer as HTMLDivElement)
+        },
+        onTitleClick() {
+            this.$root.$emit('map-shuishoutop5')
         }
     }
 })

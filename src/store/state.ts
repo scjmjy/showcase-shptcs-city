@@ -54,9 +54,7 @@ export class ZhongDianShuiShouTop5 {
      * @param name 重点企业名称
      * @param value 金额
      */
-    constructor(public name = '', public value = 0) {
-        this.name = name.replace(/有限公司$/g, '')
-    }
+    constructor(public name = '', public value = 0) {}
     static fromServer(serverData) {
         const top5 = [
             new ZhongDianShuiShouTop5(serverData.fsRsName1, serverData.fsRsTax1),
@@ -466,6 +464,24 @@ export class DangZhiBu {
     constructor(public name = '', public num = 0, public address = '') {}
 }
 
+export class YuJingQiYe {
+    constructor(
+        public id = -1,
+        public name = '',
+        public coordx = -1,
+        public coordy = -1
+    ) {}
+    static fromServer(data) {
+        if (Array.isArray(data)) {
+            return data.map(item => {
+                return new YuJingQiYe(item.id, item.name, item.longitude, item.latitude)
+            })
+        } else {
+            throw new Error('不合法的企业数据格式：期待数组')
+        }
+    }
+}
+
 export class LouYu {
     constructor(
         public id = -1,
@@ -485,11 +501,20 @@ export class LouYu {
                 const qiYeList = QiYe.fromServer(item.companyDetailsResponseList) || []
                 const louZhangZhi = new LouZhangZhi(item.master, item.visitcnt, item.unresolvecnt, Number(item.rate) * 100)
 
-                return new LouYu(item.id, item.name, item.address, item.area, item.tax, louZhangZhi, [], qiYeList, undefined, undefined)
+                return new LouYu(item.id, item.name, item.address, item.area, item.tax, louZhangZhi, [], qiYeList, item.longitude, item.latitude)
             })
         } else {
             throw new Error('不合法的楼宇数据格式：期待数组')
         }
+    }
+}
+
+export class YuJingList {
+    constructor(public shuiShouList: YuJingQiYe[] = [], public inAndOutList: YuJingQiYe[] = []) {}
+    static fromServer(serverData) {
+        const shuiShouList = YuJingQiYe.fromServer(serverData.taxOverviews)
+        const inAndOutList = YuJingQiYe.fromServer(serverData.moveOverviews)
+        return new YuJingList(shuiShouList, inAndOutList)
     }
 }
 
@@ -517,6 +542,7 @@ export class State {
     weiJieJueList: WenTi[] = []
     louYuList: LouYu[] = []
     louYuCoords: LouYuCoord[] = []
+    yuJingList = new YuJingList()
 
     client_id = 'sh-ptcs-city'
     client_version = '1.0.0'

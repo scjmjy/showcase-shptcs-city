@@ -111,8 +111,13 @@ const actions: ActionTree<State, State> = {
         return res
     },
 
-    async queryBuildingCoordinates({ commit, state }) {
-        commit('SET-BUILDING-COORDINATES')
+    // async queryBuildingCoordinates({ commit, state }) {
+    //     commit('SET-BUILDING-COORDINATES')
+    //     return true
+    // }
+    async requestYuJingList({ commit }) {
+        const res = (await api.requestYuJingList()).data
+        commit('SET-YUJING-LIST', res)
         return true
     }
 }

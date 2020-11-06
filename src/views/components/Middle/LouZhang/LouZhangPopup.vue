@@ -1,5 +1,5 @@
 <template>
-    <popup :value="value" :img="img" :icon="icon" label="楼长" :title="name" @input="emitEvent('input', $event)">
+    <popup :name="name" :value="value" :img="img" :icon="icon" label="楼长" :title="louzhangName" @input="emitEvent('input', $event)">
         <div class="content">
             <scroll-list class="list" title="未解决问题" :data="weiJieJueWenTi" @click="openWenTiDetail" />
             <rose-pie class="pie" title="未解决问题分类统计" :data="weiJieJueFenLeiTongJi" />
@@ -28,6 +28,10 @@ export default Vue.extend({
             default: undefined
         },
         name: {
+            type: String,
+            default: undefined
+        },
+        louzhangName: {
             type: String,
             default: undefined
         },
@@ -65,21 +69,24 @@ export default Vue.extend({
         console.log('LouZhangPopup mounted')
     },
     watch: {
-        id(newId) {
-            api.requestWeiJieJueWenTi(newId)
-                .then((res: any) => {
-                    this.weiJieJueWenTiOrigin = WenTi.fromServer(res.data) as WenTi[]
-                })
-                .catch(err => {
-                    console.log(err)
-                })
-            api.requestWeiJieJueFenLeiTongJi(newId)
-                .then((res: any) => {
-                    this.weiJieJueFenLeiTongJiOrigin = WeiJieJueFenLeiTongJi.fromServer(res.data)
-                })
-                .catch(err => {
-                    console.log(err)
-                })
+        id: {
+            handler(newId) {
+                api.requestWeiJieJueWenTi(newId)
+                    .then((res: any) => {
+                        this.weiJieJueWenTiOrigin = WenTi.fromServer(res.data) as WenTi[]
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
+                api.requestWeiJieJueFenLeiTongJi(newId)
+                    .then((res: any) => {
+                        this.weiJieJueFenLeiTongJiOrigin = WeiJieJueFenLeiTongJi.fromServer(res.data)
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
+            },
+            immediate: true
         }
     },
     beforeDestroy() {
