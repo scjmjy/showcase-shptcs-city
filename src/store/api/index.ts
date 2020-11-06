@@ -14,7 +14,8 @@ const API_URLS = {
     weijiejue_wenti_list: API_URL_BASE + '/problem/unresolve',
     weijiejue_fenlei_stat_post: API_URL_BASE + '/category/problem/unresolve',
     louyu_list_get: API_URL_BASE + '/buildings',
-    yujing_louyu_list_get: API_URL_BASE + '/warn'
+    yujing_louyu_list_get: API_URL_BASE + '/warn',
+    zhongdian_qiye_list_get: API_URL_BASE + '/focuscompany'
 }
 
 type PageParam = {
@@ -162,6 +163,15 @@ export default {
         return request({
             method: 'GET',
             url: API_URLS.yujing_louyu_list_get
+        })
+    },
+    /**
+     * 获取重点企业列表
+     */
+    requestZhongDianQiYeList() {
+        return request({
+            method: 'GET',
+            url: API_URLS.zhongdian_qiye_list_get
         })
     },
 

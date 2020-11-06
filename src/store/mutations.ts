@@ -6,7 +6,7 @@ import {
     LouYuZongLan,
     ChangShouShangHui,
     QiTaLouYuQiYe,
-    ZhongDianQiYe,
+    ZhongDianQiYeFenXi,
     YiYuanLouYu,
     ZhongDianShuiShouTop5,
     XinXiFaBu,
@@ -23,7 +23,8 @@ import {
     YearValueType,
     WeekValueType,
     LouYu,
-    YuJingList
+    YuJingList,
+    ZhongDianQiYe
 } from './state'
 
 const coords = [
@@ -94,7 +95,7 @@ const mutations: MutationTree<State> = {
         state.diaoYanNianDuTongJi = payload.diaoYanNianDuTongJi as DiaoYanNianDuTongJi
         state.diaoYanFenLeiTongJi = payload.diaoYanFenLeiTongJi as DiaoYanFenLeiTongJi
         state.weiJieJueFenLeiTongJi = payload.weiJieJueFenLeiTongJi as WeiJieJueFenLeiTongJi[]
-        state.zhongDianQiYe = payload.zhongDianQiYe as ZhongDianQiYe
+        state.zhongDianQiYe = payload.zhongDianQiYe as ZhongDianQiYeFenXi
         state.louYuZongLan = payload.louYuZongLan as LouYuZongLan
         state.changShouShangHui = payload.changShouShangHui as ChangShouShangHui
     },
@@ -112,7 +113,7 @@ const mutations: MutationTree<State> = {
 
         state.qiTaLouYuQiYe = QiTaLouYuQiYe.fromServer(res)
 
-        state.zhongDianQiYe = ZhongDianQiYe.fromServer(res)
+        state.zhongDianQiYe = ZhongDianQiYeFenXi.fromServer(res)
         // 企业总数从 楼宇总览 获得
         state.zhongDianQiYe.num = state.louYuZongLan.huGuanQiYeZongShu
 
@@ -170,6 +171,10 @@ const mutations: MutationTree<State> = {
 
     ['SET-YUJING-LIST'](state, res) {
         state.yuJingList = YuJingList.fromServer(res)
+    },
+
+    ['SET-ZHONGDIANQIYE-LIST'](state, res) {
+        state.zhongDianQiYeList = ZhongDianQiYe.fromServer(res)
     }
 }
 export default mutations

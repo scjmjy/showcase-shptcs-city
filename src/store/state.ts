@@ -346,10 +346,26 @@ export class DiaoYanFenLeiTongJi {
     }
 }
 
-export class ZhongDianQiYe {
+export class ZhongDianQiYeFenXi {
     constructor(public year = '2020', public num = 0, public num60 = 0, public num100 = 0, public num500 = 0) {}
     static fromServer(serverData) {
-        return new ZhongDianQiYe(serverData.fsYear, 10000, serverData.fsNum60, serverData.fsNum100, serverData.fsNum500)
+        return new ZhongDianQiYeFenXi(serverData.fsYear, 10000, serverData.fsNum60, serverData.fsNum100, serverData.fsNum500)
+    }
+}
+export class ZhongDianQiYe {
+    /**
+     * 重点企业列表里的某个企业
+     * @param name 企业名字
+     * @param type 1:60 万;2:100 万;3:500 万
+     */
+    constructor(public name = '', public type: 1 | 2 | 3 = 1) {}
+    static fromServer(serverData) {
+        if (!Array.isArray(serverData)) {
+            throw new Error('楼长信息：数据格式错误')
+        }
+        return serverData.map(item => {
+            return new ZhongDianQiYe(item.name, item.ctype)
+        })
     }
 }
 export class WeiJieJueFenLeiTongJi {
@@ -468,13 +484,15 @@ export class YuJingQiYe {
     constructor(
         public id = -1,
         public name = '',
+        public status: 1 | 2 = 1, // 1:上升/迁入;2:下降/迁出
         public coordx = -1,
         public coordy = -1
     ) {}
     static fromServer(data) {
         if (Array.isArray(data)) {
             return data.map(item => {
-                return new YuJingQiYe(item.id, item.name, item.longitude, item.latitude)
+                // 目前经纬度暂无，需要从 buildings 里去找楼宇的经纬度
+                return new YuJingQiYe(item.id, item.name, item.status, item.longitude, item.latitude)
             })
         } else {
             throw new Error('不合法的企业数据格式：期待数组')
@@ -536,7 +554,8 @@ export class State {
     diaoYanNianDuTongJi = new DiaoYanNianDuTongJi()
     diaoYanFenLeiTongJi = new DiaoYanFenLeiTongJi()
     weiJieJueFenLeiTongJi: WeiJieJueFenLeiTongJi[] = []
-    zhongDianQiYe = new ZhongDianQiYe()
+    zhongDianQiYe = new ZhongDianQiYeFenXi()
+    zhongDianQiYeList: ZhongDianQiYe[] = []
     louZhang: LouZhang[] = []
     xinXi: XinXi[] = []
     weiJieJueList: WenTi[] = []

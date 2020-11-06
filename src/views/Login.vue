@@ -3,7 +3,7 @@
         <div class="login-form">
             <div class="left"></div>
             <div class="right">
-                <div class="title">长寿街道楼宇服务大屏</div>
+                <div class="title">长寿路街道服务经济工作管理系统</div>
                 <el-input v-model="username" class="username" prefix-icon="el-icon-user" placeholder="请输入账号" />
                 <el-input v-model="passwd" class="password" prefix-icon="el-icon-key" placeholder="请输入密码" type="password" :show-password="true" />
                 <button v-loading="loginLoading" class="login-btn" @click="login">登录</button>
@@ -90,7 +90,7 @@ export default Vue.extend({
                 text-align: center;
                 margin: 125px 0 40px;
                 color: #5794ff;
-                font-size: 2em;
+                font-size: 1.6em;
                 font-weight: 800;
             }
             .username, .password {

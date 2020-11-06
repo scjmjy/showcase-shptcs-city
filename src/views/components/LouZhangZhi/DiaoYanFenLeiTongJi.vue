@@ -27,21 +27,21 @@ export default Vue.extend({
     mixins: [Interval],
     data() {
         return {
-            intervalTask: undefined  as IntervalTask | undefined,
+            intervalTask: undefined as IntervalTask | undefined,
             barChart: undefined as echarts.ECharts | undefined,
             period: 'week' as 'year' | 'week',
             color: [
-                    'rgb(253,209,0)',
-                    'rgb(199,255,65)',
-                    'rgb(255,121,48)',
-                    'rgb(255,72,116)',
-                    'rgb(230,65,255)',
-                    'rgb(128,92,254)',
-                    'rgb(51,181,255)',
-                    'rgb(63,236,253)',
-                    'rgb(0,217,139)',
-                    'rgb(38,67,255)'
-                ]
+                'rgb(253,209,0)',
+                'rgb(199,255,65)',
+                'rgb(255,121,48)',
+                'rgb(255,72,116)',
+                'rgb(230,65,255)',
+                'rgb(128,92,254)',
+                'rgb(51,181,255)',
+                'rgb(63,236,253)',
+                'rgb(0,217,139)',
+                'rgb(38,67,255)'
+            ]
         }
     },
     computed: {
@@ -61,7 +61,8 @@ export default Vue.extend({
                 return {}
             }
             const { week, year } = this.diaoYanFenLeiTongJi
-            const yearTop8 = year.sort((a, b) => b.value - a.value).slice(0, 8)
+            // const yearTop8 = year.sort((a, b) => b.value - a.value).slice(0, 8)
+            const yearTop8 = year
             const { color } = this
             const title = '调研分类统计'
             let xAxis
@@ -147,17 +148,11 @@ export default Vue.extend({
                     },
                     backgroundColor: 'rgb(0,121,202)'
                 }
-
-                series = [
-                    { type: 'bar', barWidth: 15, stack: 'week', datasetIndex: 1 },
-                    { type: 'bar', barWidth: 15, stack: 'week', datasetIndex: 1 },
-                    { type: 'bar', barWidth: 15, stack: 'week', datasetIndex: 1 },
-                    { type: 'bar', barWidth: 15, stack: 'week', datasetIndex: 1 },
-                    { type: 'bar', barWidth: 15, stack: 'week', datasetIndex: 1 },
-                    { type: 'bar', barWidth: 15, stack: 'week', datasetIndex: 1 },
-                    { type: 'bar', barWidth: 15, stack: 'week', datasetIndex: 1 },
-                    { type: 'bar', barWidth: 15, stack: 'week', datasetIndex: 1 }
-                ]
+                const len = week[0].length - 1
+                series = []
+                for (let index = 0; index < len; index++) {
+                    series.push({ type: 'bar', barWidth: 15, stack: 'week', datasetIndex: 1 })
+                }
             }
             const option: echarts.EChartOption = {
                 color,
@@ -187,9 +182,13 @@ export default Vue.extend({
         }
     },
     mounted() {
-        this.intervalTask = this.newInterval(() => {
-            this.$store.dispatch('requestCategoryResearch')
-        }, 1000*60, true)
+        this.intervalTask = this.newInterval(
+            () => {
+                this.$store.dispatch('requestCategoryResearch')
+            },
+            1000 * 60,
+            true
+        )
         this.initChart()
     },
     beforeDestroy() {
@@ -214,5 +213,4 @@ export default Vue.extend({
 </script>
 
 <style scoped>
-
 </style>

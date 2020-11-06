@@ -51,7 +51,7 @@ export default Vue.extend({
             wentiLabelColor: '',
             showMask: false,
             currentComponent: {
-                name: 'LouZhangFenBuTu', // LouZhangFenBuTu, ChangShouMap
+                name: 'ChangShouMap', // LouZhangFenBuTu, ChangShouMap
                 data: {}
             },
             topmostPopup: ''

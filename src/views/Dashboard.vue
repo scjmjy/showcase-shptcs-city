@@ -76,7 +76,7 @@ Component.registerHooks(['beforeRouteEnter'])
 export default class Home extends Interval {
     get headerOpts() {
         return {
-            title: '长寿街楼宇服务经济管理系统',
+            title: '长寿路街道服务经济工作管理系统',
             width: 1020,
             fontSize: 36
         }

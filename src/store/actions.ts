@@ -119,6 +119,12 @@ const actions: ActionTree<State, State> = {
         const res = (await api.requestYuJingList()).data
         commit('SET-YUJING-LIST', res)
         return true
+    },
+
+    async requestZhongDianQiYeList({ commit }) {
+        const res = (await api.requestZhongDianQiYeList()).data
+        commit('SET-ZHONGDIANQIYE-LIST', res)
+        return true
     }
 }
 export default actions

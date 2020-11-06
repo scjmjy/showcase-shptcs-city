@@ -2,15 +2,15 @@
     <div class="map-contianer">
         <iframe id="id-city-map" class="city-map-iframe" frameborder="no" scrolling="no" allowtransparency="true" />
         <div class="map-overlay">
-            <div class="type-title">{{ typeTitle }}</div>
+            <div v-loading="loading" class="type-title">{{ typeTitle }}</div>
             <div v-if="type === 'yujing'" class="radio-group yujing-type">
                 <div class="radio-item" :class="{ active: yujingType === 'year' }">
-                    <input v-model="yujingType" id="radio-year" class="radio" type="radio" value="shuishou" />
-                    <label for="radio-year" class="label" style="font-size: 20px;">税收波动</label>
+                    <input v-model="yujingType" id="radio-shuishoubodong" class="radio" type="radio" value="shuishou" />
+                    <label for="radio-shuishoubodong" class="label" style="font-size: 20px;">税收波动</label>
                 </div>
                 <div class="radio-item" :class="{ active: yujingType === 'week' }">
-                    <input v-model="yujingType" id="radio-week" class="radio" type="radio" value="inout" />
-                    <label for="radio-week" class="label" style="font-size: 20px;">迁入迁出</label>
+                    <input v-model="yujingType" id="radio-qianruqianchu" class="radio" type="radio" value="inout" />
+                    <label for="radio-qianruqianchu" class="label" style="font-size: 20px;">迁入迁出</label>
                 </div>
             </div>
         </div>
@@ -81,12 +81,14 @@ export default Vue.extend({
     mixins: [Interval],
     props: {
         type: {
-            type: String, // louyu  qiyeTop5 yujing yiyuanlouyu qiyeshuishouTop5
+            type: String, // louyu  shuishoutop5 yujing yiyuanlouyu zhongdianqiye
             default: 'louyu'
         }
     },
     data() {
         return {
+            loading: false,
+            markerCache: {},
             topmostPopup: '',
             isShowZhongDianQiYePopup: false,
             isShowLouYuPopup: false,
@@ -113,7 +115,8 @@ export default Vue.extend({
                 return list
             },
             zhongDianShuiShouTop5: state => (state as State).zhongDianShuiShouTop5,
-            yiYuanLouYu: state => (state as State).yiYuanLouYu
+            yiYuanLouYu: state => (state as State).yiYuanLouYu,
+            zhongDianQiYeList: state => (state as State).zhongDianQiYeList
         }),
         typeTitle(): string {
             switch (this.type) {
@@ -132,142 +135,25 @@ export default Vue.extend({
             }
         },
         markerData(): any {
-            let markers = [] as any[]
-            let texts = [] as any[]
+            let marker
             switch (this.type) {
                 case 'louyu':
-                    markers = this.louYuList.map(louyu => {
-                        return {
-                            coordx: louyu.coordx,
-                            coordy: louyu.coordy,
-                            coordz: 100,
-                            iconType: '楼宇',
-                            id: louyu.id,
-                            name: louyu.name
-                        }
-                    })
+                    marker = this.markerCache['louyu']
                     break
                 case 'yujing':
-                    // 楼宇名字<——>预警参数，用来计算楼宇中有几个预警的企业
-                    const louyu2yujing = new Map()
-                    const yujinglist = this.yujingType === 'shuishou' ? this.yuJingList.shuiShouList : this.yuJingList.inAndOutList
-                    yujinglist.forEach((qiye, index) => {
-                        const louyu = this.louYuList.find(l => {
-                            return l.qiYeList.find(q => q.name === qiye.name)
-                        })
-                        if (louyu) {
-                            const yujing = louyu2yujing.get(louyu.name)
-                            if (yujing) {
-                                yujing.in++
-                            } else {
-                                louyu2yujing.set(louyu.name, {
-                                    id: louyu.id,
-                                    name: louyu.name,
-                                    coordx: louyu.coordx,
-                                    coordy: louyu.coordy,
-                                    in: 1,
-                                    out: 0 // TODO 目前没有迁入迁出的标志
-                                })
-                                markers.push({
-                                    coordx: louyu.coordx,
-                                    coordy: louyu.coordy,
-                                    coordz: 100,
-                                    iconType: getYuJingPic(index),
-                                    id: louyu.id,
-                                    name: louyu.name
-                                })
-                            }
-                        }
-                    })
-                    louyu2yujing.forEach((yujing, louyuName) => {
-                        texts.push({
-                            content: `+${yujing.in}` + '\n-20',
-                            louyuName,
-                            font: {
-                                size: 10
-                            }
-                        })
-                        markers.push({
-                            coordx: yujing.coordx,
-                            coordy: yujing.coordy,
-                            coordz: 120,
-                            iconType: louyuName,
-                            id: yujing.id,
-                            name: yujing.name
-                        })
-                    })
+                    marker = this.markerCache['yujing' + this.yujingType]
                     break
                 case 'shuishoutop5':
-                    // 楼宇名字<——>税收参数，用来计算楼宇中有几个top5的企业
-                    const louyu2shuishou = new Map()
-                    this.zhongDianShuiShouTop5.forEach((qiye, index) => {
-                        const louyu = this.louYuList.find(l => {
-                            return l.qiYeList.find(q => q.name === qiye.name)
-                        })
-                        if (louyu) {
-                            const zhongdian = louyu2shuishou.get(louyu.name)
-                            if (zhongdian) {
-                                zhongdian.count++
-                            } else {
-                                louyu2shuishou.set(louyu.name, {
-                                    id: louyu.id,
-                                    name: louyu.name,
-                                    coordx: louyu.coordx,
-                                    coordy: louyu.coordy,
-                                    count: 1
-                                })
-                                markers.push({
-                                    coordx: louyu.coordx,
-                                    coordy: louyu.coordy,
-                                    coordz: 100,
-                                    iconType: getZhongDian(index),
-                                    id: louyu.id,
-                                    name: louyu.name
-                                })
-                            }
-                        }
-                    })
-                    louyu2shuishou.forEach((zhongdian, louyuName) => {
-                        texts.push({
-                            content: zhongdian.count + '',
-                            louyuName,
-                            font: {
-                                size: 30,
-                                weight: 'bold'
-                            }
-                        })
-                        markers.push({
-                            coordx: zhongdian.coordx,
-                            coordy: zhongdian.coordy,
-                            coordz: 200,
-                            iconType: louyuName,
-                            id: zhongdian.id,
-                            name: zhongdian.name
-                        })
-                    })
+                    marker = this.markerCache['shuishoutop5']
                     break
                 case 'yiyuanlouyu':
-                    this.yiYuanLouYu.map((yiyuanLouyu, index) => {
-                        const louyu = this.louYuList.find(l => {
-                            return l.qiYeList.find(q => q.name === yiyuanLouyu.name)
-                        })
-                        if (louyu) {
-                            return {
-                                coordx: louyu.coordx,
-                                coordy: louyu.coordy,
-                                coordz: 100,
-                                iconType: getZhongDian(index),
-                                id: louyu.id,
-                                name: louyu.name
-                            }
-                        }
-                    })
+                    marker = this.markerCache['yiyuanlouyu']
+                    break
+                case 'zhongdianqiye':
+                    marker = this.markerCache['zhongdianqiye']
                     break
             }
-            return {
-                markers,
-                texts
-            }
+            return marker || { markers: [], texts: [] }
         }
     },
     created() {
@@ -312,16 +198,42 @@ export default Vue.extend({
         }, this)
     },
     watch: {
-        type(type) {
-            if (type === 'yujing') {
-                if (this.yuJingList.shuiShouList.length === 0 || this.yuJingList.inAndOutList.length === 0) {
-                    this.$store.dispatch('requestYuJingList')
+        type: {
+            handler(type) {
+                if (type === 'yujing') {
+                    if (this.yuJingList.shuiShouList.length === 0 || this.yuJingList.inAndOutList.length === 0) {
+                        this.$store.dispatch('requestYuJingList')
+                    }
                 }
-            }
-            // this.mapShowMarkers()
+                if (type === 'zhongdianqiye') {
+                    if (this.zhongDianQiYeList.length === 0) {
+                        this.$store.dispatch('requestZhongDianQiYeList')
+                    }
+                }
+                this.calcMarderDataIfNeed()
+            },
+            immediate: true
         },
         markerData(data) {
             this.mapShowMarkers()
+        },
+        louYuList() {
+            this.calcMarderDataIfNeed()
+        },
+        yuJingList() {
+            this.calcMarderDataIfNeed()
+        },
+        zhongDianShuiShouTop5() {
+            this.calcMarderDataIfNeed()
+        },
+        yiYuanLouYu() {
+            this.calcMarderDataIfNeed()
+        },
+        zhongDianQiYeList() {
+            this.calcMarderDataIfNeed()
+        },
+        yujingType() {
+            this.calcMarderDataIfNeed()
         }
     },
     methods: {
@@ -362,6 +274,7 @@ export default Vue.extend({
                 case 'zhongdianqiye':
                 case 'yujing':
                 case 'shuishoutop5':
+                case 'yiyuanlouyu':
                     this.topmostPopup = 'lou-yu'
                     break
                 default:
@@ -613,6 +526,317 @@ export default Vue.extend({
                     }
                 }
             })
+        },
+        calcMarderDataIfNeed() {
+            switch (this.type) {
+                case 'louyu':
+                    this.calcLouYuMarders()
+                    break
+                case 'yujing':
+                    this.calcYuJingMarders()
+                    break
+                case 'shuishoutop5':
+                    this.calcShuiShouTop5Marders()
+                    break
+                case 'yiyuanlouyu':
+                    this.calcYiYuanLouYuMarders()
+                    break
+                case 'zhongdianqiye':
+                    this.calcZhongDianQiYeMarders()
+                    break
+            }
+        },
+        calcLouYuMarders() {
+            if (this.louYuList.length === 0) {
+                return
+            }
+            const key = 'louyu'
+            if (!this.markerCache[key]) {
+                this.loading = true
+                new Promise((resovle, reject) => {
+                    const markers = this.louYuList.map(louyu => {
+                        return {
+                            coordx: louyu.coordx,
+                            coordy: louyu.coordy,
+                            coordz: 100,
+                            iconType: '楼宇',
+                            id: louyu.id,
+                            name: louyu.name
+                        }
+                    })
+                    resovle({
+                        markers,
+                        texts: []
+                    })
+                })
+                    .then(res => {
+                        Vue.set(this.markerCache, key, res)
+                    })
+                    .finally(() => {
+                        this.loading = false
+                    })
+            }
+        },
+        calcYuJingMarders() {
+            if (this.louYuList.length === 0) {
+                return
+            }
+            if (this.yuJingList.shuiShouList.length === 0 || this.yuJingList.inAndOutList.length === 0) {
+                return
+            }
+            const key = 'yujing' + this.yujingType
+            if (!this.markerCache[key]) {
+                this.loading = true
+                new Promise((resovle, reject) => {
+                    let markers = [] as any[]
+                    let texts = [] as any[]
+                    // 楼宇名字<——>预警参数，用来计算楼宇中有几个预警的企业
+                    const louyu2yujing = new Map()
+                    const yujinglist = this.yujingType === 'shuishou' ? this.yuJingList.shuiShouList : this.yuJingList.inAndOutList
+                    yujinglist.forEach((qiye, index) => {
+                        const louyu = this.louYuList.find(l => {
+                            return l.qiYeList.find(q => q.name === qiye.name)
+                        })
+                        if (louyu) {
+                            const yujing = louyu2yujing.get(louyu.name)
+                            const sign = {
+                                plus: qiye.status === 1 ? 1 : 0,
+                                minus: qiye.status === 2 ? 1 : 0
+                            }
+                            if (yujing) {
+                                yujing.plus += sign.plus
+                                yujing.minus += sign.minus
+                            } else {
+                                louyu2yujing.set(louyu.name, {
+                                    id: louyu.id,
+                                    name: louyu.name,
+                                    coordx: louyu.coordx,
+                                    coordy: louyu.coordy,
+                                    ...sign
+                                })
+                                markers.push({
+                                    coordx: louyu.coordx,
+                                    coordy: louyu.coordy,
+                                    coordz: 100,
+                                    iconType: getYuJingPic(index),
+                                    id: louyu.id,
+                                    name: louyu.name
+                                })
+                            }
+                        }
+                    })
+                    louyu2yujing.forEach((yujing, louyuName) => {
+                        texts.push({
+                            content: `+${yujing.plus}` + `\n-${yujing.minus}`,
+                            louyuName,
+                            font: {
+                                size: 10
+                            }
+                        })
+                        markers.push({
+                            coordx: yujing.coordx,
+                            coordy: yujing.coordy,
+                            coordz: 120,
+                            iconType: louyuName,
+                            id: yujing.id,
+                            name: yujing.name
+                        })
+                    })
+                    resovle({
+                        markers,
+                        texts
+                    })
+                })
+                    .then(res => {
+                        Vue.set(this.markerCache, key, res)
+                    })
+                    .finally(() => {
+                        this.loading = false
+                    })
+            }
+        },
+        calcYiYuanLouYuMarders() {
+            if (this.louYuList.length === 0) {
+                return
+            }
+            if (this.yiYuanLouYu.length === 0) {
+                return
+            }
+            const key = 'yiyuanlouyu'
+            if (!this.markerCache[key]) {
+                this.loading = true
+                new Promise((resovle, reject) => {
+                    const markers = this.yiYuanLouYu.map((yiyuanLouyu, index) => {
+                        const louyu = this.louYuList.find(l => l.name === yiyuanLouyu.name)
+                        if (louyu) {
+                            return {
+                                coordx: louyu.coordx,
+                                coordy: louyu.coordy,
+                                coordz: 100,
+                                iconType: getZhongDian(index),
+                                id: louyu.id,
+                                name: louyu.name
+                            }
+                        }
+                    })
+                    resovle({
+                        markers,
+                        texts: []
+                    })
+                })
+                    .then(res => {
+                        Vue.set(this.markerCache, key, res)
+                    })
+                    .finally(() => {
+                        this.loading = false
+                    })
+            }
+        },
+        calcShuiShouTop5Marders() {
+            if (this.louYuList.length === 0) {
+                return
+            }
+            if (this.zhongDianShuiShouTop5.length === 0) {
+                return
+            }
+            const key = 'shuishoutop5'
+            if (!this.markerCache[key]) {
+                this.loading = true
+                new Promise((resovle, reject) => {
+                    let markers = [] as any[]
+                    let texts = [] as any[]
+                    // 楼宇名字<——>税收参数，用来计算楼宇中有几个top5的企业
+                    const louyu2shuishou = new Map()
+                    this.zhongDianShuiShouTop5.forEach((qiye, index) => {
+                        const louyu = this.louYuList.find(l => {
+                            return l.qiYeList.find(q => q.name === qiye.name)
+                        })
+                        if (louyu) {
+                            const zhongdian = louyu2shuishou.get(louyu.name)
+                            if (zhongdian) {
+                                zhongdian.count++
+                            } else {
+                                louyu2shuishou.set(louyu.name, {
+                                    id: louyu.id,
+                                    name: louyu.name,
+                                    coordx: louyu.coordx,
+                                    coordy: louyu.coordy,
+                                    count: 1
+                                })
+                                markers.push({
+                                    coordx: louyu.coordx,
+                                    coordy: louyu.coordy,
+                                    coordz: 100,
+                                    iconType: getZhongDian(index),
+                                    id: louyu.id,
+                                    name: louyu.name
+                                })
+                            }
+                        }
+                    })
+                    louyu2shuishou.forEach((zhongdian, louyuName) => {
+                        texts.push({
+                            content: zhongdian.count + '',
+                            louyuName,
+                            font: {
+                                size: 30,
+                                weight: 'bold'
+                            }
+                        })
+                        markers.push({
+                            coordx: zhongdian.coordx,
+                            coordy: zhongdian.coordy,
+                            coordz: 200,
+                            iconType: louyuName,
+                            id: zhongdian.id,
+                            name: zhongdian.name
+                        })
+                    })
+                    resovle({
+                        markers,
+                        texts
+                    })
+                })
+                    .then(res => {
+                        Vue.set(this.markerCache, key, res)
+                    })
+                    .finally(() => {
+                        this.loading = false
+                    })
+            }
+        },
+        calcZhongDianQiYeMarders() {
+            if (this.louYuList.length === 0) {
+                return
+            }
+            if (this.zhongDianQiYeList.length === 0) {
+                return
+            }
+            const key = 'zhongdianqiye'
+            if (!this.markerCache[key]) {
+                this.loading = true
+                new Promise((resovle, reject) => {
+                    let markers = [] as any[]
+                    let texts = [] as any[]
+                    // 楼宇名字<——>重点企业参数，用来计算楼宇中有几个重点的企业
+                    const louyu2zhongdian = new Map()
+                    this.zhongDianQiYeList.forEach((qiye, index) => {
+                        const louyu = this.louYuList.find(l => {
+                            return l.qiYeList.find(q => q.name === qiye.name)
+                        })
+                        if (louyu) {
+                            const zhongdian = louyu2zhongdian.get(louyu.name)
+                            if (zhongdian) {
+                                zhongdian.count++
+                            } else {
+                                louyu2zhongdian.set(louyu.name, {
+                                    id: louyu.id,
+                                    name: louyu.name,
+                                    coordx: louyu.coordx,
+                                    coordy: louyu.coordy,
+                                    count: 1
+                                })
+                                markers.push({
+                                    coordx: louyu.coordx,
+                                    coordy: louyu.coordy,
+                                    coordz: 100,
+                                    iconType: getZhongDian(index),
+                                    id: louyu.id,
+                                    name: louyu.name
+                                })
+                            }
+                        }
+                    })
+                    louyu2zhongdian.forEach((zhongdian, louyuName) => {
+                        texts.push({
+                            content: zhongdian.count + '',
+                            louyuName,
+                            font: {
+                                size: 30,
+                                weight: 'bold'
+                            }
+                        })
+                        markers.push({
+                            coordx: zhongdian.coordx,
+                            coordy: zhongdian.coordy,
+                            coordz: 200,
+                            iconType: louyuName,
+                            id: zhongdian.id,
+                            name: zhongdian.name
+                        })
+                    })
+                    resovle({
+                        markers,
+                        texts
+                    })
+                })
+                    .then(res => {
+                        Vue.set(this.markerCache, key, res)
+                    })
+                    .finally(() => {
+                        this.loading = false
+                    })
+            }
         }
     }
 })

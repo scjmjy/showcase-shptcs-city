@@ -54,8 +54,8 @@ export default Vue.extend({
                 { avatar: '楼长9.png', type: 'tr', style: { left: '35px', top: '565px' } }
             ],
             zongLouZhangData: [
-                { avatar: '总楼长1.png', style: { left: '360px', top: '455px' } },
-                { avatar: '总楼长2.png', style: { left: '570px', top: '295px' } }
+                { avatar: '总楼长2.png', style: { left: '360px', top: '455px' } },
+                { avatar: '总楼长1.png', style: { left: '570px', top: '295px' } }
             ]
         }
     },
