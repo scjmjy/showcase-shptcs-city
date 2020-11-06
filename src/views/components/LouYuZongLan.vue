@@ -41,7 +41,7 @@ export default Vue.extend({
                 icon: '户管企业总数',
                 iconColor: '#06DAD6',
                 value: this.louYuZongLan.huGuanQiYeZongShu,
-                suffix: '+',
+                suffix: '',
                 suffixStyle: {
                     'vertical-align': 'super'
                 },
@@ -54,7 +54,7 @@ export default Vue.extend({
                 iconColor: '#00D98B',
                 value: this.louYuZongLan.shuiShouZongE,
                 suffix: '亿',
-                title: '税收总额（2019）'
+                title: '税收总额'
             }
         },
         zhongDianQiYe() {

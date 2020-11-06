@@ -133,7 +133,8 @@ export default Vue.extend({
                 return {}
             }
             const { num60, num100, num500, num } = this.zhongDianQiYe
-            let maxNum = num - (num % 100) // 100的整数倍
+            // let maxNum = num - (num % 100) // 100的整数倍
+            let maxNum = 100
             const opt = {
                 series: [
                     {

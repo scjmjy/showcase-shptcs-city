@@ -5,7 +5,7 @@
             <div class="louzhang-data">
                 <div>{{ '负责企业数：' + data.qiYeShu }}</div>
                 <div>{{ '负责楼宇数：' + data.louYuShu }}</div>
-                <div>{{ '税收60万以上企业数：' + data.qiYeShu60 }}</div>
+                <div>{{ '税收60万以上企业数：' + (data.qiYeShu60 ? data.qiYeShu60 : '-') }}</div>
                 <div>{{ '走访次数：' + data.zouFangShu }}</div>
                 <div>{{ '未解决问题数：' + data.weiJieJue }}</div>
             </div>

@@ -376,15 +376,15 @@ export class LouZhang {
         public qiYeShu60 = 0,
         public zouFangShu = 0,
         public weiJieJue = 0,
-        public manYiDu = 98,
-        public wanChengLv = 95
+        public manYiDu = 0,
+        public wanChengLv = 0
     ) {}
     static fromServer(serverData) {
         if (!Array.isArray(serverData)) {
             throw new Error('楼长信息：数据格式错误')
         }
         return serverData.map(item => {
-            return new LouZhang(item.id, item.name, item.owner, item.companyCnt, item.buildsCnt, item.tax60Cnt, item.visitCnt, item.unresolveCnt, 98, 95)
+            return new LouZhang(item.id, item.name, item.owner, item.companyCnt, item.buildsCnt, item.tax60Cnt, item.visitCnt, item.unresolveCnt, item.satisfaction, item.rate)
         })
     }
 }
