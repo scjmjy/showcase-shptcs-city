@@ -235,7 +235,7 @@ export default Vue.extend({
         transform: translate(-50%, -50%) scale(0);
     }
     50% {
-        transform: translate(-50%, -50%) scale(1.5);
+        transform: translate(-50%, -50%) scale(1.2);
     }
     100% {
         transform: translate(-50%, -50%) scale(1);
@@ -253,7 +253,7 @@ export default Vue.extend({
         transform: scale(0);
     }
     50% {
-        transform: scale(1.5);
+        transform: scale(1.2);
     }
     100% {
         transform: scale(1);
@@ -271,7 +271,7 @@ export default Vue.extend({
         transform: translate(-50%, 0) scale(0);
     }
     50% {
-        transform: translate(-50%, 0) scale(1.5);
+        transform: translate(-50%, 0) scale(1.2);
     }
     100% {
         transform: translate(-50%, 0) scale(1);

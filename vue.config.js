@@ -7,7 +7,7 @@ function resolve(dir) {
 }
 
 // const name = defaultSettings.title || 'vue Admin Template' // page title
-const title = '长寿街道楼宇服务'
+const title = process.env.VUE_APP_TITLE
 
 // If your port is set to 80,
 // use administrator privileges to execute the command line.

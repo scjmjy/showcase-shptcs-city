@@ -6,18 +6,20 @@ import store from './store'
 import '@/styles/index.scss' // global css
 import '@/icons'
 
-import echarts from 'echarts'
-
-import { Pagination, Table, TableColumn, Loading, Input, Message } from 'element-ui'
+import { Pagination, Table, TableColumn, Loading, Input, Message, Dropdown, DropdownMenu, DropdownItem } from 'element-ui'
 Vue.use(Pagination)
 Vue.use(Table)
 Vue.use(TableColumn)
 Vue.use(Input)
+Vue.use(Dropdown)
+Vue.use(DropdownMenu)
+Vue.use(DropdownItem)
 Vue.use(Loading.directive);
 Vue.prototype.$message = Message
 
-import { scrollBoard } from '@jiaminghi/data-view'
+import { scrollBoard, borderBox8 } from '@jiaminghi/data-view'
 Vue.use(scrollBoard)
+Vue.use(borderBox8)
 Vue.config.productionTip = false
 
 new Vue({

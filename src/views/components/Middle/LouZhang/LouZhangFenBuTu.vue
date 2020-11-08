@@ -1,18 +1,27 @@
 <template>
     <div class="lou-zhang-fen-bu-tu-contianer">
-        <lou-zhang-flash-pao-pao class="lou-zhang-paopao" v-bind="louZhangData[0]" @click.native="onLouZhangClick(louZhangData[0])" />
-        <lou-zhang-flash-pao-pao class="lou-zhang-paopao" v-bind="louZhangData[1]" @click.native="onLouZhangClick(louZhangData[1])" />
-        <lou-zhang-flash-pao-pao class="lou-zhang-paopao" v-bind="louZhangData[2]" @click.native="onLouZhangClick(louZhangData[2])" />
-        <lou-zhang-flash-pao-pao class="lou-zhang-paopao" v-bind="louZhangData[3]" @click.native="onLouZhangClick(louZhangData[3])" />
-        <lou-zhang-flash-pao-pao class="lou-zhang-paopao" v-bind="louZhangData[4]" @click.native="onLouZhangClick(louZhangData[4])" />
-        <lou-zhang-flash-pao-pao class="lou-zhang-paopao" v-bind="louZhangData[5]" @click.native="onLouZhangClick(louZhangData[5])" />
-        <lou-zhang-flash-pao-pao class="lou-zhang-paopao" v-bind="louZhangData[6]" @click.native="onLouZhangClick(louZhangData[6])" />
-        <lou-zhang-flash-pao-pao class="lou-zhang-paopao" v-bind="louZhangData[7]" @click.native="onLouZhangClick(louZhangData[7])" />
-        <lou-zhang-flash-pao-pao class="lou-zhang-paopao" v-bind="louZhangData[8]" @click.native="onLouZhangClick(louZhangData[8])" />
-        <zong-lou-zhang-pao-pao class="lou-zhang-paopao" v-bind="zongLouZhangData[0]" />
-        <zong-lou-zhang-pao-pao class="lou-zhang-paopao" v-bind="zongLouZhangData[1]" />
+        <lou-zhang-flash-pao-pao
+            v-for="louZhang of louZhangData"
+            :key="louZhang.name"
+            class="lou-zhang-paopao"
+            v-bind="louZhang"
+            @click.native="onLouZhangClick(louZhang)"
+        />
+        <zong-lou-zhang-pao-pao
+            v-for="zongLouZhang of zongLouZhangData"
+            :key="zongLouZhang.name"
+            class="lou-zhang-paopao"
+            v-bind="zongLouZhang"
+            @click.native="onZongLouZhangClick(zongLouZhang)"
+        />
         <popup-group v-model="topmostPopup">
-            <lou-zhang-popup name="popup-louzhang" :img="showLouZhang.avatar" :id="showLouZhang.data.id" :louzhangName="showLouZhang.data.name" v-model="showPopup" />
+            <lou-zhang-popup
+                name="popup-louzhang"
+                :img="showLouZhang.avatar"
+                :id="showLouZhang.data.id"
+                :louzhangName="showLouZhang.data.name"
+                v-model="showPopup"
+            />
         </popup-group>
     </div>
 </template>
@@ -53,9 +62,9 @@ export default Vue.extend({
                 { avatar: '楼长8.png', type: 'tl', style: { left: '340px', top: '655px' } },
                 { avatar: '楼长9.png', type: 'tr', style: { left: '35px', top: '565px' } }
             ],
-            zongLouZhangData: [
-                { avatar: '总楼长2.png', style: { left: '360px', top: '455px' } },
-                { avatar: '总楼长1.png', style: { left: '570px', top: '295px' } }
+            zongLouZhangFixed: [
+                { avatar: '总楼长1.png', style: { left: '570px', top: '295px' } },
+                { avatar: '总楼长2.png', style: { left: '360px', top: '455px' } }
             ]
         }
     },
@@ -65,24 +74,37 @@ export default Vue.extend({
         }),
         louZhangData() {
             const data: any[] = []
+            const louZhangList = this.louZhang.filter(louzhang => !louzhang.isZongLouZhang)
             this.louZhangFixed.forEach((item, index) => {
-                const info = this.louZhang[index]
-                if (info) {
-                    data.push({
-                        ...item,
-                        data: info
-                    })
-                } else {
-                    data.push(item)
-                }
+                const louzhanag = louZhangList[index]
+                data.push({
+                    ...item,
+                    data: louzhanag
+                })
+            })
+            return data
+        },
+        zongLouZhangData() {
+            const data: any[] = []
+            const zongLouZhangList = this.louZhang.filter(louzhang => louzhang.isZongLouZhang)
+            this.zongLouZhangFixed.forEach((item, index) => {
+                const louzhanag = zongLouZhangList[index]
+                data.push({
+                    ...item,
+                    data: louzhanag
+                })
             })
             return data
         }
     },
     created() {
-        this.newInterval(() => {
-            this.$store.dispatch('requestLouZhang')
-        }, 1000*60, true)
+        this.newInterval(
+            () => {
+                this.$store.dispatch('requestLouZhang')
+            },
+            1000 * 60,
+            true
+        )
     },
     methods: {
         onLouZhangClick(louZhang) {
@@ -91,6 +113,9 @@ export default Vue.extend({
                 this.showLouZhang.data.id = 41
             }
             this.topmostPopup = 'popup-louzhang'
+        },
+        onZongLouZhangClick(zongLouZhang) {
+            this.$message.warning('暂无数据')
         }
     }
 })

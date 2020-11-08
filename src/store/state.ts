@@ -398,7 +398,9 @@ export class LouZhang {
             throw new Error('楼长信息：数据格式错误')
         }
         return serverData.map(item => {
-            return new LouZhang(item.id, item.name, item.owner, item.companyCnt, item.buildsCnt, item.tax60Cnt, item.visitCnt, item.unresolveCnt, item.satisfaction, item.rate)
+            const manYiDu = Number(item.satisfaction)
+            const wanChengLv = Number(item.rate) * 100
+            return new LouZhang(item.id, item.name, item.owner == 1, item.companyCnt, item.buildsCnt, item.tax60Cnt, item.visitCnt, item.unresolveCnt, manYiDu, wanChengLv)
         })
     }
 }
@@ -433,7 +435,7 @@ export class WenTi {
     static fromServer(serverData) {
         if (Array.isArray(serverData)) {
             return serverData.map(item => {
-                return new WenTi(item.id, item.master, item.category, item.title, item.desc, item.bname, item.company, new Date(item.ctime).toLocaleString())
+                return new WenTi(item.id, item.master, item.category, item.title, item.desc, item.bname, item.company || item.comany, new Date(item.ctime).toLocaleString())
             })
         } else {
             return new WenTi(
@@ -540,6 +542,27 @@ export class LouYuCoord {
     constructor(public id = -1, public x = 0, public y = 0) {}
 }
 
+export class QiYe2LouYu {
+    /**
+     * 
+     * @param qiYeName 企业名称
+     * @param id 楼宇 id
+     * @param name 楼宇名称
+     * @param coordx 楼宇坐标 x
+     * @param coordy 楼宇坐标 y
+     */
+    constructor(public qiYeName = '', public id = -1, public name = '', public coordx = -1, public coordy = -1) {}
+    static fromServer(louYuList: LouYu[]) {
+        const qiYe2Louyu = new Map<string, QiYe2LouYu>()
+        louYuList.forEach(louyu => {
+            louyu.qiYeList.forEach(qiYe => {
+                qiYe2Louyu.set(qiYe.name, new QiYe2LouYu(qiYe.name, louyu.id, louyu.name, louyu.coordx, louyu.coordy))
+            })
+        })
+        return qiYe2Louyu
+    }
+}
+
 export class State {
     louYuZongLan = new LouYuZongLan()
     changShouShangHui = new ChangShouShangHui()
@@ -562,6 +585,8 @@ export class State {
     louYuList: LouYu[] = []
     louYuCoords: LouYuCoord[] = []
     yuJingList = new YuJingList()
+
+    qiYe2Louyu = new Map<string, QiYe2LouYu>()
 
     client_id = 'sh-ptcs-city'
     client_version = '1.0.0'

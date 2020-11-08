@@ -3,7 +3,7 @@
         <div class="login-form">
             <div class="left"></div>
             <div class="right">
-                <div class="title">长寿路街道服务经济工作管理系统</div>
+                <div class="title">{{ title }}</div>
                 <el-input v-model="username" class="username" prefix-icon="el-icon-user" placeholder="请输入账号" />
                 <el-input v-model="passwd" class="password" prefix-icon="el-icon-key" placeholder="请输入密码" type="password" :show-password="true" />
                 <button v-loading="loginLoading" class="login-btn" @click="login">登录</button>
@@ -20,6 +20,7 @@ export default Vue.extend({
     props: {},
     data() {
         return {
+            title: process.env.VUE_APP_TITLE,
             username: '',
             passwd: '',
             loginLoading: false

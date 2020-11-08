@@ -148,10 +148,12 @@ export default Vue.extend({
                     },
                     backgroundColor: 'rgb(0,121,202)'
                 }
-                const len = week[0].length - 1
                 series = []
-                for (let index = 0; index < len; index++) {
-                    series.push({ type: 'bar', barWidth: 15, stack: 'week', datasetIndex: 1 })
+                if (week.length > 0) {
+                    const len = week[0].length - 1
+                    for (let index = 0; index < len; index++) {
+                        series.push({ type: 'bar', barWidth: 15, stack: 'week', datasetIndex: 1 })
+                    }
                 }
             }
             const option: echarts.EChartOption = {

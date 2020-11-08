@@ -1,23 +1,12 @@
 <template>
     <card :opts="{ hasTitle: false }" style="width: 100%; height: 100%;">
         <!-- <keep-alive> -->
-            <component :is="currentComponent.name" v-bind="currentComponent.data" />
+        <component :is="currentComponent.name" v-bind="currentComponent.data" />
         <!-- </keep-alive> -->
+        <map-marder-menu class="map-marker-menu" @command="onMenuCommand" />
         <popup-group v-model="topmostPopup">
-            <xinxi-detail-popup
-                name="popup-xinxi"
-                v-model="isShowXinxiPopup"
-                :id="xinXiId"
-                :xinXi="xinXi"
-                :labelColor="xinXiLabelColor"
-            />
-            <problem-detail-popup
-                name="popup-problem-detail"
-                v-model="isShowProblemDetailPopup"
-                :id="wentiId"
-                :wenti="wenti"
-                :labelColor="wentiLabelColor"
-            />
+            <xinxi-detail-popup name="popup-xinxi" v-model="isShowXinxiPopup" :id="xinXiId" :xinXi="xinXi" :labelColor="xinXiLabelColor" />
+            <problem-detail-popup name="popup-problem-detail" v-model="isShowProblemDetailPopup" :id="wentiId" :wenti="wenti" :labelColor="wentiLabelColor" />
         </popup-group>
     </card>
 </template>
@@ -31,13 +20,13 @@ import LouZhangFenBuTu from './LouZhang/LouZhangFenBuTu.vue'
 import ChangShouMap from './CityMap/ChangShouMap.vue'
 import PopupGroup from '@/components/popup/PopupGroup.vue'
 import { WenTi, XinXi } from '@/store/state'
-
+import MapMarderMenu from './components/MapMarkerMenu.vue'
 /**
  * 中间地图部分区域的组件，包括长寿街道的城建地图、楼长制分布图，以及一些 popup 弹窗
  */
 export default Vue.extend({
     name: 'Middle',
-    components: { Card, PopupGroup, XinxiDetailPopup, ProblemDetailPopup, LouZhangFenBuTu, ChangShouMap },
+    components: { Card, MapMarderMenu, PopupGroup, XinxiDetailPopup, ProblemDetailPopup, LouZhangFenBuTu, ChangShouMap },
     data() {
         // const pm = new PopupManager()
         return {
@@ -66,9 +55,7 @@ export default Vue.extend({
         })
         this.$root.$on('popup-problem-detail', ({ id, wenti, color }) => {
             this.topmostPopup = 'popup-problem-detail'
-            this.wentiId = id,
-            this.wenti = wenti,
-            this.wentiLabelColor = color
+            ;(this.wentiId = id), (this.wenti = wenti), (this.wentiLabelColor = color)
         })
         // 显示城建地图，并且在地图上显示信息预警撒点
         this.$root.$on('map-xinxiyujing', () => {
@@ -76,6 +63,26 @@ export default Vue.extend({
                 name: 'ChangShouMap',
                 data: {
                     type: 'yujing'
+                }
+            }
+        })
+        // 显示城建地图，并且在地图上显示信息预警撒点中的税收波动
+        this.$root.$on('map-shuishoubodong', () => {
+            this.currentComponent = {
+                name: 'ChangShouMap',
+                data: {
+                    type: 'yujing',
+                    yujingType: 'shuishou'
+                }
+            }
+        })
+        // 显示城建地图，并且在地图上显示信息预警撒点中的迁入迁出
+        this.$root.$on('map-qianruqianchu', () => {
+            this.currentComponent = {
+                name: 'ChangShouMap',
+                data: {
+                    type: 'yujing',
+                    yujingType: 'inout'
                 }
             }
         })
@@ -160,9 +167,19 @@ export default Vue.extend({
         //     // eval(arg.action).apply(window, [arg.data]);
         // }, this)
     },
-    methods: {}
+    methods: {
+        onMenuCommand(command) {
+            this.$root.$emit('map-' + command)
+        }
+    }
 })
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped></style>
+<style lang="scss" scoped>
+.map-marker-menu {
+    position: absolute;
+    top: 80px;
+    right: 20px;
+}
+</style>

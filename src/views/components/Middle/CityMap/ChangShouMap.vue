@@ -83,6 +83,10 @@ export default Vue.extend({
         type: {
             type: String, // louyu  shuishoutop5 yujing yiyuanlouyu zhongdianqiye
             default: 'louyu'
+        },
+        yujingType: {
+            type: String,
+            default: 'inout'
         }
     },
     data() {
@@ -95,7 +99,7 @@ export default Vue.extend({
             louYuId: -1,
             bridge: (undefined as unknown) as CityGis.Bridge,
             mapReady: false,
-            yujingType: 'inout' // shuisou inout
+            // yujingType: 'inout' // shuisou inout
         }
     },
     computed: {
@@ -107,6 +111,7 @@ export default Vue.extend({
                 // }
                 return list
             },
+            qiYe2LouYu: state => (state as State).qiYe2Louyu,
             yuJingList: state => {
                 let list = (state as State).yuJingList
                 // if (list.inAndOutList.length === 0) {
@@ -125,7 +130,7 @@ export default Vue.extend({
                 case 'yujing':
                     return '信息预警'
                 case 'zhongdianqiye':
-                    return '重点企业分析'
+                    return '重点企业'
                 case 'shuishoutop5':
                     return '重点企业税收Top5'
                 case 'yiyuanlouyu':
@@ -160,6 +165,7 @@ export default Vue.extend({
         // this.
     },
     mounted() {
+        // 楼宇列表数据不需要轮询，只获取一个就可以
         this.$store.dispatch('requestBuildings')
         // this.newInterval(
         //     () => {
@@ -590,13 +596,15 @@ export default Vue.extend({
                 new Promise((resovle, reject) => {
                     let markers = [] as any[]
                     let texts = [] as any[]
+                    console.time('TEST-' + key)
                     // 楼宇名字<——>预警参数，用来计算楼宇中有几个预警的企业
                     const louyu2yujing = new Map()
                     const yujinglist = this.yujingType === 'shuishou' ? this.yuJingList.shuiShouList : this.yuJingList.inAndOutList
                     yujinglist.forEach((qiye, index) => {
-                        const louyu = this.louYuList.find(l => {
-                            return l.qiYeList.find(q => q.name === qiye.name)
-                        })
+                        // const louyu = this.louYuList.find(l => {
+                        //     return l.qiYeList.find(q => q.name === qiye.name)
+                        // })
+                        const louyu = this.qiYe2LouYu.get(qiye.name)
                         if (louyu) {
                             const yujing = louyu2yujing.get(louyu.name)
                             const sign = {
@@ -642,6 +650,7 @@ export default Vue.extend({
                             name: yujing.name
                         })
                     })
+                    console.timeEnd('TEST-' + key)
                     resovle({
                         markers,
                         texts
@@ -708,9 +717,11 @@ export default Vue.extend({
                     // 楼宇名字<——>税收参数，用来计算楼宇中有几个top5的企业
                     const louyu2shuishou = new Map()
                     this.zhongDianShuiShouTop5.forEach((qiye, index) => {
-                        const louyu = this.louYuList.find(l => {
-                            return l.qiYeList.find(q => q.name === qiye.name)
-                        })
+                        // const louyu = this.louYuList.find(l => {
+                        //     return l.qiYeList.find(q => q.name === qiye.name)
+                        // })
+                        const louyu = this.qiYe2LouYu.get(qiye.name)
+
                         if (louyu) {
                             const zhongdian = louyu2shuishou.get(louyu.name)
                             if (zhongdian) {
@@ -781,9 +792,11 @@ export default Vue.extend({
                     // 楼宇名字<——>重点企业参数，用来计算楼宇中有几个重点的企业
                     const louyu2zhongdian = new Map()
                     this.zhongDianQiYeList.forEach((qiye, index) => {
-                        const louyu = this.louYuList.find(l => {
-                            return l.qiYeList.find(q => q.name === qiye.name)
-                        })
+                        // const louyu = this.louYuList.find(l => {
+                        //     return l.qiYeList.find(q => q.name === qiye.name)
+                        // })
+                        const louyu = this.qiYe2LouYu.get(qiye.name)
+
                         if (louyu) {
                             const zhongdian = louyu2zhongdian.get(louyu.name)
                             if (zhongdian) {

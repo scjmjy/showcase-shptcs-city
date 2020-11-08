@@ -24,7 +24,8 @@ import {
     WeekValueType,
     LouYu,
     YuJingList,
-    ZhongDianQiYe
+    ZhongDianQiYe,
+    QiYe2LouYu
 } from './state'
 
 const coords = [
@@ -160,6 +161,7 @@ const mutations: MutationTree<State> = {
 
     ['SET-BUILDINGS'](state, res) {
         state.louYuList = LouYu.fromServer(res)
+        state.qiYe2Louyu = QiYe2LouYu.fromServer(state.louYuList)
         // state.louYuList.forEach(louyu => {
         //     const coord = coords.find(c => c.id === louyu.id)
         //     if (coord) {

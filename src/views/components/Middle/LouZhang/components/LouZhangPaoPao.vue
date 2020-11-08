@@ -12,8 +12,8 @@
         </div>
         <div class="right-side">
             <div ref="chart" class="u-wh-100"></div>
-            <div class="man-yi">{{ data.manYiDu }}%</div>
-            <div class="wan-cheng-lv">{{ data.wanChengLv }}%</div>
+            <div class="man-yi">{{ manYiDu }}%</div>
+            <div class="wan-cheng-lv">{{ wanChengLv }}%</div>
         </div>
     </div>
 </template>
@@ -39,10 +39,6 @@ export default Vue.extend({
         }
     },
     data() {
-        const { manYiDu, wanChengLv } = this.data
-        const buManYiDu = 100 - manYiDu
-        const weiWanChengLv = 100 - wanChengLv
-
         return {
             chart: undefined as echarts.ECharts | undefined,
             chartOption: {
@@ -85,19 +81,41 @@ export default Vue.extend({
                         },
                         labelLine: {
                             show: true
-                        },
-                        data: [
-                            { value: weiWanChengLv, name: '未完成率', itemStyle: { color: 'red' } },
-                            { value: wanChengLv, name: '完成率', itemStyle: { color: '#00D98B' } },
-                            { value: manYiDu, name: '满意', itemStyle: { color: '#FE693B' } },
-                            { value: buManYiDu, name: '不满意度', itemStyle: { color: 'red' } }
-                        ]
+                        }
                     }
                 ]
             } as echarts.EChartOption
         }
     },
     computed: {
+        manYiDu(): number {
+            let { manYiDu } = this.data
+            manYiDu = Number(manYiDu.toFixed(1))
+            return manYiDu
+        },
+        wanChengLv(): number {
+            let { wanChengLv } = this.data
+            wanChengLv = Number(wanChengLv.toFixed(1))
+            return wanChengLv
+        },
+        chartSeries(): any {
+            let { manYiDu, wanChengLv } = this
+
+            const buManYiDu = 100 - manYiDu
+            const weiWanChengLv = 100 - wanChengLv
+            const series = [
+                {
+                    name: '楼长评估',
+                    data: [
+                        { value: weiWanChengLv, name: '未完成率', itemStyle: { color: 'red' } },
+                        { value: wanChengLv, name: '完成率', itemStyle: { color: '#00D98B' } },
+                        { value: manYiDu, name: '满意', itemStyle: { color: '#FE693B' } },
+                        { value: buManYiDu, name: '不满意度', itemStyle: { color: 'red' } }
+                    ]
+                }
+            ]
+            return series
+        },
         containerStyle() {
             const { type } = this
             let padding, background, width, height
@@ -178,13 +196,13 @@ export default Vue.extend({
         }
     },
     watch: {
-        chartOption: {
-            handler(val) {
-                if (this.chart) {
-                    this.chart.setOption(val)
+        chartSeries(series) {
+            if (this.chart) {
+                const option = {
+                    series
                 }
-            },
-            deep: true
+                this.chart.setOption(option)
+            }
         }
     }
 })
