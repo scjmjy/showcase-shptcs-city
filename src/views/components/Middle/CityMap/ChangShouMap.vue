@@ -832,7 +832,7 @@ export default Vue.extend({
                         markers.push({
                             coordx: zhongdian.coordx,
                             coordy: zhongdian.coordy,
-                            coordz: 200,
+                            coordz: 250,
                             iconType: louyuName,
                             id: zhongdian.id,
                             name: zhongdian.name
@@ -875,7 +875,7 @@ export default Vue.extend({
     .map-overlay {
         position: absolute;
         left: 20px;
-        top: 5px;
+        top: 15px;
         display: flex;
         align-items: center;
         .type-title {

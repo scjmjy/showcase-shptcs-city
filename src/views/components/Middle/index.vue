@@ -180,6 +180,6 @@ export default Vue.extend({
 .map-marker-menu {
     position: absolute;
     top: 80px;
-    right: 20px;
+    left: 20px;
 }
 </style>

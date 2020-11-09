@@ -277,6 +277,27 @@ function formatWeek(weekday: number) {
             return ''
     }
 }
+function getServerWeekdayName(weekday: number) {
+    switch (weekday) {
+        case 1:
+            return '星期一'
+        case 2:
+            return '星期二'
+        case 3:
+            return '星期三'
+        case 4:
+            return '星期四'
+        case 5:
+            return '星期五'
+        case 6:
+            return '星期六'
+        case 7:
+            return '星期日'
+
+        default:
+            return ''
+    }
+}
 export class DiaoYanFenLeiTongJi {
     constructor(public year: YearValueType[] = [], public week: WeekValueType[][] = []) {}
     static fromServer(serverData, type: 'year' | 'week') {
@@ -302,7 +323,7 @@ export class DiaoYanFenLeiTongJi {
                 const weekDayData = week[weekDay]
                 weekDayData.push(formatWeek(weekDay))
 
-                const found = serverData.find(item => Number(item.xaxis) === weekDay)
+                const found = serverData.find(item => item.xaxis == getServerWeekdayName(weekDay))
                 if (found) {
                     catSet.forEach(cat => {
                         const catValue = found.yvalues.find(y => y.cname === cat)

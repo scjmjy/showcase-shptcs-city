@@ -8,6 +8,7 @@
             <el-dropdown-item command="yiyuanlouyu">亿元楼宇</el-dropdown-item>
             <el-dropdown-item command="shuishoubodong">税收波动</el-dropdown-item>
             <el-dropdown-item command="qianruqianchu">迁入迁出</el-dropdown-item>
+            <el-dropdown-item command="louzhangzhi">楼长制</el-dropdown-item>
         </el-dropdown-menu>
     </el-dropdown>
 </template>

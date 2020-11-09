@@ -115,7 +115,7 @@ export default Vue.extend({
     .list {
         width: 50%;
         height: 100%;
-        padding: 25px 15px 15px 15px;
+        padding: 20px 15px 15px 15px;
         border-right: 1px solid rgb(0, 99, 167);
     }
     .pie {
