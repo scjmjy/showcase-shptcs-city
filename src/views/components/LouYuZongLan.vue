@@ -45,7 +45,7 @@ export default Vue.extend({
                 suffixStyle: {
                     'vertical-align': 'super'
                 },
-                title: '沪管企业总数'
+                title: '户管企业总数'
             }
         },
         shuiShou() {
