@@ -36,27 +36,29 @@ import ZhongDianQiYePopup from './ZhongDianQiYePopup.vue'
 import LouYuPopup from './LouYuPopup.vue'
 import Interval, { IntervalTask } from '@/components/Interval.vue'
 
-const icon_louyu = 'http://localhost:9528' + require('../../../../assets/img/louyu.png')
+const STATIC_RESOURCE_HOST = 'http://localhost:80'
 
-const icon_yujing1 = 'http://localhost:9528' + require('../../../../assets/img/信息预警1.png')
-const icon_yujing2 = 'http://localhost:9528' + require('../../../../assets/img/信息预警2.png')
-const icon_yujing3 = 'http://localhost:9528' + require('../../../../assets/img/信息预警3.png')
-const icon_yujing4 = 'http://localhost:9528' + require('../../../../assets/img/信息预警4.png')
-const icon_yujing5 = 'http://localhost:9528' + require('../../../../assets/img/信息预警5.png')
-const icon_yujing6 = 'http://localhost:9528' + require('../../../../assets/img/信息预警6.png')
-const icon_yujing7 = 'http://localhost:9528' + require('../../../../assets/img/信息预警7.png')
-const icon_yujing8 = 'http://localhost:9528' + require('../../../../assets/img/信息预警8.png')
-const icon_yujing9 = 'http://localhost:9528' + require('../../../../assets/img/信息预警9.png')
+const icon_louyu = STATIC_RESOURCE_HOST + require('../../../../assets/img/louyu.png')
 
-const icon_zhongdian1 = 'http://localhost:9528' + require('../../../../assets/img/重点企业1.png')
-const icon_zhongdian2 = 'http://localhost:9528' + require('../../../../assets/img/重点企业2.png')
-const icon_zhongdian3 = 'http://localhost:9528' + require('../../../../assets/img/重点企业3.png')
-const icon_zhongdian4 = 'http://localhost:9528' + require('../../../../assets/img/重点企业4.png')
-const icon_zhongdian5 = 'http://localhost:9528' + require('../../../../assets/img/重点企业5.png')
-const icon_zhongdian6 = 'http://localhost:9528' + require('../../../../assets/img/重点企业6.png')
-const icon_zhongdian7 = 'http://localhost:9528' + require('../../../../assets/img/重点企业7.png')
-const icon_zhongdian8 = 'http://localhost:9528' + require('../../../../assets/img/重点企业8.png')
-const icon_zhongdian9 = 'http://localhost:9528' + require('../../../../assets/img/重点企业9.png')
+const icon_yujing1 = STATIC_RESOURCE_HOST + require('../../../../assets/img/信息预警1.png')
+const icon_yujing2 = STATIC_RESOURCE_HOST + require('../../../../assets/img/信息预警2.png')
+const icon_yujing3 = STATIC_RESOURCE_HOST + require('../../../../assets/img/信息预警3.png')
+const icon_yujing4 = STATIC_RESOURCE_HOST + require('../../../../assets/img/信息预警4.png')
+const icon_yujing5 = STATIC_RESOURCE_HOST + require('../../../../assets/img/信息预警5.png')
+const icon_yujing6 = STATIC_RESOURCE_HOST + require('../../../../assets/img/信息预警6.png')
+const icon_yujing7 = STATIC_RESOURCE_HOST + require('../../../../assets/img/信息预警7.png')
+const icon_yujing8 = STATIC_RESOURCE_HOST + require('../../../../assets/img/信息预警8.png')
+const icon_yujing9 = STATIC_RESOURCE_HOST + require('../../../../assets/img/信息预警9.png')
+
+const icon_zhongdian1 = STATIC_RESOURCE_HOST + require('../../../../assets/img/重点企业1.png')
+const icon_zhongdian2 = STATIC_RESOURCE_HOST + require('../../../../assets/img/重点企业2.png')
+const icon_zhongdian3 = STATIC_RESOURCE_HOST + require('../../../../assets/img/重点企业3.png')
+const icon_zhongdian4 = STATIC_RESOURCE_HOST + require('../../../../assets/img/重点企业4.png')
+const icon_zhongdian5 = STATIC_RESOURCE_HOST + require('../../../../assets/img/重点企业5.png')
+const icon_zhongdian6 = STATIC_RESOURCE_HOST + require('../../../../assets/img/重点企业6.png')
+const icon_zhongdian7 = STATIC_RESOURCE_HOST + require('../../../../assets/img/重点企业7.png')
+const icon_zhongdian8 = STATIC_RESOURCE_HOST + require('../../../../assets/img/重点企业8.png')
+const icon_zhongdian9 = STATIC_RESOURCE_HOST + require('../../../../assets/img/重点企业9.png')
 
 /**
  * 从1-9个预警图片中获取一个，目前只支持9个
