@@ -36,7 +36,8 @@ import ZhongDianQiYePopup from './ZhongDianQiYePopup.vue'
 import LouYuPopup from './LouYuPopup.vue'
 import Interval, { IntervalTask } from '@/components/Interval.vue'
 
-const STATIC_RESOURCE_HOST = 'http://localhost:80'
+// const STATIC_RESOURCE_HOST = 'http://localhost:80'
+const STATIC_RESOURCE_HOST = process.env.VUE_APP_NGINX_IP
 
 const icon_louyu = STATIC_RESOURCE_HOST + require('../../../../assets/img/louyu.png')
 
@@ -179,8 +180,7 @@ export default Vue.extend({
         const vue = this
         this.bridge = new CityGis.Bridge({
             id: 'id-city-map',
-            url: 'http://158.10.0.222/citygis/areamap/WidgetPages/WidgetGIS.html?debug=false&maptype=3d&code=0715&themeid=Gis&devicetype=null',
-            // url: 'http://10.244.106.14/citygis2/areamap/WidgetPages/WidgetGIS.html?code=02&devicetype=sm',
+            url: process.env.VUE_APP_CITY_MAP_IP + '/citygis/areamap/WidgetPages/WidgetGIS.html?debug=false&maptype=3d&code=0715&themeid=Gis&devicetype=null',
             onReady(bridge) {
                 vue.onMapReady()
             }

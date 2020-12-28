@@ -37,8 +37,8 @@ const actions: ActionTree<State, State> = {
         commit('setAll', all)
     },
 
-    async login({ commit }, { username, passwd }) {
-        const res = (await api.login(username, passwd)).data
+    async login({ commit }, { username, passwd, code, uuid }) {
+        const res = (await api.login(username, passwd, code, uuid)).data
         const auth = {
             uid: res.uid,
             token: res.token
@@ -52,7 +52,7 @@ const actions: ActionTree<State, State> = {
         return new Promise(resolve => {
             commit('SET-AUTH', { uid: -1, token: '' })
             removeToken()
-            resolve()
+            resolve(true)
         })
     },
 
