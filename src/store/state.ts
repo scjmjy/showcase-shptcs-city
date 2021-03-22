@@ -6,7 +6,7 @@ export class LouYuZongLan {
         public shuiShouZongE = 0,
         public zhongDianQiYeShu = 0,
         public zhongDianQiYeShuiShouZongE = 0,
-        public shuiShouZanBi = 0
+        public shuiShouZanBi = 0,
     ) {}
     static fromServer(serverData) {
         return new LouYuZongLan(
@@ -14,7 +14,7 @@ export class LouYuZongLan {
             serverData.bdTax,
             serverData.bdNumFocusC,
             serverData.bdTaxFocus, // TODO 前端：重点企业税收总额 --- 后端：企业税收增加数
-            serverData.bdRatioTax
+            serverData.bdRatioTax,
         )
     }
 }
@@ -43,7 +43,7 @@ export class YiYuanLouYu {
             new YiYuanLouYu(serverData.bnName2, serverData.bnTax2),
             new YiYuanLouYu(serverData.bnName3, serverData.bnTax3),
             new YiYuanLouYu(serverData.bnName4, serverData.bnTax4),
-            new YiYuanLouYu(serverData.bnName5, serverData.bnTax5)
+            new YiYuanLouYu(serverData.bnName5, serverData.bnTax5),
         ]
         return top5
     }
@@ -61,7 +61,7 @@ export class ZhongDianShuiShouTop5 {
             new ZhongDianShuiShouTop5(serverData.fsRsName2, serverData.fsRsTax2),
             new ZhongDianShuiShouTop5(serverData.fsRsName3, serverData.fsRsTax3),
             new ZhongDianShuiShouTop5(serverData.fsRsName4, serverData.fsRsTax4),
-            new ZhongDianShuiShouTop5(serverData.fsRsName5, serverData.fsRsTax5)
+            new ZhongDianShuiShouTop5(serverData.fsRsName5, serverData.fsRsTax5),
         ]
         return top5
     }
@@ -83,7 +83,7 @@ export class ShuiShouBoDong {
             upNum: serverData.wnNumTaxAsc,
             upPercent: serverData.wnNumTaxAscRate,
             downNum: serverData.wnNumTaxDsc,
-            downPercent: serverData.wnNumTaxDscRate
+            downPercent: serverData.wnNumTaxDscRate,
         }
         const upLog = [
             ['月份', '上升20-50%', '上升50-80%', '上升>80%'],
@@ -92,7 +92,7 @@ export class ShuiShouBoDong {
             [serverData.wnNumTax180Name3, serverData.wnNumTax18020upp3, serverData.wnNumTax18050upp3, serverData.wnNumTax18080upp3],
             [serverData.wnNumTax180Name4, serverData.wnNumTax18020upp4, serverData.wnNumTax18050upp4, serverData.wnNumTax18080upp4],
             [serverData.wnNumTax180Name5, serverData.wnNumTax18020upp5, serverData.wnNumTax18050upp5, serverData.wnNumTax18080upp5],
-            [serverData.wnNumTax180Name6, serverData.wnNumTax18020upp6, serverData.wnNumTax18050upp6, serverData.wnNumTax18080upp6]
+            [serverData.wnNumTax180Name6, serverData.wnNumTax18020upp6, serverData.wnNumTax18050upp6, serverData.wnNumTax18080upp6],
         ]
         const downLog = [
             ['月份', '下降20-50%', '下降50-80%', '下降>80%'],
@@ -101,7 +101,7 @@ export class ShuiShouBoDong {
             [serverData.wnNumTax180Name3, -serverData.wnNumTax18020downp3, -serverData.wnNumTax18050downp3, -serverData.wnNumTax18080downp3],
             [serverData.wnNumTax180Name4, -serverData.wnNumTax18020downp4, -serverData.wnNumTax18050downp4, -serverData.wnNumTax18080downp4],
             [serverData.wnNumTax180Name5, -serverData.wnNumTax18020downp5, -serverData.wnNumTax18050downp5, -serverData.wnNumTax18080downp5],
-            [serverData.wnNumTax180Name6, -serverData.wnNumTax18020downp6, -serverData.wnNumTax18050downp6, -serverData.wnNumTax18080downp6]
+            [serverData.wnNumTax180Name6, -serverData.wnNumTax18020downp6, -serverData.wnNumTax18050downp6, -serverData.wnNumTax18080downp6],
         ]
         return new ShuiShouBoDong(upAndDown, upLog, downLog)
         // const data = {
@@ -144,7 +144,7 @@ export class QianRuQianChu {
             serverData.wnNumMoveIn,
             serverData.wnNumMoveInRate.toFixed(1),
             serverData.wnNumMoveOut,
-            serverData.wnNumMoveOutRate.toFixed(1)
+            serverData.wnNumMoveOutRate.toFixed(1),
         )
         const inLog: (string | number)[][] = [
             [serverData.wnNumMove180Name1, serverData.wnNumMove180upp1],
@@ -152,7 +152,7 @@ export class QianRuQianChu {
             [serverData.wnNumMove180Name3, serverData.wnNumMove180upp3],
             [serverData.wnNumMove180Name4, serverData.wnNumMove180upp4],
             [serverData.wnNumMove180Name5, serverData.wnNumMove180upp5],
-            [serverData.wnNumMove180Name6, serverData.wnNumMove180upp6]
+            [serverData.wnNumMove180Name6, serverData.wnNumMove180upp6],
         ]
         const {
             wnNumMove180downp1: downp1,
@@ -160,7 +160,7 @@ export class QianRuQianChu {
             wnNumMove180downp3: downp3,
             wnNumMove180downp4: downp4,
             wnNumMove180downp5: downp5,
-            wnNumMove180downp6: downp6
+            wnNumMove180downp6: downp6,
         } = serverData
         const outLog: (string | number)[][] = [
             [serverData.wnNumMove180Name1, downp1 < 0 ? downp1 : -downp1],
@@ -168,7 +168,7 @@ export class QianRuQianChu {
             [serverData.wnNumMove180Name3, downp3 < 0 ? downp3 : -downp3],
             [serverData.wnNumMove180Name4, downp4 < 0 ? downp4 : -downp4],
             [serverData.wnNumMove180Name5, downp5 < 0 ? downp5 : -downp5],
-            [serverData.wnNumMove180Name6, downp6 < 0 ? downp6 : -downp6]
+            [serverData.wnNumMove180Name6, downp6 < 0 ? downp6 : -downp6],
         ]
         return new QianRuQianChu(inAndOut, inLog, outLog)
     }
@@ -181,7 +181,7 @@ export class DangJian {
         public dangJianHuoDong = 0,
         public huoDongPinTai = 0,
         public zhiYuanZhe = 0,
-        public zhiYuanZheHuoDong = 0
+        public zhiYuanZheHuoDong = 0,
     ) {}
     static fromServer(serverData) {
         return new DangJian(
@@ -190,7 +190,7 @@ export class DangJian {
             serverData.partyNumActivity,
             serverData.partyNumPlatform,
             serverData.partyNumVolunteer,
-            serverData.partyNumVolunteerActivity
+            serverData.partyNumVolunteerActivity,
         )
     }
 }
@@ -201,7 +201,7 @@ export class LouZhangOverview {
         public zouFangQiYeShu = 0,
         public wenTiZongShu = 0,
         public weiJieJueShu = 0,
-        public wanChengLv = 0
+        public wanChengLv = 0,
     ) {}
     static fromServer(serverData) {
         return new LouZhangOverview(
@@ -210,7 +210,7 @@ export class LouZhangOverview {
             serverData.numVisitB,
             serverData.numProblem,
             serverData.numUnresolve,
-            Number(serverData.ratioCompletion) * 100
+            Number(serverData.ratioCompletion) * 100,
         )
     }
 }
@@ -218,7 +218,9 @@ export class DiaoYanNianDuTongJi {
     constructor(public months: string[] = [], public yiChuLi: number[] = [], public weiChuLi: number[] = []) {}
     static fromServer(serverData) {
         if (!Array.isArray(serverData)) {
-            throw new Error('大调研年度数据统计：数据格式错误')
+            // throw new Error('大调研年度数据统计：数据格式错误')
+            console.error('大调研年度数据统计：数据格式错误')
+            return new DiaoYanNianDuTongJi()
         }
         const months: string[] = []
         const yiChuLi: number[] = []
@@ -239,7 +241,7 @@ const week = [
     ['星期四', 100, 10, 30, 40, 44, 55, 22, 44],
     ['星期五', 200, 120, 30, 40, 44, 55, 22, 44],
     ['星期六', 50, 110, 40, 40, 44, 55, 22, 44],
-    ['星期日', 120, 10, 70, 40, 44, 55, 22, 44]
+    ['星期日', 120, 10, 70, 40, 44, 55, 22, 44],
 ]
 const year = [
     { name: '党的建设类', value: 100 },
@@ -249,7 +251,7 @@ const year = [
     { name: '公安政法类', value: 120 },
     { name: '科教文卫类', value: 120 },
     { name: '社会管理类', value: 110 },
-    { name: '其他', value: 100 }
+    { name: '其他', value: 100 },
 ]
 export type YearValueType = {
     name: string
@@ -357,12 +359,12 @@ export class DiaoYanFenLeiTongJi {
             mapCategory2Count.forEach((v, k) => {
                 year.push({
                     name: k,
-                    value: v
+                    value: v,
                 })
             })
             return year
         } else {
-            throw new Error('无效的')
+            throw new Error('无效的类型：' + type)
         }
     }
 }
@@ -382,7 +384,9 @@ export class ZhongDianQiYe {
     constructor(public name = '', public type: 1 | 2 | 3 = 1) {}
     static fromServer(serverData) {
         if (!Array.isArray(serverData)) {
-            throw new Error('楼长信息：数据格式错误')
+            // throw new Error('楼长信息：数据格式错误')
+            console.error('楼长信息：数据格式错误')
+            return []
         }
         return serverData.map(item => {
             return new ZhongDianQiYe(item.name, item.ctype)
@@ -393,7 +397,9 @@ export class WeiJieJueFenLeiTongJi {
     constructor(public category = '', public count = 0) {}
     static fromServer(serverData) {
         if (!Array.isArray(serverData)) {
-            throw new Error('未解决问题分类统计：数据格式错误')
+            // throw new Error('未解决问题分类统计：数据格式错误')
+            console.error('未解决问题分类统计：数据格式错误')
+            return []
         }
         return serverData.map(item => {
             return new WeiJieJueFenLeiTongJi(item.cname, item.count)
@@ -412,16 +418,29 @@ export class LouZhang {
         public zouFangShu = 0,
         public weiJieJue = 0,
         public manYiDu = 0,
-        public wanChengLv = 0
+        public wanChengLv = 0,
     ) {}
     static fromServer(serverData) {
         if (!Array.isArray(serverData)) {
-            throw new Error('楼长信息：数据格式错误')
+            // throw new Error('楼长信息：数据格式错误')
+            console.error('楼长信息：数据格式错误')
+            return []
         }
         return serverData.map(item => {
             const manYiDu = Number(item.satisfaction)
             const wanChengLv = Number(item.rate) * 100
-            return new LouZhang(item.id, item.name, item.owner == 1, item.companyCnt, item.buildsCnt, item.tax60Cnt, item.visitCnt, item.unresolveCnt, manYiDu, wanChengLv)
+            return new LouZhang(
+                item.id,
+                item.name,
+                item.owner == 1,
+                item.companyCnt,
+                item.buildsCnt,
+                item.tax60Cnt,
+                item.visitCnt,
+                item.unresolveCnt,
+                manYiDu,
+                wanChengLv,
+            )
         })
     }
 }
@@ -430,7 +449,9 @@ export class XinXi {
     constructor(public id = -1, public category = '', public title = '', public content = '') {}
     static fromServer(serverData) {
         if (!Array.isArray(serverData)) {
-            throw new Error('新闻信息：数据格式错误')
+            // throw new Error('新闻信息：数据格式错误')
+            console.error('新闻信息：数据格式错误')
+            return []
         }
         return serverData.map(item => {
             return new XinXi(item.id, item.cname, item.title, item.content)
@@ -451,12 +472,21 @@ export class WenTi {
         public desc = '',
         public louYu = '',
         public qiYe = '',
-        public time = ''
+        public time = '',
     ) {}
     static fromServer(serverData) {
         if (Array.isArray(serverData)) {
             return serverData.map(item => {
-                return new WenTi(item.id, item.master, item.category, item.title, item.desc, item.bname, item.company || item.comany, new Date(item.ctime).toLocaleString())
+                return new WenTi(
+                    item.id,
+                    item.master,
+                    item.category,
+                    item.title,
+                    item.desc,
+                    item.bname,
+                    item.company || item.comany,
+                    new Date(item.ctime).toLocaleString(),
+                )
             })
         } else {
             return new WenTi(
@@ -467,7 +497,7 @@ export class WenTi {
                 serverData.desc,
                 serverData.bname,
                 serverData.company,
-                new Date(serverData.ctime).toLocaleString()
+                new Date(serverData.ctime).toLocaleString(),
             )
         }
     }
@@ -482,7 +512,7 @@ export class QiYe {
         public area = 0,
         public contact = '',
         public shangHui = '',
-        public tag = ''
+        public tag = '',
     ) {}
     static fromServer(serverData) {
         if (Array.isArray(serverData)) {
@@ -490,7 +520,9 @@ export class QiYe {
                 return new QiYe(item.id, item.company, item.address, item.tax, item.area, item.contact, item.cName, item.tag)
             })
         } else {
-            throw new Error('不合法的企业数据格式：期待数组')
+            // throw new Error('不合法的企业数据格式：期待数组')
+            console.error('不合法的企业数据格式：期待数组')
+            return []
         }
     }
 }
@@ -509,7 +541,7 @@ export class YuJingQiYe {
         public name = '',
         public status: 1 | 2 = 1, // 1:上升/迁入;2:下降/迁出
         public coordx = -1,
-        public coordy = -1
+        public coordy = -1,
     ) {}
     static fromServer(data) {
         if (Array.isArray(data)) {
@@ -518,7 +550,9 @@ export class YuJingQiYe {
                 return new YuJingQiYe(item.id, item.name, item.status, item.longitude, item.latitude)
             })
         } else {
-            throw new Error('不合法的企业数据格式：期待数组')
+            // throw new Error('不合法的企业数据格式：期待数组')
+            console.error('不合法的企业数据格式：期待数组')
+            return []
         }
     }
 }
@@ -534,7 +568,7 @@ export class LouYu {
         public dangZhiBu: DangZhiBu[] = [],
         public qiYeList: QiYe[] = [],
         public coordx = 0,
-        public coordy = 0
+        public coordy = 0,
     ) {}
     static fromServer(serverData) {
         if (Array.isArray(serverData)) {
@@ -545,7 +579,9 @@ export class LouYu {
                 return new LouYu(item.id, item.name, item.address, item.area, item.tax, louZhangZhi, [], qiYeList, item.longitude, item.latitude)
             })
         } else {
-            throw new Error('不合法的楼宇数据格式：期待数组')
+            // throw new Error('不合法的楼宇数据格式：期待数组')
+            console.error('不合法的楼宇数据格式：期待数组')
+            return []
         }
     }
 }
@@ -565,7 +601,7 @@ export class LouYuCoord {
 
 export class QiYe2LouYu {
     /**
-     * 
+     *
      * @param qiYeName 企业名称
      * @param id 楼宇 id
      * @param name 楼宇名称
