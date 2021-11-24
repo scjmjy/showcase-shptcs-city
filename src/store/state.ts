@@ -152,8 +152,12 @@ export class ShuiShouBoDong {
 }
 export class ZhaoShangYinZi {
     constructor(public complete = 68, public projectQianWanYuan = 14, public projectYiYuan = 43, public projectPuTong = 2721) {}
-    static fromServer(_serverData) {
-        return new ZhaoShangYinZi()
+    static fromServer(serverData) {
+        // bi: Business and Investment 招商引资
+        // biNum100m: 100 millions(亿元)
+        // biNum10m: 10 millions(千万元)
+        // biNumCommon: 普通项目
+        return new ZhaoShangYinZi(serverData.biComplete, serverData.biNum100m, serverData.biNum10m, serverData.biNumCommon)
     }
 }
 class InAndOut {
