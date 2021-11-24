@@ -7,6 +7,8 @@
         <popup-group v-model="topmostPopup">
             <xinxi-detail-popup name="popup-xinxi" v-model="isShowXinxiPopup" :id="xinXiId" :xinXi="xinXi" :labelColor="xinXiLabelColor" />
             <problem-detail-popup name="popup-problem-detail" v-model="isShowProblemDetailPopup" :id="wentiId" :wenti="wenti" :labelColor="wentiLabelColor" />
+            <zhong-dian-qi-ye-shui-shou-popup name="popup-zhongdian-qiye" v-model="isShowZhongDianQiYePopup" :qiYeName.sync="zhongDianQiYeName" />
+            <fengxian-qi-ye-popup name="popup-fengxian-qiye" v-model="isShowFengxianPopup" :qiYeName.sync="fengXianQiYeName" />
         </popup-group>
     </card>
 </template>
@@ -21,29 +23,46 @@ import ChangShouMap from './CityMap/ChangShouMap.vue'
 import PopupGroup from '@/components/popup/PopupGroup.vue'
 import { WenTi, XinXi } from '@/store/state'
 import MapMarderMenu from './components/MapMarkerMenu.vue'
+import ZhongDianQiYeShuiShouPopup from './ZhongDianQiYeShuiShouPopup.vue'
+import FengxianQiYePopup from './FengxianQiYePopup.vue'
+
 /**
  * 中间地图部分区域的组件，包括长寿街道的城建地图、楼长制分布图，以及一些 popup 弹窗
  */
 export default Vue.extend({
     name: 'Middle',
-    components: { Card, MapMarderMenu, PopupGroup, XinxiDetailPopup, ProblemDetailPopup, LouZhangFenBuTu, ChangShouMap },
+    components: {
+        Card,
+        MapMarderMenu,
+        PopupGroup,
+        XinxiDetailPopup,
+        ProblemDetailPopup,
+        LouZhangFenBuTu,
+        ChangShouMap,
+        ZhongDianQiYeShuiShouPopup,
+        FengxianQiYePopup,
+    },
     data() {
         // const pm = new PopupManager()
         return {
-            isShowXinxiPopup: false,
             xinXiId: -1,
             xinXiLabelColor: '',
             xinXi: new XinXi(),
+            isShowXinxiPopup: false,
             isShowProblemDetailPopup: false,
+            isShowZhongDianQiYePopup: false,
+            isShowFengxianPopup: false,
             wentiId: -1,
             wenti: new WenTi(),
             wentiLabelColor: '',
+            zhongDianQiYeName: '',
+            fengXianQiYeName: '',
             showMask: false,
             currentComponent: {
                 name: 'ChangShouMap', // LouZhangFenBuTu, ChangShouMap
-                data: {}
+                data: {},
             },
-            topmostPopup: ''
+            topmostPopup: '',
         }
     },
     mounted() {
@@ -55,15 +74,25 @@ export default Vue.extend({
         })
         this.$root.$on('popup-problem-detail', ({ id, wenti, color }) => {
             this.topmostPopup = 'popup-problem-detail'
-            ;(this.wentiId = id), (this.wenti = wenti), (this.wentiLabelColor = color)
+            this.wentiId = id
+            this.wenti = wenti
+            this.wentiLabelColor = color
+        })
+        this.$root.$on('popup-zhongdian-qiye', ({ name }) => {
+            this.topmostPopup = 'popup-zhongdian-qiye'
+            this.zhongDianQiYeName = name
+        })
+        this.$root.$on('popup-fengxian-qiye', ({ name }) => {
+            this.topmostPopup = 'popup-fengxian-qiye'
+            this.fengXianQiYeName = name
         })
         // 显示城建地图，并且在地图上显示信息预警撒点
         this.$root.$on('map-xinxiyujing', () => {
             this.currentComponent = {
                 name: 'ChangShouMap',
                 data: {
-                    type: 'yujing'
-                }
+                    type: 'yujing',
+                },
             }
         })
         // 显示城建地图，并且在地图上显示信息预警撒点中的税收波动
@@ -72,8 +101,8 @@ export default Vue.extend({
                 name: 'ChangShouMap',
                 data: {
                     type: 'yujing',
-                    yujingType: 'shuishou'
-                }
+                    yujingType: 'shuishou',
+                },
             }
         })
         // 显示城建地图，并且在地图上显示信息预警撒点中的迁入迁出
@@ -82,8 +111,8 @@ export default Vue.extend({
                 name: 'ChangShouMap',
                 data: {
                     type: 'yujing',
-                    yujingType: 'inout'
-                }
+                    yujingType: 'inout',
+                },
             }
         })
         // 显示城建地图，并且在地图上显示重点企业撒点
@@ -91,8 +120,8 @@ export default Vue.extend({
             this.currentComponent = {
                 name: 'ChangShouMap',
                 data: {
-                    type: 'louyu'
-                }
+                    type: 'louyu',
+                },
             }
         })
         // 显示城建地图，并且在地图上显示重点企业撒点
@@ -100,8 +129,8 @@ export default Vue.extend({
             this.currentComponent = {
                 name: 'ChangShouMap',
                 data: {
-                    type: 'zhongdianqiye'
-                }
+                    type: 'zhongdianqiye',
+                },
             }
         })
         // 显示城建地图，并且在地图上显示重点企业所对应的楼宇撒点
@@ -109,8 +138,8 @@ export default Vue.extend({
             this.currentComponent = {
                 name: 'ChangShouMap',
                 data: {
-                    type: 'shuishoutop5'
-                }
+                    type: 'shuishoutop5',
+                },
             }
         })
         // 显示城建地图，并且在地图上显示亿元楼宇撒点
@@ -118,15 +147,15 @@ export default Vue.extend({
             this.currentComponent = {
                 name: 'ChangShouMap',
                 data: {
-                    type: 'yiyuanlouyu'
-                }
+                    type: 'yiyuanlouyu',
+                },
             }
         })
         // 显示楼长之分布图
         this.$root.$on('map-louzhangzhi', () => {
             this.currentComponent = {
                 name: 'LouZhangFenBuTu',
-                data: {}
+                data: {},
             }
         })
         // eslint-disable-next-line no-undef
@@ -170,8 +199,8 @@ export default Vue.extend({
     methods: {
         onMenuCommand(command) {
             this.$root.$emit('map-' + command)
-        }
-    }
+        },
+    },
 })
 </script>
 

@@ -21,33 +21,33 @@ export default Vue.extend({
     props: {
         img: {
             type: String,
-            default: undefined
+            default: undefined,
         },
         icon: {
             type: String,
-            default: undefined
+            default: undefined,
         },
         name: {
             type: String,
-            default: undefined
+            default: undefined,
         },
         louzhangName: {
             type: String,
-            default: undefined
+            default: undefined,
         },
         id: {
             type: Number,
-            default: -1
+            default: -1,
         },
         value: {
             type: Boolean,
-            default: false
-        }
+            default: false,
+        },
     },
     data() {
         return {
             weiJieJueWenTiOrigin: [] as WenTi[],
-            weiJieJueFenLeiTongJiOrigin: [] as WeiJieJueFenLeiTongJi[]
+            weiJieJueFenLeiTongJiOrigin: [] as WeiJieJueFenLeiTongJi[],
         }
     },
     computed: {
@@ -60,10 +60,10 @@ export default Vue.extend({
             return this.weiJieJueFenLeiTongJiOrigin.map(item => {
                 return {
                     name: item.category,
-                    value: item.count
+                    value: item.count,
                 }
             })
-        }
+        },
     },
     mounted() {
         console.log('LouZhangPopup mounted')
@@ -86,8 +86,8 @@ export default Vue.extend({
                         console.log(err)
                     })
             },
-            immediate: true
-        }
+            immediate: true,
+        },
     },
     beforeDestroy() {
         console.log('LouZhangPopup beforeDestroy')
@@ -99,8 +99,8 @@ export default Vue.extend({
         openWenTiDetail({ item, index }) {
             const wenti = this.weiJieJueWenTiOrigin[index]
             this.$root.$emit('popup-problem-detail', { id: wenti.id, labelColor: WentiCategoryEnum.str2more(wenti.category), wenti })
-        }
-    }
+        },
+    },
 })
 </script>
 

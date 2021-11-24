@@ -48,7 +48,7 @@ export default Vue.extend({
         }
     },
     computed: {
-        isBtnDisabled(): Boolean {
+        isBtnDisabled(): boolean {
             return this.username === '' || this.passwd === '' || this.code == ''
         },
     },
@@ -165,6 +165,7 @@ export default Vue.extend({
                 color: white;
                 border-radius: 30px;
                 font-size: 18px;
+                cursor: pointer;
 
                 &:focus {
                     background-color: #1062f0;

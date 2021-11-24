@@ -41,9 +41,8 @@ module.exports = {
     },
     proxy: {
       '/api': {
-        // target: 'http://192.168.0.153:8088/',
-        // target: 'http://120.26.247.223:9988/',
-        target: 'http://180.167.226.227:9988/',
+        // target: 'http://180.167.226.227:9988/',
+        target: 'http://47.100.181.102:9101/',
         changeOrigin: true
       }
     }

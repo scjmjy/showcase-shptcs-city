@@ -6,7 +6,7 @@
 
 <script>
 export default {
-    created() {}
+    created() {},
 }
 </script>
 
@@ -55,6 +55,10 @@ body,
 
 .card-item {
     width: 185px;
+
+    &--small {
+        width: 160px;
+    }
 }
 .card-item + .card-item {
     margin-left: 30px;

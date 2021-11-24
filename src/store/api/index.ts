@@ -17,6 +17,7 @@ const API_URLS = {
     louyu_list_get: API_URL_BASE + '/buildings',
     yujing_louyu_list_get: API_URL_BASE + '/warn',
     zhongdian_qiye_list_get: API_URL_BASE + '/focuscompany',
+    zhongdian_fengxian_qiye_get: API_URL_BASE + '/focusriskcompany',
 }
 
 type PageParam = {
@@ -25,7 +26,7 @@ type PageParam = {
     pageSize: number // 每页个数
 }
 
-const COORDINATE_QUERY_URL = 'http://10.81.71.51/Search/ api/Address/Search?keyWord='
+const COORDINATE_QUERY_URL = 'http://10.81.71.51/Search/api/Address/Search?keyWord='
 export type Coord = {
     x: number
     y: number
@@ -68,6 +69,12 @@ export default {
         return promise
     },
     login(username: string, passwd: string, code: string, uuid: string) {
+        // return Promise.resolve({
+        //     data: {
+        //         uid: 1,
+        //         token: 'fake-token',
+        //     },
+        // })
         return request({
             method: 'POST',
             url: API_URLS.login_post,
@@ -184,6 +191,12 @@ export default {
             url: API_URLS.zhongdian_qiye_list_get,
         })
     },
+    requestZhongDianFengXianQiYe() {
+        return request({
+            method: 'GET',
+            url: API_URLS.zhongdian_fengxian_qiye_get,
+        })
+    },
 
     getLouYuZongLan() {
         const data = {
@@ -199,7 +212,6 @@ export default {
     getChangShouShangHui() {
         const data = {
             shangHuiQiYeShu: 897,
-            shangHuiQiYeShuiShouZongE: 1.3,
             xinZengHuiYuanShu: 100,
         }
 
@@ -215,7 +227,7 @@ export default {
         ]
         return Promise.resolve({ data })
     },
-    getZhongDianShuiShouTop5() {
+    getZhongDianShuiShouTop10() {
         const data = [
             { name: '万达广场', value: '1200' },
             { name: '方特广场', value: '1000' },

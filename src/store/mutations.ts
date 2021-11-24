@@ -8,7 +8,7 @@ import {
     QiTaLouYuQiYe,
     ZhongDianQiYeFenXi,
     YiYuanLouYu,
-    ZhongDianShuiShouTop5,
+    ZhongDianShuiShouTop10,
     XinXiFaBu,
     ShuiShouBoDong,
     QianRuQianChu,
@@ -25,7 +25,9 @@ import {
     LouYu,
     YuJingList,
     ZhongDianQiYe,
-    QiYe2LouYu
+    QiYe2LouYu,
+    ZhaoShangYinZi,
+    ZhongDianFengXianTop10
 } from './state'
 
 const coords = [
@@ -85,8 +87,8 @@ const mutations: MutationTree<State> = {
         state.yiYuanLouYu = payload.yiYuanLouYu as YiYuanLouYu[]
         state.yiYuanLouYu.sort((a, b) => a.value - b.value)
 
-        state.zhongDianShuiShouTop5 = payload.zhongDianShuiShouTop5 as ZhongDianShuiShouTop5[]
-        state.zhongDianShuiShouTop5.sort((a, b) => a.value - b.value)
+        state.ZhongDianShuiShouTop10 = payload.ZhongDianShuiShouTop10 as ZhongDianShuiShouTop10[]
+        state.ZhongDianShuiShouTop10.sort((a, b) => a.value - b.value)
 
         state.xinXiFaBu = payload.xinXiFaBu as XinXiFaBu[]
         state.shuiShouBoDong = payload.shuiShouBoDong as ShuiShouBoDong
@@ -115,14 +117,15 @@ const mutations: MutationTree<State> = {
         state.qiTaLouYuQiYe = QiTaLouYuQiYe.fromServer(res)
 
         state.zhongDianQiYe = ZhongDianQiYeFenXi.fromServer(res)
-        // 企业总数从 楼宇总览 获得
+        // 企业总数从 企业总览 获得
         state.zhongDianQiYe.num = state.louYuZongLan.huGuanQiYeZongShu
 
         state.yiYuanLouYu = YiYuanLouYu.fromServer(res)
 
-        state.zhongDianShuiShouTop5 = ZhongDianShuiShouTop5.fromServer(res)
+        state.ZhongDianShuiShouTop10 = ZhongDianShuiShouTop10.fromServer(res)
 
-        state.shuiShouBoDong = ShuiShouBoDong.fromServer(res)
+        // state.shuiShouBoDong = ShuiShouBoDong.fromServer(res)
+        state.zhaoShangYinZi = ZhaoShangYinZi.fromServer(res)
         state.qianRuQianChu = QianRuQianChu.fromServer(res)
 
         state.dangJian = DangJian.fromServer(res)
@@ -177,6 +180,10 @@ const mutations: MutationTree<State> = {
 
     ['SET-ZHONGDIANQIYE-LIST'](state, res) {
         state.zhongDianQiYeList = ZhongDianQiYe.fromServer(res)
-    }
+    },
+
+    ['SET-ZHONGDIAN-FENGXIAN'](state, res) {
+        state.zhongDianFengxianTop10 = ZhongDianFengXianTop10.fromServer(res)
+    },
 }
 export default mutations

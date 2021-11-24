@@ -6,7 +6,7 @@ import { removeToken } from '@/utils/token'
 const actions: ActionTree<State, State> = {
     async requestAll({ commit }) {
         const { data: yiYuanLouYu } = await api.getYiYuanLouYu()
-        const { data: zhongDianShuiShouTop5 } = await api.getZhongDianShuiShouTop5()
+        const { data: ZhongDianShuiShouTop10 } = await api.getZhongDianShuiShouTop10()
         const { data: xinXiFaBu } = await api.getXinXiFaBu()
         const { data: shuiShouBoDong } = await api.getShuiShouBoDong()
         const { data: qianRuQianChu } = await api.getQianRuQianChu()
@@ -23,7 +23,7 @@ const actions: ActionTree<State, State> = {
             louYuZongLan,
             changShouShangHui,
             yiYuanLouYu,
-            zhongDianShuiShouTop5,
+            ZhongDianShuiShouTop10,
             xinXiFaBu,
             shuiShouBoDong,
             qianRuQianChu,
@@ -32,7 +32,7 @@ const actions: ActionTree<State, State> = {
             diaoYanNianDuTongJi,
             diaoYanFenLeiTongJi,
             weiJieJueFenLeiTongJi,
-            zhongDianQiYe
+            zhongDianQiYe,
         }
         commit('setAll', all)
     },
@@ -41,7 +41,7 @@ const actions: ActionTree<State, State> = {
         const res = (await api.login(username, passwd, code, uuid)).data
         const auth = {
             uid: res.uid,
-            token: res.token
+            token: res.token,
         }
         commit('SET-AUTH', auth)
         return auth
@@ -59,7 +59,8 @@ const actions: ActionTree<State, State> = {
     async requestOverview({ commit }) {
         const res = (await api.requestOverview()).data
         commit('SET-OVERVIEW', res)
-        return res
+        const fengXian = (await api.requestZhongDianFengXianQiYe()).data
+        commit('SET-ZHONGDIAN-FENGXIAN', fengXian)
     },
 
     async requestLouZhangZhi({ commit }) {
@@ -125,6 +126,6 @@ const actions: ActionTree<State, State> = {
         const res = (await api.requestZhongDianQiYeList()).data
         commit('SET-ZHONGDIANQIYE-LIST', res)
         return true
-    }
+    },
 }
 export default actions

@@ -1,18 +1,17 @@
 <template>
-    <div class="container" :style="containerStyle">
+    <div class="slopeCardRight" :style="containerStyle">
         <div class="u-flex u-rela">
-            <div class="placeholder u-flex-1" :style="placeholderStyle"></div>
-            <div class="slope" :style="slopeStyle">
-            </div>
-            <span v-if="!$slots.title" class="title u-abso" :style="titleStyle" ref="refTitle" @click="emit('click', $event)">
+            <div class="slopeCardRight-placeholder u-flex-1" :style="placeholderStyle"></div>
+            <div class="slopeCardRight-slope" :style="slopeStyle"></div>
+            <span v-if="!$slots.title" class="slopeCardRight-title u-abso" :style="titleStyle" ref="refTitle" @click="emit('click', $event)">
                 {{ opts_.title }}
             </span>
-            <div v-else class="title u-abso" :style="titleStyle">
+            <div v-else class="slopeCardRight-title u-abso" :style="titleStyle">
                 <slot name="title"></slot>
             </div>
         </div>
-        <div class="right-border" :style="placeholderRightBorder"></div>
-        <div class="content" :style="contentStyle">
+        <div class="slopeCardRight-rightBorder" :style="placeholderRightBorder"></div>
+        <div class="slopeCardRight-content" :style="contentStyle">
             <slot></slot>
         </div>
         <div class="corner-lt" :style="cornerLtStyle"></div>
@@ -31,8 +30,8 @@ export default Vue.extend({
     props: {
         opts: {
             type: Object,
-            default: () => ({})
-        }
+            default: () => ({}),
+        },
     },
     computed: {
         defaultOpts(): any {
@@ -52,7 +51,7 @@ export default Vue.extend({
                 shadowColor: '#034D81',
                 cornerWidth: 2,
                 cornerLength: 15,
-                cornerColor: '#1356ee'
+                cornerColor: '#1356ee',
             }
         },
         opts_(): any {
@@ -70,12 +69,12 @@ export default Vue.extend({
         containerStyle(): any {
             const { shadowColor } = this.opts_
             return {
-                'box-shadow': `inset -15px -15px 20px -15px ${shadowColor}`
+                'box-shadow': `inset -15px -15px 20px -15px ${shadowColor}`,
             }
         },
         placeholderRightBorder(): any {
             return {
-                'border-right': this.borderStyle
+                'border-right': this.borderStyle,
             }
         },
         slopeStyle(): any {
@@ -88,7 +87,7 @@ export default Vue.extend({
                 transform: `skewX(-${angle}deg)`,
                 'box-shadow': `inset 15px 15px 20px -20px ${shadowColor}`,
                 'justify-content': justify,
-                'align-items': align
+                'align-items': align,
             }
         },
         titleStyle(): any {
@@ -98,7 +97,7 @@ export default Vue.extend({
                 color: titleColor,
                 'font-size': titleSize + 'px',
                 top,
-                ...titleStyle
+                ...titleStyle,
             }
         },
         placeholderStyle(): any {
@@ -109,7 +108,7 @@ export default Vue.extend({
                 'margin-right': height / tan / 2 - 1 + 'px',
                 height: height + 'px',
                 'border-bottom': this.borderStyle,
-                'box-shadow': `0px 15px 20px -15px ${shadowColor}`
+                'box-shadow': `0px 15px 20px -15px ${shadowColor}`,
             }
         },
         contentStyle(): any {
@@ -118,7 +117,7 @@ export default Vue.extend({
                 'border-left': this.borderStyle,
                 'border-bottom': this.borderStyle,
                 'box-shadow': `inset 15px 0px 20px -20px ${shadowColor}`,
-                height: `calc(100% - ${height}px)`
+                height: `calc(100% - ${height}px)`,
             }
         },
         cornerBorderStyle(): string {
@@ -136,7 +135,7 @@ export default Vue.extend({
                 height: this.cornerLength,
                 'border-left': this.cornerBorderStyle,
                 'border-top': this.cornerBorderStyle,
-                top: height - 1 + 'px'
+                top: height - 1 + 'px',
             }
         },
         cornerRtStyle(): any {
@@ -144,7 +143,7 @@ export default Vue.extend({
                 width: this.cornerLength,
                 height: this.cornerLength,
                 'border-right': this.cornerBorderStyle,
-                'border-top': this.cornerBorderStyle
+                'border-top': this.cornerBorderStyle,
             }
         },
         cornerRbStyle(): any {
@@ -152,7 +151,7 @@ export default Vue.extend({
                 width: this.cornerLength,
                 height: this.cornerLength,
                 'border-right': this.cornerBorderStyle,
-                'border-bottom': this.cornerBorderStyle
+                'border-bottom': this.cornerBorderStyle,
             }
         },
         cornerLbStyle(): any {
@@ -160,9 +159,9 @@ export default Vue.extend({
                 width: this.cornerLength,
                 height: this.cornerLength,
                 'border-left': this.cornerBorderStyle,
-                'border-bottom': this.cornerBorderStyle
+                'border-bottom': this.cornerBorderStyle,
             }
-        }
+        },
     },
     mounted() {
         if (this.$refs.refTitle && this.opts_.clickable) {
@@ -172,59 +171,37 @@ export default Vue.extend({
     methods: {
         emit(evName: string, ev: Event) {
             this.$emit(evName, ev.target)
-        }
-    }
+        },
+    },
 })
 </script>
 
-<style scoped>
-.container {
+<style lang="scss">
+.slopeCardRight {
     display: inline-block;
     overflow: hidden;
     position: relative;
-    /* border-left: 1px solid #2d426d; */
-    /* box-shadow: inset 15px -15px 20px -20px #94c0ef63; */
-}
-.right-border {
-    position: absolute;
-    right: 0px;
-    top: 0px;
-    bottom: 0px;
-    width: 0px;
-}
-.slope {
-    /* border-right: 1px solid rgb(45, 66, 109); */
-    /* border-top: 1px solid rgb(45, 66, 109); */
-    /* width: 100px; */
-    /* height: 50px; */
-    /* transform: skewX(45deg); */
-    /* box-shadow: inset -15px 15px 20px -20px rgba(148, 192, 239, 0.39); */
-    display: flex;
-}
-.title {
-    /* transform: skewX(-45deg); */
-    /* color: #4fb5f6; */
-}
-/* .slope::after {
-    display: inline-block;
-    position: absolute;
-    top: -25px;
-    width: 50px;
-    height: 50px;
-    content: ' ';
-    border-left: 1px solid rgb(45,66,109);
-    transform: rotate(-45deg);
-} */
-.placeholder {
-    /* margin-left: 24px; */
-    /* height: 50px; */
-    /* border-bottom: 1px solid rgb(45, 66, 109); */
-    /* box-shadow: 0px 15px 20px -20px rgba(148, 192, 239, 0.39); */
-}
-.content {
-    /* border-right: 1px solid rgb(45, 66, 109); */
-    /* border-bottom: 1px solid rgb(45, 66, 109); */
-    /* box-shadow: inset -15px 0px 20px -20px rgba(148, 192, 239, 0.39); */
+
+    &-slope {
+        display: flex;
+    }
+    &-placeholder {
+        //
+    }
+    &-rightBorder {
+        position: absolute;
+        right: 0px;
+        top: 0px;
+        bottom: 0px;
+        width: 0px;
+    }
+    &-title {
+        //
+    }
+
+    &-content {
+        //
+    }
 }
 .corner-lt {
     position: absolute;

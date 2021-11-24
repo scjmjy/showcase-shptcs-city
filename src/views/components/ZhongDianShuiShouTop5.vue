@@ -7,7 +7,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { State, ZhongDianShuiShouTop5 } from '@/store/state'
+import { State, ZhongDianShuiShouTop10 } from '@/store/state'
 import echarts from 'echarts'
 import Card from '@/components/Card.vue'
 
@@ -27,13 +27,13 @@ export default Vue.extend({
     },
     computed: {
         ...mapState({
-            zhongDianShuiShouTop5: state => (state as State).zhongDianShuiShouTop5
+            ZhongDianShuiShouTop10: state => (state as State).ZhongDianShuiShouTop10
         }),
-        top5(): ZhongDianShuiShouTop5[] {
-            const top5 = this.zhongDianShuiShouTop5.map(qiye => {
+        top5(): ZhongDianShuiShouTop10[] {
+            const top5 = this.ZhongDianShuiShouTop10.map(qiye => {
                 return {
+                    ...qiye,
                     name: qiye.name.replace(/有限公司$/g, ''),
-                    value: qiye.value
                 }
             })
             return top5.sort((a, b) => a.value - b.value)

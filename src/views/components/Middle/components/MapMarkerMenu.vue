@@ -2,7 +2,7 @@
     <el-dropdown class="marker-menu-container" :class="{ active: isMenuShowing }" @visible-change="isMenuShowing = !isMenuShowing" v-on="$listeners">
         <span class="dropdown-link">快捷撒点<i class="el-icon-arrow-right u-m-l-10 menu-icon-animatable" :class="{ 'animate-rotate': isMenuShowing }"></i></span>
         <el-dropdown-menu slot="dropdown" style="margin-top: 15px;">
-            <el-dropdown-item command="louyu">楼宇总览</el-dropdown-item>
+            <el-dropdown-item command="louyu">企业总览</el-dropdown-item>
             <el-dropdown-item command="zhongdianqiye">重点企业</el-dropdown-item>
             <el-dropdown-item command="shuishoutop5">企业税收Top5</el-dropdown-item>
             <el-dropdown-item command="yiyuanlouyu">亿元楼宇</el-dropdown-item>

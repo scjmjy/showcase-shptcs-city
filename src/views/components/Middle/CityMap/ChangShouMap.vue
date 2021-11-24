@@ -122,14 +122,14 @@ export default Vue.extend({
                 // }
                 return list
             },
-            zhongDianShuiShouTop5: state => (state as State).zhongDianShuiShouTop5,
+            ZhongDianShuiShouTop10: state => (state as State).ZhongDianShuiShouTop10,
             yiYuanLouYu: state => (state as State).yiYuanLouYu,
             zhongDianQiYeList: state => (state as State).zhongDianQiYeList
         }),
         typeTitle(): string {
             switch (this.type) {
                 case 'louyu':
-                    return '楼宇总览'
+                    return '企业总览'
                 case 'yujing':
                     return '信息预警'
                 case 'zhongdianqiye':
@@ -231,7 +231,7 @@ export default Vue.extend({
         yuJingList() {
             this.calcMarderDataIfNeed()
         },
-        zhongDianShuiShouTop5() {
+        ZhongDianShuiShouTop10() {
             this.calcMarderDataIfNeed()
         },
         yiYuanLouYu() {
@@ -707,7 +707,7 @@ export default Vue.extend({
             if (this.louYuList.length === 0) {
                 return
             }
-            if (this.zhongDianShuiShouTop5.length === 0) {
+            if (this.ZhongDianShuiShouTop10.length === 0) {
                 return
             }
             const key = 'shuishoutop5'
@@ -718,7 +718,7 @@ export default Vue.extend({
                     let texts = [] as any[]
                     // 楼宇名字<——>税收参数，用来计算楼宇中有几个top5的企业
                     const louyu2shuishou = new Map()
-                    this.zhongDianShuiShouTop5.forEach((qiye, index) => {
+                    this.ZhongDianShuiShouTop10.forEach((qiye, index) => {
                         // const louyu = this.louYuList.find(l => {
                         //     return l.qiYeList.find(q => q.name === qiye.name)
                         // })

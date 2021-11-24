@@ -183,6 +183,7 @@ export default Vue.extend({
             margin-right: 5px;
             width: 34px;
             height: 40px;
+            vertical-align: baseline;
         }
         .label {
             vertical-align: super;

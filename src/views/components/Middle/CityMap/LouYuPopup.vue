@@ -1,5 +1,14 @@
 <template>
-    <popup icon="楼宇总数" iconColor="#00FFFB" :name="name" :value="value" label="楼宇名称" :title="louYu.name" position="bottom-right" @input="emitEvent('input', $event)">
+    <popup
+        icon="楼宇总数"
+        iconColor="#00FFFB"
+        :name="name"
+        :value="value"
+        label="楼宇名称"
+        :title="louYu.name"
+        position="bottom-right"
+        @input="emitEvent('input', $event)"
+    >
         <div class="content">
             <qi-ye-pages :id="id" />
         </div>
@@ -19,29 +28,28 @@ export default Vue.extend({
     props: {
         name: {
             type: String,
-            default: ''
+            default: '',
         },
         // 楼宇 id
         id: {
             type: Number,
-            default: -1
+            default: -1,
         },
         value: {
             type: Boolean,
-            default: false
+            default: false,
         },
         louYuName: {
             type: String,
-            default: ''
-        }
+            default: '',
+        },
     },
     data() {
-        return {
-        }
+        return {}
     },
     computed: {
         ...mapState({
-            louYuList: state => (state as State).louYuList
+            louYuList: state => (state as State).louYuList,
         }),
         louYu(): LouYu {
             if (this.id === -1) {
@@ -54,8 +62,8 @@ export default Vue.extend({
     methods: {
         emitEvent(evName: string, evArg: any) {
             this.$emit(evName, evArg)
-        }
-    }
+        },
+    },
 })
 </script>
 

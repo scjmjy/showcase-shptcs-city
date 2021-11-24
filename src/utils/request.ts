@@ -7,12 +7,13 @@ import debounce from '@/utils/debounce'
 const service = axios.create({
     baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
     // withCredentials: true, // send cookies when cross-domain requests
-    timeout: 50000 // request timeout
+    timeout: 50000, // request timeout
 })
 
 service.interceptors.request.use(
     config => {
         const token = store.getters.token || getToken()
+        if (!config.headers) config.headers = {}
         if (token) {
             config.headers['token'] = token
         }
@@ -25,14 +26,18 @@ service.interceptors.request.use(
     error => {
         console.log('axios request error: ', error)
         return Promise.reject(error)
-    }
+    },
 )
 
-const relogin = debounce(() => {
-    store.dispatch('resetToken').then(() => {
-        location.reload()
-    })
-}, 1000, true)
+const relogin = debounce(
+    () => {
+        store.dispatch('resetToken').then(() => {
+            location.reload()
+        })
+    },
+    1000,
+    true,
+)
 
 service.interceptors.response.use(
     response => {
@@ -42,12 +47,12 @@ service.interceptors.response.use(
         if (error.response.status === 401) {
             Message({
                 type: 'warning',
-                message: '登录过期，请重新登录。'
+                message: '登录过期，请重新登录。',
             })
             relogin()
         }
         return Promise.reject(error)
-    }
+    },
 )
 
 export default service

@@ -14,7 +14,7 @@
                     </div>
                     <div class="ls-m-right">
                         <yi-yuan-lou-yu class="yi-yuan-lou-yu" :width="300" :height="260"></yi-yuan-lou-yu>
-                        <zhong-dian-shui-shou-top5 class="zhong-dian-shui-shou-top5" :width="300" :height="260"></zhong-dian-shui-shou-top5>
+                        <zhong-dian-shui-shou-top10 class="zhong-dian-shui-shou-top5" :width="300" :height="260"></zhong-dian-shui-shou-top10>
                     </div>
                 </div>
                 <div class="ls-bottom">
@@ -47,7 +47,7 @@ import ZhongDianQiYe from './components/ZhongDianQiYe.vue'
 import ChangShouShangHui from './components/ChangShouShangHui.vue'
 import QiTaLouYu from './components/QiTaLouYu.vue'
 import YiYuanLouYu from './components/YiYuanLouYu.vue'
-import ZhongDianShuiShouTop5 from './components/ZhongDianShuiShouTop5.vue'
+import ZhongDianShuiShouTop10 from './components/ZhongDianShuiShouTop10.vue'
 import XinXiFaBu from './components/XinXiFaBu.vue'
 import Middle from './components/Middle/index.vue'
 import XinXiYuJing from './components/XinXiYuJing/index.vue'
@@ -64,7 +64,7 @@ Component.registerHooks(['beforeRouteEnter'])
         ChangShouShangHui,
         QiTaLouYu,
         YiYuanLouYu,
-        ZhongDianShuiShouTop5,
+        ZhongDianShuiShouTop10,
         XinXiFaBu,
         Middle,
         XinXiYuJing,

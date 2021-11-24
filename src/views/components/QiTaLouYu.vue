@@ -2,9 +2,9 @@
     <card :opts="cardOpts">
         <div class="qita-content">
             <div class="u-w-100" style="white-space: nowrap;">
-                <card-item class="card-item" :opts="louYu"></card-item>
-                <card-item class="card-item" :opts="siCai"></card-item>
-                <card-item class="card-item" :opts="xuNiZhuChe"></card-item>
+                <card-item class="card-item card-item--small" :opts="louYu"></card-item>
+                <card-item class="card-item card-item--small" :opts="yuanQuShu"></card-item>
+                <card-item class="card-item" :opts="ziGuanLouYu"></card-item>
             </div>
         </div>
     </card>
@@ -20,43 +20,61 @@ export default Vue.extend({
     components: { Card, CardItem },
     computed: {
         ...mapState({
-            qiTaLouYuQiYe: state => (state as State).qiTaLouYuQiYe
+            qiTaLouYuQiYe: state => (state as State).qiTaLouYuQiYe,
         }),
         cardOpts() {
             return {
-                title: '其他楼宇企业',
+                title: '楼宇总览',
                 justify: 'start',
-                titleStyle: { 'margin-left': '20px' }
+                titleStyle: { 'margin-left': '20px' },
             }
         },
         louYu() {
             return {
                 icon: '楼宇数',
                 iconColor: '#00FFFB',
-                value: this.qiTaLouYuQiYe.jiTuanZiGuan,
-                suffix: '',
-                title: '集团自管楼宇'
+                value: this.qiTaLouYuQiYe.zhongDianLouYu,
+                suffix: '家',
+                title: '重点楼宇数',
             }
         },
-        siCai() {
+        yuanQuShu() {
             return {
-                icon: '四才企业',
-                iconColor: '#00DA8C',
-                value: this.qiTaLouYuQiYe.siCaiQiYe,
-                suffix: '',
-                title: '四才企业'
+                icon: '园区数',
+                iconColor: '#0D982E',
+                value: this.qiTaLouYuQiYe.yuanQuShu,
+                suffix: '家',
+                title: '园区数',
             }
         },
-        xuNiZhuChe() {
+        ziGuanLouYu() {
             return {
                 icon: '虚拟注册企业',
-                iconColor: '#299BFF',
-                value: this.qiTaLouYuQiYe.xvNiZhuChe,
-                suffix: '',
-                title: '虚拟注册企业'
+                iconColor: '#289BFD',
+                value: this.qiTaLouYuQiYe.ziGuanLouYuShu,
+                suffix: '家',
+                title: '自管楼宇数',
             }
-        }
-    }
+        },
+        // siCai() {
+        //     return {
+        //         icon: '四才企业',
+        //         iconColor: '#00DA8C',
+        //         value: this.qiTaLouYuQiYe.siCaiQiYe,
+        //         suffix: '',
+        //         title: '四才企业',
+        //     }
+        // },
+        // xuNiZhuChe() {
+        //     return {
+        //         icon: '虚拟注册企业',
+        //         iconColor: '#299BFF',
+        //         value: this.qiTaLouYuQiYe.xvNiZhuChe,
+        //         suffix: '',
+        //         title: '虚拟注册企业',
+        //     }
+        // },
+    },
 })
 </script>
 

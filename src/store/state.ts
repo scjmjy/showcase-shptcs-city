@@ -2,32 +2,27 @@ import Enum from '@/utils/enum'
 
 export class LouYuZongLan {
     constructor(
-        public huGuanQiYeZongShu = 0,
-        public shuiShouZongE = 0,
-        public zhongDianQiYeShu = 0,
-        public zhongDianQiYeShuiShouZongE = 0,
-        public shuiShouZanBi = 0,
+        public huGuanQiYeZongShu = 9085,
+        public zhongDianQiYeShu = 350,
+        public shuiShouZanBi = 75,
+        public shuiShouZongE = 27.07,
+        public xinYinJinQiYeShu = 318,
+        public xinZengQuShui = 2093.5, // public zhongDianQiYeShuiShouZongE = 2.5, // public jingJiZongTiZhiBiao = 8.48,
     ) {}
     static fromServer(serverData) {
-        return new LouYuZongLan(
-            serverData.bdNumC,
-            serverData.bdTax,
-            serverData.bdNumFocusC,
-            serverData.bdTaxFocus, // TODO 前端：重点企业税收总额 --- 后端：企业税收增加数
-            serverData.bdRatioTax,
-        )
+        return new LouYuZongLan(serverData.bdNumC, serverData.bdNumFocusC, serverData.bdRatioTax, serverData.bdTax, serverData.bdNewC, serverData.bdNewTax)
     }
 }
 export class ChangShouShangHui {
-    constructor(public shangHuiQiYeShu = 0, public shangHuiQiYeShuiShouZongE = 0, public xinZengHuiYuanShu = 0) {}
+    constructor(public shangHuiQiYeShu = 131, public xinZengHuiYuanShu = 11) {}
     static fromServer(serverData) {
-        return new ChangShouShangHui(serverData.cmNum, serverData.cmTax, serverData.cmNumNew)
+        return new ChangShouShangHui(serverData.cmNum, serverData.cmNumNew)
     }
 }
 export class QiTaLouYuQiYe {
-    constructor(public jiTuanZiGuan = 0, public siCaiQiYe = 0, public xvNiZhuChe = 0) {}
+    constructor(public zhongDianLouYu = 15, public yuanQuShu = 6, public ziGuanLouYuShu = 8) {}
     static fromServer(serverData) {
-        return new QiTaLouYuQiYe(serverData.gpNumB, serverData.gpNumF, serverData.gpNumV)
+        return new QiTaLouYuQiYe(serverData.gpNumB, serverData.gpNumPark, serverData.gpNumSelf)
     }
 }
 export class YiYuanLouYu {
@@ -48,22 +43,44 @@ export class YiYuanLouYu {
         return top5
     }
 }
-export class ZhongDianShuiShouTop5 {
+export class ZhongDianShuiShouTop10 {
     /**
      *
      * @param name 重点企业名称
      * @param value 金额
      */
-    constructor(public name = '', public value = 0) {}
+    constructor(public name = '', public value = 0, public address = '', public area = 0, public contact = '') {}
     static fromServer(serverData) {
         const top5 = [
-            new ZhongDianShuiShouTop5(serverData.fsRsName1, serverData.fsRsTax1),
-            new ZhongDianShuiShouTop5(serverData.fsRsName2, serverData.fsRsTax2),
-            new ZhongDianShuiShouTop5(serverData.fsRsName3, serverData.fsRsTax3),
-            new ZhongDianShuiShouTop5(serverData.fsRsName4, serverData.fsRsTax4),
-            new ZhongDianShuiShouTop5(serverData.fsRsName5, serverData.fsRsTax5),
+            new ZhongDianShuiShouTop10(serverData.fsRsName1, serverData.fsRsTax1, serverData.fsRsAddress1, serverData.fsRsRoomarea1, serverData.fsRsContact1),
+            new ZhongDianShuiShouTop10(serverData.fsRsName2, serverData.fsRsTax2, serverData.fsRsAddress2, serverData.fsRsRoomarea2, serverData.fsRsContact2),
+            new ZhongDianShuiShouTop10(serverData.fsRsName3, serverData.fsRsTax3, serverData.fsRsAddress3, serverData.fsRsRoomarea3, serverData.fsRsContact3),
+            new ZhongDianShuiShouTop10(serverData.fsRsName4, serverData.fsRsTax4, serverData.fsRsAddress4, serverData.fsRsRoomarea4, serverData.fsRsContact4),
+            new ZhongDianShuiShouTop10(serverData.fsRsName5, serverData.fsRsTax5, serverData.fsRsAddress5, serverData.fsRsRoomarea5, serverData.fsRsContact5),
+            new ZhongDianShuiShouTop10(serverData.fsRsName6, serverData.fsRsTax6, serverData.fsRsAddress6, serverData.fsRsRoomarea6, serverData.fsRsContact6),
+            new ZhongDianShuiShouTop10(serverData.fsRsName7, serverData.fsRsTax7, serverData.fsRsAddress7, serverData.fsRsRoomarea7, serverData.fsRsContact7),
+            new ZhongDianShuiShouTop10(serverData.fsRsName8, serverData.fsRsTax8, serverData.fsRsAddress8, serverData.fsRsRoomarea8, serverData.fsRsContact8),
+            new ZhongDianShuiShouTop10(serverData.fsRsName9, serverData.fsRsTax9, serverData.fsRsAddress9, serverData.fsRsRoomarea9, serverData.fsRsContact9),
+            new ZhongDianShuiShouTop10(
+                serverData.fsRsName10,
+                serverData.fsRsTax10,
+                serverData.fsRsAddress10,
+                serverData.fsRsRoomarea10,
+                serverData.fsRsContact10,
+            ),
         ]
         return top5
+    }
+}
+export class ZhongDianFengXianTop10 {
+    /**
+     *
+     * @param name 重点企业名称
+     * @param value 金额
+     */
+    constructor(public id = 0, public name = '', public color = '', public notes = '') {}
+    static fromServer(serverData): ZhongDianFengXianTop10[] {
+        return serverData
     }
 }
 export type XinXiFaBu = {
@@ -133,7 +150,12 @@ export class ShuiShouBoDong {
         // return data
     }
 }
-
+export class ZhaoShangYinZi {
+    constructor(public complete = 68, public projectQianWanYuan = 14, public projectYiYuan = 43, public projectPuTong = 2721) {}
+    static fromServer(_serverData) {
+        return new ZhaoShangYinZi()
+    }
+}
 class InAndOut {
     constructor(public inNum = 0, public inPercent = 0, public outNum = 0, public outPercent = 0) {}
 }
@@ -370,7 +392,7 @@ export class DiaoYanFenLeiTongJi {
 }
 
 export class ZhongDianQiYeFenXi {
-    constructor(public year = '2020', public num = 0, public num60 = 0, public num100 = 0, public num500 = 0) {}
+    constructor(public year = '2020', public num = 0, public num60 = 83, public num100 = 152, public num500 = 72) {}
     static fromServer(serverData) {
         return new ZhongDianQiYeFenXi(serverData.fsYear, 10000, serverData.fsNum60, serverData.fsNum100, serverData.fsNum500)
     }
@@ -625,9 +647,11 @@ export class State {
     changShouShangHui = new ChangShouShangHui()
     qiTaLouYuQiYe = new QiTaLouYuQiYe()
     yiYuanLouYu: YiYuanLouYu[] = []
-    zhongDianShuiShouTop5: ZhongDianShuiShouTop5[] = []
+    ZhongDianShuiShouTop10: ZhongDianShuiShouTop10[] = []
+    zhongDianFengxianTop10: ZhongDianFengXianTop10[] = []
     xinXiFaBu: XinXiFaBu[] = []
     shuiShouBoDong = new ShuiShouBoDong()
+    zhaoShangYinZi = new ZhaoShangYinZi()
     qianRuQianChu = new QianRuQianChu()
     dangJian = new DangJian()
     louZhangOverview = new LouZhangOverview()

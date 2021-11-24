@@ -24,12 +24,12 @@ export default Vue.extend({
     props: {
         gaugeWidth: {
             type: Number,
-            default: 250
+            default: 250,
         },
         gaugeHeight: {
             type: Number,
-            default: 225
-        }
+            default: 225,
+        },
     },
     data() {
         return {
@@ -44,8 +44,8 @@ export default Vue.extend({
                         width: 3,
                         color: '#fff',
                         shadowColor: '#fff', //默认透明
-                        shadowBlur: 10
-                    }
+                        shadowBlur: 10,
+                    },
                 },
                 axisLine: {
                     // 坐标轴线
@@ -54,30 +54,30 @@ export default Vue.extend({
                         color: [
                             [20 / 100, '#00d98b'],
                             [80 / 100, '#0096ff'],
-                            [1, '#ff3838']
+                            [1, '#ff3838'],
                         ],
                         width: 3,
                         shadowColor: '#10364d', //默认透明
-                        shadowBlur: 10
-                    }
+                        shadowBlur: 10,
+                    },
                 },
                 axisLabel: {
                     // 坐标轴小标记
                     fontWeight: 'bolder',
                     fontSize: 8,
-                    color: '#fff'
+                    color: '#fff',
                 },
                 axisTick: {
                     // 坐标轴小标记
                     length: 7, // 属性length控制线长
                     lineStyle: {
                         // 属性lineStyle控制线条样式
-                        color: 'auto'
-                    }
+                        color: 'auto',
+                    },
                 },
                 pointer: {
                     shadowColor: '#10364d',
-                    shadowBlur: 5
+                    shadowBlur: 5,
                 },
                 title: {
                     offsetCenter: [0, '-125%'],
@@ -86,8 +86,8 @@ export default Vue.extend({
                         fontSize: 19,
                         color: '#fff',
                         shadowColor: '#10364d',
-                        shadowBlur: 10
-                    }
+                        shadowBlur: 10,
+                    },
                 },
                 detail: {
                     offsetCenter: [0, '85%'],
@@ -96,37 +96,37 @@ export default Vue.extend({
                     fontSize: 20,
                     color: '#eee',
                     backgroundColor: {
-                        image: require('@/assets/img/pill.png')
+                        image: require('@/assets/img/pill.png'),
                     },
                     formatter: function(value) {
                         return `${value}家`
                     },
-                    rich: {}
-                }
+                    rich: {},
+                },
             },
             gaugeLeftOpts: {
                 center: ['110', '55%'],
-                radius: '80'
+                radius: '80',
             },
             gaugeMiddleOpts: {
                 center: ['50%', '55%'],
-                radius: '80'
+                radius: '80',
             },
             gaugeRightOpts: {
                 center: ['520', '55%'],
-                radius: '80'
-            }
+                radius: '80',
+            },
         }
     },
     computed: {
         slopeOpts(): any {
             return {
                 clickable: true,
-                title: `重点企业分析(${this.zhongDianQiYe.year}年)`
+                title: `重点企业数量(${this.zhongDianQiYe.year}年)`,
             }
         },
         ...mapState({
-            zhongDianQiYe: state => (state as State).zhongDianQiYe
+            zhongDianQiYe: state => (state as State).zhongDianQiYe,
         }),
         gaugeChartOption(): any {
             if (!this.zhongDianQiYe) {
@@ -134,7 +134,7 @@ export default Vue.extend({
             }
             const { num60, num100, num500, num } = this.zhongDianQiYe
             // let maxNum = num - (num % 100) // 100的整数倍
-            let maxNum = 100
+            const maxNum = 100
             const opt = {
                 series: [
                     {
@@ -142,26 +142,26 @@ export default Vue.extend({
                         ...this.gaugeLeftOpts,
                         min: 0,
                         max: maxNum,
-                        data: [{ value: num60, name: '60万以上企业' }]
+                        data: [{ value: num60, name: '60万-100万企业' }],
                     },
                     {
                         ...this.gaugeCommonOpts,
                         ...this.gaugeMiddleOpts,
                         min: 0,
                         max: maxNum,
-                        data: [{ value: num100, name: '100万以上企业' }]
+                        data: [{ value: num100, name: '100万-500万企业' }],
                     },
                     {
                         ...this.gaugeCommonOpts,
                         ...this.gaugeRightOpts,
                         min: 0,
                         max: maxNum,
-                        data: [{ value: num500, name: '500万以上企业' }]
-                    }
-                ]
+                        data: [{ value: num500, name: '500万以上企业' }],
+                    },
+                ],
             }
             return opt
-        }
+        },
     },
     mounted() {
         this.$nextTick(() => {
@@ -181,8 +181,8 @@ export default Vue.extend({
                 if (this.gaugeChart) {
                     this.gaugeChart.setOption(opt)
                 }
-            }
-        }
+            },
+        },
     },
     methods: {
         onTitleClick() {
@@ -191,10 +191,9 @@ export default Vue.extend({
         initChart() {
             this.gaugeChart = echarts.init(this.$refs.gaugeChart as HTMLDivElement)
             this.gaugeChart.setOption({})
-        }
-    }
+        },
+    },
 })
 </script>
 
-<style>
-</style>
+<style></style>

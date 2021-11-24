@@ -27,20 +27,20 @@ export default Vue.extend({
         // topmost 的 popup 的 name
         value: {
             type: String,
-            default: ''
-        }
+            default: '',
+        },
     },
     data() {
         const groupStartZIndex = nextGroupStartZIndex()
         return {
             groupStartZIndex,
-            currentMaxZIndex: groupStartZIndex
+            currentMaxZIndex: groupStartZIndex,
         }
     },
     computed: {
         show(): boolean {
             return !!this.value
-        }
+        },
     },
     watch: {
         value(newVal, oldVal) {
@@ -53,7 +53,7 @@ export default Vue.extend({
             } else {
                 this.onValueChange(newVal)
             }
-        }
+        },
     },
     methods: {
         nextZIndex() {
@@ -93,19 +93,20 @@ export default Vue.extend({
             }
         },
         onValueChange(newVal) {
-            this.$children.forEach((c: any) => {
+            if (!newVal) {
+                return
+            }
+            for (const c of this.$children) {
                 const popup = this.findPopupChild(c) as any
-                if (popup) {
-                    if (popup.name === newVal) {
-                        popup.changeValue(true)
-                        popup.zIndex = this.nextZIndex()
-                    }
-                } else {
-                    throw new Error('没有找到 Popup 组件')
+                if (popup && popup.name === newVal) {
+                    popup.changeValue(true)
+                    popup.zIndex = this.nextZIndex()
+                    return
                 }
-            })
-        }
-    }
+            }
+            throw new Error('没有找到 Popup 组件')
+        },
+    },
 })
 </script>
 

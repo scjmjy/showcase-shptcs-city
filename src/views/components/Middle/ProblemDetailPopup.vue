@@ -2,11 +2,21 @@
     <popup :name="name" :value="value" :icon="icon" :labelColor="labelColor" label="未解决问题" :title="wenti.title" @input="emitEvent('input', $event)">
         <div class="content">
             <div class="left">
-                <div>楼宇名称：<span>{{ wenti.louYu }}</span></div>
-                <div>企业名称：<span>{{ wenti.qiYe }}</span></div>
-                <div>问题类别：<span>{{ wenti.category }}</span></div>
-                <div>楼长：<span>{{ wenti.louZhang }}</span></div>
-                <div>上报时间：<span>{{ wenti.time }}</span></div>
+                <div>
+                    楼宇名称：<span>{{ wenti.louYu }}</span>
+                </div>
+                <div>
+                    企业名称：<span>{{ wenti.qiYe }}</span>
+                </div>
+                <div>
+                    问题类别：<span>{{ wenti.category }}</span>
+                </div>
+                <div>
+                    楼长：<span>{{ wenti.louZhang }}</span>
+                </div>
+                <div>
+                    上报时间：<span>{{ wenti.time }}</span>
+                </div>
             </div>
             <div class="right">
                 <div>问题详情：</div>
@@ -19,39 +29,36 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import Popup from '@/components/popup/Popup.vue'
-import ScrollList from '@/components/ScrollList.vue'
-import RosePie from '@/components/chart/RosePie.vue'
-import api from '@/store/api'
 import { WenTi } from '@/store/state'
 
 export default Vue.extend({
     name: 'ProblemDetailPopup',
-    components: { Popup, ScrollList, RosePie },
+    components: { Popup },
     props: {
         name: {
             type: String,
-            default: ''
+            default: '',
         },
         icon: {
             type: String,
-            default: '未解决数'
+            default: '未解决数',
         },
         id: {
             type: Number,
-            default: -1
+            default: -1,
         },
         labelColor: {
             type: String,
-            default: 'white'
+            default: 'white',
         },
         wenti: {
             type: Object as PropType<WenTi>,
-            default: () => new WenTi()
+            default: () => new WenTi(),
         },
         value: {
             type: Boolean,
-            default: false
-        }
+            default: false,
+        },
     },
     data() {
         return {
@@ -61,8 +68,8 @@ export default Vue.extend({
                 louZhang: '',
                 category: '',
                 date: '',
-                content: ''
-            }
+                content: '',
+            },
         }
     },
     mounted() {
@@ -81,8 +88,8 @@ export default Vue.extend({
     methods: {
         emitEvent(evName: string, evArg: any) {
             this.$emit(evName, evArg)
-        }
-    }
+        },
+    },
 })
 </script>
 
@@ -101,9 +108,9 @@ export default Vue.extend({
         flex: 1;
         height: 100%;
         font-size: 16px;
-        color: #00F6FF;
+        color: #00f6ff;
         vertical-align: top;
-        &> div {
+        & > div {
             font-weight: bolder;
         }
         & span {
@@ -118,12 +125,12 @@ export default Vue.extend({
         width: 400px;
         height: 100%;
         font-size: 16px;
-        color: #00F6FF;
+        color: #00f6ff;
 
-        &> div:first-of-type {
-            font-weight: bolder
+        & > div:first-of-type {
+            font-weight: bolder;
         }
-        &> div:last-of-type {
+        & > div:last-of-type {
             margin-top: 15px;
             flex: 1;
             overflow: auto;

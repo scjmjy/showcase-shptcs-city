@@ -1,8 +1,17 @@
 <template>
     <div class="container">
-        <div class="title">{{ title }}</div>
+        <div v-if="title" class="title">{{ title }}</div>
         <ul class="list-group">
-            <li v-for="(item, i) of data" :key="i" class="list-item u-line-1" :style="itemStyle(item, i)" @click="emitClick(item, i)">{{ item }}</li>
+            <li
+                v-for="(item, i) of data"
+                :key="i"
+                class="list-item u-line-1"
+                :class="{ [`list-item--level-${i + 1}`]: level, ['is-' + colors[i]]: colors[i] }"
+                :style="itemStyle(item, i)"
+                @click="emitClick(item, i)"
+            >
+                {{ item }}
+            </li>
         </ul>
     </div>
 </template>
@@ -13,20 +22,28 @@ export default Vue.extend({
     props: {
         title: {
             type: String,
-            default: '我的标题'
+            default: '',
         },
         data: {
             type: Array,
-            default: () => []
+            default: () => [],
         },
         markerColor: {
             type: String,
-            default: 'red'
+            default: 'red',
         },
         textColor: {
             type: String,
-            default: 'rgb(0, 247, 255)'
-        }
+            default: 'rgb(0, 247, 255)',
+        },
+        level: {
+            type: Boolean,
+            default: false,
+        },
+        colors: {
+            type: Array, // [red, yellow,...]
+            default: () => [],
+        },
     },
     mounted() {
         console.log('scroll list mounted')
@@ -44,12 +61,14 @@ export default Vue.extend({
         },
         emitClick(item: any, index: number) {
             this.$emit('click', { item, index })
-        }
-    }
+        },
+    },
 })
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@use 'sass:color';
+
 .container {
     height: 100%;
     overflow: hidden;
@@ -72,21 +91,36 @@ export default Vue.extend({
     margin-block-end: 0px;
     border: 1px solid rgb(46, 69, 101);
 }
+
 .list-item {
     color: rgb(0, 247, 255);
     padding: 0px 15px;
     line-height: 35px;
     vertical-align: middle;
 }
+
+@for $i from 1 through 10 {
+    .list-item--level-#{$i} {
+        &::before {
+            opacity: (11- $i) * 0.1;
+        }
+    }
+}
 .list-item::before {
     display: inline-block;
     width: 8px;
     height: 8px;
     margin-right: 10px;
-    background: radial-gradient(rgb(254, 209, 4), rgba(254, 209, 4, 0.6));
+    background-color: rgb(254, 209, 4);
     transform: rotate(45deg);
     box-shadow: 0 0 10px 1px rgb(254, 209, 4);
     content: '';
+}
+.list-item.is-red::before {
+    background-color: red !important;
+}
+.list-item.is-yellow::before {
+    background-color: yellow !important;
 }
 .list-item:hover {
     text-decoration: underline;
