@@ -16,7 +16,7 @@ export default Vue.extend({
     computed: {
         top10(): string[] {
             const top10 = (this.$store.state as State).ZhongDianShuiShouTop10
-            return top10.sort((a, b) => a.value - b.value).map(item => item.name)
+            return top10.sort((a, b) => b.value - a.value).map(item => item.name)
         },
         cardOpts(): any {
             return {
@@ -27,7 +27,7 @@ export default Vue.extend({
     },
     methods: {
         onTitleClick() {
-            this.$root.$emit('map-shuishoutop5')
+            this.$root.$emit('map-shuishoutop10')
         },
         openDetailPopup({ item }) {
             this.$root.$emit('popup-zhongdian-qiye', { name: item })

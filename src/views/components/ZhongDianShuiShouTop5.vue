@@ -140,7 +140,7 @@ export default Vue.extend({
             this.chart = echarts.init(this.$refs.chartContainer as HTMLDivElement)
         },
         onTitleClick() {
-            this.$root.$emit('map-shuishoutop5')
+            this.$root.$emit('map-shuishoutop10')
         }
     }
 })

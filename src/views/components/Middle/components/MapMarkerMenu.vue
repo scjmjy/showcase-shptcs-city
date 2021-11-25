@@ -1,10 +1,13 @@
 <template>
     <el-dropdown class="marker-menu-container" :class="{ active: isMenuShowing }" @visible-change="isMenuShowing = !isMenuShowing" v-on="$listeners">
-        <span class="dropdown-link">快捷撒点<i class="el-icon-arrow-right u-m-l-10 menu-icon-animatable" :class="{ 'animate-rotate': isMenuShowing }"></i></span>
+        <span class="dropdown-link"
+            >快捷撒点<i class="el-icon-arrow-right u-m-l-10 menu-icon-animatable" :class="{ 'animate-rotate': isMenuShowing }"></i
+        ></span>
         <el-dropdown-menu slot="dropdown" style="margin-top: 15px;">
             <el-dropdown-item command="louyu">企业总览</el-dropdown-item>
             <el-dropdown-item command="zhongdianqiye">重点企业</el-dropdown-item>
-            <el-dropdown-item command="shuishoutop5">企业税收Top10</el-dropdown-item>
+            <el-dropdown-item command="shuishoutop10">企业税收Top10</el-dropdown-item>
+            <el-dropdown-item command="fengxiantop10">风险企业Top10</el-dropdown-item>
             <el-dropdown-item command="yiyuanlouyu">亿元楼宇</el-dropdown-item>
             <el-dropdown-item command="shuishoubodong">税收波动</el-dropdown-item>
             <el-dropdown-item command="qianruqianchu">迁入迁出</el-dropdown-item>
@@ -19,9 +22,9 @@ export default Vue.extend({
     name: 'MapMarderMenu',
     data() {
         return {
-            isMenuShowing: false
+            isMenuShowing: false,
         }
-    }
+    },
 })
 </script>
 

@@ -51,7 +51,7 @@ export default Vue.extend({
                 iconColor: '#00DA8C',
                 value: this.changShouShangHui.xinZengHuiYuanShu,
                 suffix: '家',
-                title: '新增会员数',
+                title: '新增会员企业数',
             }
         },
     },

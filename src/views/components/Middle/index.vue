@@ -134,7 +134,7 @@ export default Vue.extend({
             }
         })
         // 显示城建地图，并且在地图上显示重点企业所对应的楼宇撒点
-        this.$root.$on('map-shuishoutop5', () => {
+        this.$root.$on('map-shuishoutop10', () => {
             this.currentComponent = {
                 name: 'ChangShouMap',
                 data: {

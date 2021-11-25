@@ -108,20 +108,15 @@ export default Vue.extend({
         ...mapState({
             louYuList: state => {
                 const list = (state as State).louYuList
-                // if (list.length === 0) {
-                //     list = LouYu.fromServer(require('@/store/api/louyu.json'))
-                // }
                 return list
             },
             qiYe2LouYu: state => (state as State).qiYe2Louyu,
             yuJingList: state => {
                 const list = (state as State).yuJingList
-                // if (list.inAndOutList.length === 0) {
-                //     list = YuJingList.fromServer(require('@/store/api/yujing.json'))
-                // }
                 return list
             },
             ZhongDianShuiShouTop10: state => (state as State).ZhongDianShuiShouTop10,
+            fengxianTop10: state => (state as State).zhongDianFengxianTop10,
             yiYuanLouYu: state => (state as State).yiYuanLouYu,
             zhongDianQiYeList: state => (state as State).zhongDianQiYeList,
         }),
@@ -135,6 +130,8 @@ export default Vue.extend({
                     return '重点企业'
                 case 'shuishoutop10':
                     return '重点企业税收Top10'
+                case 'fengxiantop10':
+                    return '重点风险企业Top10'
                 case 'yiyuanlouyu':
                     return '亿元楼宇'
                 default:
@@ -152,6 +149,9 @@ export default Vue.extend({
                     break
                 case 'shuishoutop10':
                     marker = this.markerCache['shuishoutop10']
+                    break
+                case 'fengxiantop10':
+                    marker = this.markerCache['fengxiantop10']
                     break
                 case 'yiyuanlouyu':
                     marker = this.markerCache['yiyuanlouyu']
@@ -762,6 +762,78 @@ export default Vue.extend({
                             iconType: louyuName,
                             id: zhongdian.id,
                             name: zhongdian.name,
+                        })
+                    })
+                    resovle({
+                        markers,
+                        texts,
+                    })
+                })
+                    .then(res => {
+                        Vue.set(this.markerCache, key, res)
+                    })
+                    .finally(() => {
+                        this.loading = false
+                    })
+            }
+        },
+        calcFengxianTop10Markers() {
+            if (this.louYuList.length === 0) {
+                return
+            }
+            if (this.fengxianTop10.length === 0) {
+                return
+            }
+            const key = 'fengxiantop10'
+            if (!this.markerCache[key]) {
+                this.loading = true
+                new Promise((resovle, reject) => {
+                    const markers = [] as any[]
+                    const texts = [] as any[]
+                    // 楼宇名字<——>税收参数，用来计算楼宇中有几个top5的企业
+                    const louyu2Location = new Map()
+                    this.fengxianTop10.forEach((qiye, index) => {
+                        const louyu = this.qiYe2LouYu.get(qiye.name)
+
+                        if (louyu) {
+                            const location = louyu2Location.get(louyu.name)
+                            if (location) {
+                                location.count++
+                            } else {
+                                louyu2Location.set(louyu.name, {
+                                    id: louyu.id,
+                                    name: louyu.name,
+                                    coordx: louyu.coordx,
+                                    coordy: louyu.coordy,
+                                    count: 1,
+                                })
+                                markers.push({
+                                    coordx: louyu.coordx,
+                                    coordy: louyu.coordy,
+                                    coordz: 100,
+                                    iconType: getZhongDian(index),
+                                    id: louyu.id,
+                                    name: louyu.name,
+                                })
+                            }
+                        }
+                    })
+                    louyu2Location.forEach((location, louyuName) => {
+                        texts.push({
+                            content: location.count + '',
+                            louyuName,
+                            font: {
+                                size: 30,
+                                weight: 'bold',
+                            },
+                        })
+                        markers.push({
+                            coordx: location.coordx,
+                            coordy: location.coordy,
+                            coordz: 200,
+                            iconType: louyuName,
+                            id: location.id,
+                            name: location.name,
                         })
                     })
                     resovle({
