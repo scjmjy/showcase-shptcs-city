@@ -180,6 +180,7 @@ export default Vue.extend({
         this.bridge = new CityGis.Bridge({
             id: 'id-city-map',
             url: process.env.VUE_APP_CITY_MAP_IP + '/citygis/areamap/WidgetPages/WidgetGIS.html?debug=false&maptype=3d&code=0715&themeid=Gis&devicetype=null',
+            // url: process.env.VUE_APP_CITY_MAP_IP + '/citygis/areamap/index.html?debug=false&maptype=3d&code=07&themeid=Gis&devicetype=null',
             onReady(bridge) {
                 vue.onMapReady()
             },
@@ -233,6 +234,9 @@ export default Vue.extend({
         ZhongDianShuiShouTop10() {
             this.calcMarderDataIfNeed()
         },
+        fengxianTop10() {
+            this.calcMarderDataIfNeed()
+        },
         yiYuanLouYu() {
             this.calcMarderDataIfNeed()
         },
@@ -281,6 +285,7 @@ export default Vue.extend({
                 case 'zhongdianqiye':
                 case 'yujing':
                 case 'shuishoutop10':
+                case 'fengxiantop10':
                 case 'yiyuanlouyu':
                     this.topmostPopup = 'lou-yu'
                     break
@@ -545,6 +550,9 @@ export default Vue.extend({
                 case 'shuishoutop10':
                     this.calcShuiShouTop10Markers()
                     break
+                case 'fengxiantop10':
+                    this.calcFengxianTop10Markers()
+                    break
                 case 'yiyuanlouyu':
                     this.calcYiYuanLouYuMarkers()
                     break
@@ -592,7 +600,8 @@ export default Vue.extend({
                 return
             }
             const key = 'yujing' + this.yujingType
-            if (!this.markerCache[key]) {
+            const cache = this.markerCache[key];
+            if (!cache || cache.markers.length === 0) {
                 this.loading = true
                 new Promise((resovle, reject) => {
                     const markers = [] as any[]
@@ -673,7 +682,8 @@ export default Vue.extend({
                 return
             }
             const key = 'yiyuanlouyu'
-            if (!this.markerCache[key]) {
+            const cache = this.markerCache[key];
+            if (!cache || cache.markers.length === 0) {
                 this.loading = true
                 new Promise((resovle, reject) => {
                     const markers = this.yiYuanLouYu.map((yiyuanLouyu, index) => {
@@ -710,7 +720,8 @@ export default Vue.extend({
                 return
             }
             const key = 'shuishoutop10'
-            if (!this.markerCache[key]) {
+            const cache = this.markerCache[key];
+            if (!cache || cache.markers.length === 0) {
                 this.loading = true
                 new Promise((resovle, reject) => {
                     const markers = [] as any[]
@@ -785,7 +796,8 @@ export default Vue.extend({
                 return
             }
             const key = 'fengxiantop10'
-            if (!this.markerCache[key]) {
+            const cache = this.markerCache[key];
+            if (!cache || cache.markers.length === 0) {
                 this.loading = true
                 new Promise((resovle, reject) => {
                     const markers = [] as any[]
@@ -857,7 +869,8 @@ export default Vue.extend({
                 return
             }
             const key = 'zhongdianqiye'
-            if (!this.markerCache[key]) {
+            const cache = this.markerCache[key];
+            if (!cache || cache.markers.length === 0) {
                 this.loading = true
                 new Promise((resovle, reject) => {
                     const markers = [] as any[]

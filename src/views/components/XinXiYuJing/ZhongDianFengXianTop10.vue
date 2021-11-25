@@ -1,7 +1,7 @@
 <template>
     <div class="fengxianTop10">
         <div class="fengxianTop10-left">
-            <div class="fengxianTop10-title">重点风险企业Top10</div>
+            <div class="fengxianTop10-title hoverable" @click="onTitleClick">重点风险企业Top10</div>
             <img class="fengxianTop10-logo" src="@/assets/img/重点风险企业Top10.png" alt="" />
         </div>
         <scroll-list class="fengxianTop10-list" :colors="top10.colors" :data="top10.list" @click="openDetailPopup" />
@@ -20,18 +20,21 @@ export default Vue.extend({
     computed: {
         ...mapState({
             // zhongDianFengxianTop10: state => (state as State).zhongDianFengxianTop10,
-            zhongDianFengxianTop10: state => (state as State).zhongDianFengxianTop10,
+            zhongDianFengxianTop10: (state) => (state as State).zhongDianFengxianTop10,
         }),
         top10(): { list: string[]; colors: string[] } {
             return {
-                list: this.zhongDianFengxianTop10.map(item => item.name),
-                colors: this.zhongDianFengxianTop10.map(item => (item.color === '红' ? 'red' : 'yellow')),
+                list: this.zhongDianFengxianTop10.map((item) => item.name),
+                colors: this.zhongDianFengxianTop10.map((item) => (item.color === '红' ? 'red' : 'yellow')),
             }
         },
     },
     methods: {
         openDetailPopup({ item }) {
             this.$root.$emit('popup-fengxian-qiye', { name: item })
+        },
+        onTitleClick() {
+            this.$root.$emit('map-fengxiantop10')
         },
     },
 })

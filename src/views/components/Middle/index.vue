@@ -138,7 +138,16 @@ export default Vue.extend({
             this.currentComponent = {
                 name: 'ChangShouMap',
                 data: {
-                    type: 'shuishoutop5',
+                    type: 'shuishoutop10',
+                },
+            }
+        })
+        // 显示城建地图，并且在地图上显示风险企业所对应的楼宇撒点
+        this.$root.$on('map-fengxiantop10', () => {
+            this.currentComponent = {
+                name: 'ChangShouMap',
+                data: {
+                    type: 'fengxiantop10',
                 },
             }
         })
