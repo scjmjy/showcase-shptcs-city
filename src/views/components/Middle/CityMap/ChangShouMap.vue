@@ -29,37 +29,36 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { LouYu, State, YuJingList } from '@/store/state'
+import { LouYu, State } from '@/store/state'
 import PopupGroup from '@/components/popup/PopupGroup.vue'
-import Popup from '@/components/popup/Popup.vue'
 import ZhongDianQiYePopup from './ZhongDianQiYePopup.vue'
 import LouYuPopup from './LouYuPopup.vue'
-import Interval, { IntervalTask } from '@/components/Interval.vue'
+import Interval from '@/components/Interval.vue'
 
 // const STATIC_RESOURCE_HOST = 'http://localhost:80'
 const STATIC_RESOURCE_HOST = process.env.VUE_APP_NGINX_IP
 
-const icon_louyu = STATIC_RESOURCE_HOST + require('../../../../assets/img/louyu.png')
+const icon_louyu = STATIC_RESOURCE_HOST + require('@/assets/img/louyu.png')
 
-const icon_yujing1 = STATIC_RESOURCE_HOST + require('../../../../assets/img/信息预警1.png')
-const icon_yujing2 = STATIC_RESOURCE_HOST + require('../../../../assets/img/信息预警2.png')
-const icon_yujing3 = STATIC_RESOURCE_HOST + require('../../../../assets/img/信息预警3.png')
-const icon_yujing4 = STATIC_RESOURCE_HOST + require('../../../../assets/img/信息预警4.png')
-const icon_yujing5 = STATIC_RESOURCE_HOST + require('../../../../assets/img/信息预警5.png')
-const icon_yujing6 = STATIC_RESOURCE_HOST + require('../../../../assets/img/信息预警6.png')
-const icon_yujing7 = STATIC_RESOURCE_HOST + require('../../../../assets/img/信息预警7.png')
-const icon_yujing8 = STATIC_RESOURCE_HOST + require('../../../../assets/img/信息预警8.png')
-const icon_yujing9 = STATIC_RESOURCE_HOST + require('../../../../assets/img/信息预警9.png')
+const icon_yujing1 = STATIC_RESOURCE_HOST + require('@/assets/img/信息预警1.png')
+const icon_yujing2 = STATIC_RESOURCE_HOST + require('@/assets/img/信息预警2.png')
+const icon_yujing3 = STATIC_RESOURCE_HOST + require('@/assets/img/信息预警3.png')
+const icon_yujing4 = STATIC_RESOURCE_HOST + require('@/assets/img/信息预警4.png')
+const icon_yujing5 = STATIC_RESOURCE_HOST + require('@/assets/img/信息预警5.png')
+const icon_yujing6 = STATIC_RESOURCE_HOST + require('@/assets/img/信息预警6.png')
+const icon_yujing7 = STATIC_RESOURCE_HOST + require('@/assets/img/信息预警7.png')
+const icon_yujing8 = STATIC_RESOURCE_HOST + require('@/assets/img/信息预警8.png')
+const icon_yujing9 = STATIC_RESOURCE_HOST + require('@/assets/img/信息预警9.png')
 
-const icon_zhongdian1 = STATIC_RESOURCE_HOST + require('../../../../assets/img/重点企业1.png')
-const icon_zhongdian2 = STATIC_RESOURCE_HOST + require('../../../../assets/img/重点企业2.png')
-const icon_zhongdian3 = STATIC_RESOURCE_HOST + require('../../../../assets/img/重点企业3.png')
-const icon_zhongdian4 = STATIC_RESOURCE_HOST + require('../../../../assets/img/重点企业4.png')
-const icon_zhongdian5 = STATIC_RESOURCE_HOST + require('../../../../assets/img/重点企业5.png')
-const icon_zhongdian6 = STATIC_RESOURCE_HOST + require('../../../../assets/img/重点企业6.png')
-const icon_zhongdian7 = STATIC_RESOURCE_HOST + require('../../../../assets/img/重点企业7.png')
-const icon_zhongdian8 = STATIC_RESOURCE_HOST + require('../../../../assets/img/重点企业8.png')
-const icon_zhongdian9 = STATIC_RESOURCE_HOST + require('../../../../assets/img/重点企业9.png')
+const icon_zhongdian1 = STATIC_RESOURCE_HOST + require('@/assets/img/重点企业1.png')
+const icon_zhongdian2 = STATIC_RESOURCE_HOST + require('@/assets/img/重点企业2.png')
+const icon_zhongdian3 = STATIC_RESOURCE_HOST + require('@/assets/img/重点企业3.png')
+const icon_zhongdian4 = STATIC_RESOURCE_HOST + require('@/assets/img/重点企业4.png')
+const icon_zhongdian5 = STATIC_RESOURCE_HOST + require('@/assets/img/重点企业5.png')
+const icon_zhongdian6 = STATIC_RESOURCE_HOST + require('@/assets/img/重点企业6.png')
+const icon_zhongdian7 = STATIC_RESOURCE_HOST + require('@/assets/img/重点企业7.png')
+const icon_zhongdian8 = STATIC_RESOURCE_HOST + require('@/assets/img/重点企业8.png')
+const icon_zhongdian9 = STATIC_RESOURCE_HOST + require('@/assets/img/重点企业9.png')
 
 /**
  * 从1-9个预警图片中获取一个，目前只支持9个
@@ -80,17 +79,17 @@ function getZhongDian(index: number) {
  */
 export default Vue.extend({
     name: 'ChangShouMap',
-    components: { PopupGroup, Popup, ZhongDianQiYePopup, LouYuPopup },
+    components: { PopupGroup, ZhongDianQiYePopup, LouYuPopup },
     mixins: [Interval],
     props: {
         type: {
-            type: String, // louyu  shuishoutop5 yujing yiyuanlouyu zhongdianqiye
-            default: 'louyu'
+            type: String, // louyu  shuishoutop10 yujing yiyuanlouyu zhongdianqiye
+            default: 'louyu',
         },
         yujingType: {
             type: String,
-            default: 'inout'
-        }
+            default: 'inout',
+        },
     },
     data() {
         return {
@@ -108,7 +107,7 @@ export default Vue.extend({
     computed: {
         ...mapState({
             louYuList: state => {
-                let list = (state as State).louYuList
+                const list = (state as State).louYuList
                 // if (list.length === 0) {
                 //     list = LouYu.fromServer(require('@/store/api/louyu.json'))
                 // }
@@ -116,7 +115,7 @@ export default Vue.extend({
             },
             qiYe2LouYu: state => (state as State).qiYe2Louyu,
             yuJingList: state => {
-                let list = (state as State).yuJingList
+                const list = (state as State).yuJingList
                 // if (list.inAndOutList.length === 0) {
                 //     list = YuJingList.fromServer(require('@/store/api/yujing.json'))
                 // }
@@ -124,7 +123,7 @@ export default Vue.extend({
             },
             ZhongDianShuiShouTop10: state => (state as State).ZhongDianShuiShouTop10,
             yiYuanLouYu: state => (state as State).yiYuanLouYu,
-            zhongDianQiYeList: state => (state as State).zhongDianQiYeList
+            zhongDianQiYeList: state => (state as State).zhongDianQiYeList,
         }),
         typeTitle(): string {
             switch (this.type) {
@@ -134,8 +133,8 @@ export default Vue.extend({
                     return '信息预警'
                 case 'zhongdianqiye':
                     return '重点企业'
-                case 'shuishoutop5':
-                    return '重点企业税收Top5'
+                case 'shuishoutop10':
+                    return '重点企业税收Top10'
                 case 'yiyuanlouyu':
                     return '亿元楼宇'
                 default:
@@ -151,8 +150,8 @@ export default Vue.extend({
                 case 'yujing':
                     marker = this.markerCache['yujing' + this.yujingType]
                     break
-                case 'shuishoutop5':
-                    marker = this.markerCache['shuishoutop5']
+                case 'shuishoutop10':
+                    marker = this.markerCache['shuishoutop10']
                     break
                 case 'yiyuanlouyu':
                     marker = this.markerCache['yiyuanlouyu']
@@ -162,7 +161,7 @@ export default Vue.extend({
                     break
             }
             return marker || { markers: [], texts: [] }
-        }
+        },
     },
     created() {
         // this.
@@ -183,7 +182,7 @@ export default Vue.extend({
             url: process.env.VUE_APP_CITY_MAP_IP + '/citygis/areamap/WidgetPages/WidgetGIS.html?debug=false&maptype=3d&code=0715&themeid=Gis&devicetype=null',
             onReady(bridge) {
                 vue.onMapReady()
-            }
+            },
         })
         //回发消息处理
         this.bridge.addEventListener(arg => {
@@ -220,7 +219,7 @@ export default Vue.extend({
                 }
                 this.calcMarderDataIfNeed()
             },
-            immediate: true
+            immediate: true,
         },
         markerData(data) {
             this.mapShowMarkers()
@@ -242,7 +241,7 @@ export default Vue.extend({
         },
         yujingType() {
             this.calcMarderDataIfNeed()
-        }
+        },
     },
     methods: {
         onMapReady() {
@@ -281,7 +280,7 @@ export default Vue.extend({
                     break
                 case 'zhongdianqiye':
                 case 'yujing':
-                case 'shuishoutop5':
+                case 'shuishoutop10':
                 case 'yiyuanlouyu':
                     this.topmostPopup = 'lou-yu'
                     break
@@ -296,8 +295,8 @@ export default Vue.extend({
                     Parameters: {
                         url: '../MapUI/mapmeun/mapmeun.html?code=0715',
                         visible: true,
-                        position: 'bottom-right'
-                    }
+                        position: 'bottom-right',
+                    },
                 })
             }
         },
@@ -307,8 +306,8 @@ export default Vue.extend({
                     ActionName: 'themeLayer',
                     Parameters: {
                         name: '建筑精模',
-                        visible: true
-                    }
+                        visible: true,
+                    },
                 })
             }
         },
@@ -318,8 +317,8 @@ export default Vue.extend({
                     ActionName: 'themeLayer',
                     Parameters: {
                         name: '建筑白模',
-                        visible: true //为true则显示反之则隐藏
-                    }
+                        visible: true, //为true则显示反之则隐藏
+                    },
                 })
             }
         },
@@ -336,8 +335,8 @@ export default Vue.extend({
                         type: 'text',
                         color: 'red',
                         text: text.content,
-                        font: text.font
-                    }
+                        font: text.font,
+                    },
                 }
             })
             this.bridge.Invoke({
@@ -348,7 +347,7 @@ export default Vue.extend({
                     mode: 'replace',
                     data: {
                         content: markers,
-                        parsegeometry: 'function(item){return {x:item.coordx, y:item.coordy, z:item.coordz}}'
+                        parsegeometry: 'function(item){return {x:item.coordx, y:item.coordy, z:item.coordz}}',
                     },
                     legendVisible: false,
                     popupEnabled: false,
@@ -365,8 +364,8 @@ export default Vue.extend({
                                     type: 'picture-marker',
                                     url: icon_louyu,
                                     width: '17px',
-                                    height: '28px'
-                                }
+                                    height: '28px',
+                                },
                             },
                             {
                                 value: '预警1',
@@ -374,8 +373,8 @@ export default Vue.extend({
                                     type: 'picture-marker',
                                     url: icon_yujing1,
                                     width: '51px',
-                                    height: '84px'
-                                }
+                                    height: '84px',
+                                },
                             },
                             {
                                 value: '预警2',
@@ -383,8 +382,8 @@ export default Vue.extend({
                                     type: 'picture-marker',
                                     url: icon_yujing2,
                                     width: '51px',
-                                    height: '84px'
-                                }
+                                    height: '84px',
+                                },
                             },
                             {
                                 value: '预警3',
@@ -392,8 +391,8 @@ export default Vue.extend({
                                     type: 'picture-marker',
                                     url: icon_yujing3,
                                     width: '51px',
-                                    height: '84px'
-                                }
+                                    height: '84px',
+                                },
                             },
                             {
                                 value: '预警4',
@@ -401,8 +400,8 @@ export default Vue.extend({
                                     type: 'picture-marker',
                                     url: icon_yujing4,
                                     width: '51px',
-                                    height: '84px'
-                                }
+                                    height: '84px',
+                                },
                             },
                             {
                                 value: '预警5',
@@ -410,8 +409,8 @@ export default Vue.extend({
                                     type: 'picture-marker',
                                     url: icon_yujing5,
                                     width: '51px',
-                                    height: '84px'
-                                }
+                                    height: '84px',
+                                },
                             },
                             {
                                 value: '预警6',
@@ -419,8 +418,8 @@ export default Vue.extend({
                                     type: 'picture-marker',
                                     url: icon_yujing6,
                                     width: '51px',
-                                    height: '84px'
-                                }
+                                    height: '84px',
+                                },
                             },
                             {
                                 value: '预警7',
@@ -428,8 +427,8 @@ export default Vue.extend({
                                     type: 'picture-marker',
                                     url: icon_yujing7,
                                     width: '51px',
-                                    height: '84px'
-                                }
+                                    height: '84px',
+                                },
                             },
                             {
                                 value: '预警8',
@@ -437,8 +436,8 @@ export default Vue.extend({
                                     type: 'picture-marker',
                                     url: icon_yujing8,
                                     width: '51px',
-                                    height: '84px'
-                                }
+                                    height: '84px',
+                                },
                             },
                             {
                                 value: '预警9',
@@ -446,8 +445,8 @@ export default Vue.extend({
                                     type: 'picture-marker',
                                     url: icon_yujing9,
                                     width: '51px',
-                                    height: '84px'
-                                }
+                                    height: '84px',
+                                },
                             },
                             {
                                 value: '重点1',
@@ -455,8 +454,8 @@ export default Vue.extend({
                                     type: 'picture-marker',
                                     url: icon_zhongdian1,
                                     width: '51px',
-                                    height: '84px'
-                                }
+                                    height: '84px',
+                                },
                             },
                             {
                                 value: '重点2',
@@ -464,8 +463,8 @@ export default Vue.extend({
                                     type: 'picture-marker',
                                     url: icon_zhongdian2,
                                     width: '51px',
-                                    height: '84px'
-                                }
+                                    height: '84px',
+                                },
                             },
                             {
                                 value: '重点3',
@@ -473,8 +472,8 @@ export default Vue.extend({
                                     type: 'picture-marker',
                                     url: icon_zhongdian3,
                                     width: '51px',
-                                    height: '84px'
-                                }
+                                    height: '84px',
+                                },
                             },
                             {
                                 value: '重点4',
@@ -482,8 +481,8 @@ export default Vue.extend({
                                     type: 'picture-marker',
                                     url: icon_zhongdian4,
                                     width: '51px',
-                                    height: '84px'
-                                }
+                                    height: '84px',
+                                },
                             },
                             {
                                 value: '重点5',
@@ -491,8 +490,8 @@ export default Vue.extend({
                                     type: 'picture-marker',
                                     url: icon_zhongdian5,
                                     width: '51px',
-                                    height: '84px'
-                                }
+                                    height: '84px',
+                                },
                             },
                             {
                                 value: '重点6',
@@ -500,8 +499,8 @@ export default Vue.extend({
                                     type: 'picture-marker',
                                     url: icon_zhongdian6,
                                     width: '51px',
-                                    height: '84px'
-                                }
+                                    height: '84px',
+                                },
                             },
                             {
                                 value: '重点7',
@@ -509,8 +508,8 @@ export default Vue.extend({
                                     type: 'picture-marker',
                                     url: icon_zhongdian7,
                                     width: '51px',
-                                    height: '84px'
-                                }
+                                    height: '84px',
+                                },
                             },
                             {
                                 value: '重点8',
@@ -518,8 +517,8 @@ export default Vue.extend({
                                     type: 'picture-marker',
                                     url: icon_zhongdian8,
                                     width: '51px',
-                                    height: '84px'
-                                }
+                                    height: '84px',
+                                },
                             },
                             {
                                 value: '重点9',
@@ -527,34 +526,34 @@ export default Vue.extend({
                                     type: 'picture-marker',
                                     url: icon_zhongdian9,
                                     width: '51px',
-                                    height: '84px'
-                                }
-                            }
-                        ]
-                    }
-                }
+                                    height: '84px',
+                                },
+                            },
+                        ],
+                    },
+                },
             })
         },
         calcMarderDataIfNeed() {
             switch (this.type) {
                 case 'louyu':
-                    this.calcLouYuMarders()
+                    this.calcLouYuMarkers()
                     break
                 case 'yujing':
-                    this.calcYuJingMarders()
+                    this.calcYuJingMarkers()
                     break
-                case 'shuishoutop5':
-                    this.calcShuiShouTop5Marders()
+                case 'shuishoutop10':
+                    this.calcShuiShouTop10Markers()
                     break
                 case 'yiyuanlouyu':
-                    this.calcYiYuanLouYuMarders()
+                    this.calcYiYuanLouYuMarkers()
                     break
                 case 'zhongdianqiye':
-                    this.calcZhongDianQiYeMarders()
+                    this.calcZhongDianQiYeMarkers()
                     break
             }
         },
-        calcLouYuMarders() {
+        calcLouYuMarkers() {
             if (this.louYuList.length === 0) {
                 return
             }
@@ -569,12 +568,12 @@ export default Vue.extend({
                             coordz: 100,
                             iconType: '楼宇',
                             id: louyu.id,
-                            name: louyu.name
+                            name: louyu.name,
                         }
                     })
                     resovle({
                         markers,
-                        texts: []
+                        texts: [],
                     })
                 })
                     .then(res => {
@@ -585,7 +584,7 @@ export default Vue.extend({
                     })
             }
         },
-        calcYuJingMarders() {
+        calcYuJingMarkers() {
             if (this.louYuList.length === 0) {
                 return
             }
@@ -596,8 +595,8 @@ export default Vue.extend({
             if (!this.markerCache[key]) {
                 this.loading = true
                 new Promise((resovle, reject) => {
-                    let markers = [] as any[]
-                    let texts = [] as any[]
+                    const markers = [] as any[]
+                    const texts = [] as any[]
                     console.time('TEST-' + key)
                     // 楼宇名字<——>预警参数，用来计算楼宇中有几个预警的企业
                     const louyu2yujing = new Map()
@@ -611,7 +610,7 @@ export default Vue.extend({
                             const yujing = louyu2yujing.get(louyu.name)
                             const sign = {
                                 plus: qiye.status === 1 ? 1 : 0,
-                                minus: qiye.status === 2 ? 1 : 0
+                                minus: qiye.status === 2 ? 1 : 0,
                             }
                             if (yujing) {
                                 yujing.plus += sign.plus
@@ -622,7 +621,7 @@ export default Vue.extend({
                                     name: louyu.name,
                                     coordx: louyu.coordx,
                                     coordy: louyu.coordy,
-                                    ...sign
+                                    ...sign,
                                 })
                                 markers.push({
                                     coordx: louyu.coordx,
@@ -630,7 +629,7 @@ export default Vue.extend({
                                     coordz: 100,
                                     iconType: getYuJingPic(index),
                                     id: louyu.id,
-                                    name: louyu.name
+                                    name: louyu.name,
                                 })
                             }
                         }
@@ -640,8 +639,8 @@ export default Vue.extend({
                             content: `+${yujing.plus}` + `\n-${yujing.minus}`,
                             louyuName,
                             font: {
-                                size: 10
-                            }
+                                size: 10,
+                            },
                         })
                         markers.push({
                             coordx: yujing.coordx,
@@ -649,13 +648,13 @@ export default Vue.extend({
                             coordz: 120,
                             iconType: louyuName,
                             id: yujing.id,
-                            name: yujing.name
+                            name: yujing.name,
                         })
                     })
                     console.timeEnd('TEST-' + key)
                     resovle({
                         markers,
-                        texts
+                        texts,
                     })
                 })
                     .then(res => {
@@ -666,7 +665,7 @@ export default Vue.extend({
                     })
             }
         },
-        calcYiYuanLouYuMarders() {
+        calcYiYuanLouYuMarkers() {
             if (this.louYuList.length === 0) {
                 return
             }
@@ -686,13 +685,13 @@ export default Vue.extend({
                                 coordz: 100,
                                 iconType: getZhongDian(index),
                                 id: louyu.id,
-                                name: louyu.name
+                                name: louyu.name,
                             }
                         }
                     })
                     resovle({
                         markers,
-                        texts: []
+                        texts: [],
                     })
                 })
                     .then(res => {
@@ -703,19 +702,19 @@ export default Vue.extend({
                     })
             }
         },
-        calcShuiShouTop5Marders() {
+        calcShuiShouTop10Markers() {
             if (this.louYuList.length === 0) {
                 return
             }
             if (this.ZhongDianShuiShouTop10.length === 0) {
                 return
             }
-            const key = 'shuishoutop5'
+            const key = 'shuishoutop10'
             if (!this.markerCache[key]) {
                 this.loading = true
                 new Promise((resovle, reject) => {
-                    let markers = [] as any[]
-                    let texts = [] as any[]
+                    const markers = [] as any[]
+                    const texts = [] as any[]
                     // 楼宇名字<——>税收参数，用来计算楼宇中有几个top5的企业
                     const louyu2shuishou = new Map()
                     this.ZhongDianShuiShouTop10.forEach((qiye, index) => {
@@ -734,7 +733,7 @@ export default Vue.extend({
                                     name: louyu.name,
                                     coordx: louyu.coordx,
                                     coordy: louyu.coordy,
-                                    count: 1
+                                    count: 1,
                                 })
                                 markers.push({
                                     coordx: louyu.coordx,
@@ -742,7 +741,7 @@ export default Vue.extend({
                                     coordz: 100,
                                     iconType: getZhongDian(index),
                                     id: louyu.id,
-                                    name: louyu.name
+                                    name: louyu.name,
                                 })
                             }
                         }
@@ -753,8 +752,8 @@ export default Vue.extend({
                             louyuName,
                             font: {
                                 size: 30,
-                                weight: 'bold'
-                            }
+                                weight: 'bold',
+                            },
                         })
                         markers.push({
                             coordx: zhongdian.coordx,
@@ -762,12 +761,12 @@ export default Vue.extend({
                             coordz: 200,
                             iconType: louyuName,
                             id: zhongdian.id,
-                            name: zhongdian.name
+                            name: zhongdian.name,
                         })
                     })
                     resovle({
                         markers,
-                        texts
+                        texts,
                     })
                 })
                     .then(res => {
@@ -778,7 +777,7 @@ export default Vue.extend({
                     })
             }
         },
-        calcZhongDianQiYeMarders() {
+        calcZhongDianQiYeMarkers() {
             if (this.louYuList.length === 0) {
                 return
             }
@@ -789,8 +788,8 @@ export default Vue.extend({
             if (!this.markerCache[key]) {
                 this.loading = true
                 new Promise((resovle, reject) => {
-                    let markers = [] as any[]
-                    let texts = [] as any[]
+                    const markers = [] as any[]
+                    const texts = [] as any[]
                     // 楼宇名字<——>重点企业参数，用来计算楼宇中有几个重点的企业
                     const louyu2zhongdian = new Map()
                     this.zhongDianQiYeList.forEach((qiye, index) => {
@@ -809,7 +808,7 @@ export default Vue.extend({
                                     name: louyu.name,
                                     coordx: louyu.coordx,
                                     coordy: louyu.coordy,
-                                    count: 1
+                                    count: 1,
                                 })
                                 markers.push({
                                     coordx: louyu.coordx,
@@ -817,7 +816,7 @@ export default Vue.extend({
                                     coordz: 100,
                                     iconType: getZhongDian(index),
                                     id: louyu.id,
-                                    name: louyu.name
+                                    name: louyu.name,
                                 })
                             }
                         }
@@ -828,8 +827,8 @@ export default Vue.extend({
                             louyuName,
                             font: {
                                 size: 30,
-                                weight: 'bold'
-                            }
+                                weight: 'bold',
+                            },
                         })
                         markers.push({
                             coordx: zhongdian.coordx,
@@ -837,12 +836,12 @@ export default Vue.extend({
                             coordz: 250,
                             iconType: louyuName,
                             id: zhongdian.id,
-                            name: zhongdian.name
+                            name: zhongdian.name,
                         })
                     })
                     resovle({
                         markers,
-                        texts
+                        texts,
                     })
                 })
                     .then(res => {
@@ -852,8 +851,8 @@ export default Vue.extend({
                         this.loading = false
                     })
             }
-        }
-    }
+        },
+    },
 })
 </script>
 

@@ -65,14 +65,12 @@ export default Vue.extend({
         detailItems(): Item[] {
             const found = this.top10.find(item => item.name === this.qiYeName)
             const separator = '；'
-            const notes = found.notes.split(separator)
-            return found
-                ? notes.map((item, index) => ({
-                      icon: 'number-' + (index + 1),
-                      iconColor: '#00D98B',
-                      text: item + (index === notes.length - 1 ? '' : separator),
-                  }))
-                : []
+            const notes = found?.notes.split(separator) || []
+            return notes.map((item, index) => ({
+                icon: 'number-' + (index + 1),
+                iconColor: '#00D98B',
+                text: item + (index === notes.length - 1 ? '' : separator),
+            }))
         },
     },
     methods: {

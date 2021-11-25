@@ -16,5 +16,6 @@ module.exports = {
         '@typescript-eslint/no-unused-vars': ['warn', { varsIgnorePattern: '^_', argsIgnorePattern: '^_' }], //
         '@typescript-eslint/camelcase': 'off',
         '@typescript-eslint/no-non-null-assertion': 'off',
+        '@typescript-eslint/ban-ts-ignore': 'off',
     },
 }

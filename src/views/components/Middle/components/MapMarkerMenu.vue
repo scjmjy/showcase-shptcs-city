@@ -4,7 +4,7 @@
         <el-dropdown-menu slot="dropdown" style="margin-top: 15px;">
             <el-dropdown-item command="louyu">企业总览</el-dropdown-item>
             <el-dropdown-item command="zhongdianqiye">重点企业</el-dropdown-item>
-            <el-dropdown-item command="shuishoutop5">企业税收Top5</el-dropdown-item>
+            <el-dropdown-item command="shuishoutop5">企业税收Top10</el-dropdown-item>
             <el-dropdown-item command="yiyuanlouyu">亿元楼宇</el-dropdown-item>
             <el-dropdown-item command="shuishoubodong">税收波动</el-dropdown-item>
             <el-dropdown-item command="qianruqianchu">迁入迁出</el-dropdown-item>

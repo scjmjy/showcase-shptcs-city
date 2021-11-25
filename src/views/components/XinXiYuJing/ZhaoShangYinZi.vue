@@ -13,16 +13,16 @@ import Vue from 'vue'
 import { mapState } from 'vuex'
 import echarts from 'echarts'
 import { State, ZhaoShangYinZi } from '@/store/state'
-import img1 from '@/assets/img/pattern-1.png'
-import img2 from '@/assets/img/pattern-2.png'
-import img3 from '@/assets/img/pattern-3.png'
+// import img1 from '@/assets/img/pattern-1.png'
+// import img2 from '@/assets/img/pattern-2.png'
+// import img3 from '@/assets/img/pattern-3.png'
 
 const patternImg1 = new Image()
-patternImg1.src = img1
+patternImg1.src = require('@/assets/img/pattern-1.png')
 const patternImg2 = new Image()
-patternImg2.src = img2
+patternImg2.src = require('@/assets/img/pattern-2.png')
 const patternImg3 = new Image()
-patternImg3.src = img3
+patternImg3.src = require('@/assets/img/pattern-3.png')
 
 export default Vue.extend({
     props: {
@@ -45,7 +45,7 @@ export default Vue.extend({
     },
     computed: {
         ...mapState({
-            zhaoShangYinZi: (state: State) => state.zhaoShangYinZi,
+            zhaoShangYinZi: state => (state as State).zhaoShangYinZi,
         }),
         leftChartOptsDynamic(): echarts.EChartOption {
             const { complete } = this.zhaoShangYinZi as ZhaoShangYinZi
@@ -122,7 +122,7 @@ export default Vue.extend({
                                 name: `千万元项目${projectQianWanYuan}个`,
                                 itemStyle: {
                                     color: {
-                                        image: patternImg1,
+                                        image: patternImg2,
                                         repeat: 'repeat',
                                     },
                                 },
@@ -161,8 +161,10 @@ export default Vue.extend({
         }
         let angle = 0
         const interval = setInterval(() => {
+            // @ts-ignore
             if (this.leftChart) {
                 angle += 3
+                // @ts-ignore
                 this.leftChart.setOption(this.leftChartOptsDynamic)
             }
         }, 100)
@@ -205,9 +207,9 @@ export default Vue.extend({
                             return {
                                 type: 'arc',
                                 shape: {
-                                    cx: api.getWidth() / 2,
-                                    cy: api.getHeight() / 2,
-                                    r: (Math.min(api.getWidth(), api.getHeight()) / 2) * 0.6,
+                                    cx: api.getWidth!() / 2,
+                                    cy: api.getHeight!() / 2,
+                                    r: (Math.min(api.getWidth!(), api.getHeight!()) / 2) * 0.6,
                                     startAngle: ((0 + angle) * Math.PI) / 180,
                                     endAngle: ((90 + angle) * Math.PI) / 180,
                                 },
@@ -229,9 +231,9 @@ export default Vue.extend({
                             return {
                                 type: 'arc',
                                 shape: {
-                                    cx: api.getWidth() / 2,
-                                    cy: api.getHeight() / 2,
-                                    r: (Math.min(api.getWidth(), api.getHeight()) / 2) * 0.6,
+                                    cx: api.getWidth!() / 2,
+                                    cy: api.getHeight!() / 2,
+                                    r: (Math.min(api.getWidth!(), api.getHeight!()) / 2) * 0.6,
                                     startAngle: ((180 + angle) * Math.PI) / 180,
                                     endAngle: ((270 + angle) * Math.PI) / 180,
                                 },
@@ -253,9 +255,9 @@ export default Vue.extend({
                             return {
                                 type: 'arc',
                                 shape: {
-                                    cx: api.getWidth() / 2,
-                                    cy: api.getHeight() / 2,
-                                    r: (Math.min(api.getWidth(), api.getHeight()) / 2) * 0.65,
+                                    cx: api.getWidth!() / 2,
+                                    cy: api.getHeight!() / 2,
+                                    r: (Math.min(api.getWidth!(), api.getHeight!()) / 2) * 0.65,
                                     startAngle: ((270 + -angle) * Math.PI) / 180,
                                     endAngle: ((40 + -angle) * Math.PI) / 180,
                                 },
@@ -277,9 +279,9 @@ export default Vue.extend({
                             return {
                                 type: 'arc',
                                 shape: {
-                                    cx: api.getWidth() / 2,
-                                    cy: api.getHeight() / 2,
-                                    r: (Math.min(api.getWidth(), api.getHeight()) / 2) * 0.65,
+                                    cx: api.getWidth!() / 2,
+                                    cy: api.getHeight!() / 2,
+                                    r: (Math.min(api.getWidth!(), api.getHeight!()) / 2) * 0.65,
                                     startAngle: ((90 + -angle) * Math.PI) / 180,
                                     endAngle: ((220 + -angle) * Math.PI) / 180,
                                 },
@@ -298,9 +300,9 @@ export default Vue.extend({
                         type: 'custom',
                         coordinateSystem: 'none',
                         renderItem: function(params, api) {
-                            const x0 = api.getWidth() / 2
-                            const y0 = api.getHeight() / 2
-                            const r = (Math.min(api.getWidth(), api.getHeight()) / 2) * 0.65
+                            const x0 = api.getWidth!() / 2
+                            const y0 = api.getHeight!() / 2
+                            const r = (Math.min(api.getWidth!(), api.getHeight!()) / 2) * 0.65
                             const point = getCirlPoint(x0, y0, r, 90 + -angle)
                             return {
                                 type: 'circle',
@@ -323,9 +325,9 @@ export default Vue.extend({
                         type: 'custom',
                         coordinateSystem: 'none',
                         renderItem: function(params, api) {
-                            const x0 = api.getWidth() / 2
-                            const y0 = api.getHeight() / 2
-                            const r = (Math.min(api.getWidth(), api.getHeight()) / 2) * 0.65
+                            const x0 = api.getWidth!() / 2
+                            const y0 = api.getHeight!() / 2
+                            const r = (Math.min(api.getWidth!(), api.getHeight!()) / 2) * 0.65
                             const point = getCirlPoint(x0, y0, r, 270 + -angle)
                             return {
                                 type: 'circle',
