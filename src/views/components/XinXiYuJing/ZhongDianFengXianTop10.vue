@@ -2,7 +2,7 @@
     <div class="fengxianTop10">
         <div class="fengxianTop10-left">
             <div class="fengxianTop10-title hoverable" @click="onTitleClick">重点风险企业Top10</div>
-            <img class="fengxianTop10-logo" src="@/assets/img/重点风险企业Top10.png" alt="" />
+            <img class="fengxianTop10-logo" src="@/assets/img/fengxiantop10.png" alt="" />
         </div>
         <scroll-list class="fengxianTop10-list" :colors="top10.colors" :data="top10.list" @click="openDetailPopup" />
     </div>

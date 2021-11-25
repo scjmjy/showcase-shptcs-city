@@ -8,7 +8,7 @@
             frameborder="0"
         ></iframe> -->
         <!-- <div ref="gaugeChart" style="display: inline-block;" :style="{ width: gaugeWidth + 'px', height: gaugeHeight + 'px' }"></div> -->
-        <div ref="gaugeChart" class="u-wh-100" style="display: inline-block;"></div>
+        <div ref="gaugeChart" class="u-wh-100" style="display: inline-block"></div>
     </card>
 </template>
 
@@ -18,6 +18,15 @@ import Card from '@/components/Card.vue'
 import echarts from 'echarts'
 import { mapState } from 'vuex'
 import { State } from '@/store/state'
+
+function ceil100(num) {
+    const rest = num % 100
+    let divide = Math.floor((num / 100))
+    if (rest != 0) {
+       divide += 1 
+    }
+    return divide * 100
+}
 
 export default Vue.extend({
     components: { Card },
@@ -132,30 +141,32 @@ export default Vue.extend({
             if (!this.zhongDianQiYe) {
                 return {}
             }
-            const { num60, num100, num500, num } = this.zhongDianQiYe
+            const { num60, num100, num500 } = this.zhongDianQiYe
             // let maxNum = num - (num % 100) // 100的整数倍
-            const maxNum = 100
+            const maxNum60 = ceil100(num60)
+            const maxNum100 = ceil100(num100)
+            const maxNum500 = ceil100(num500)
             const opt = {
                 series: [
                     {
                         ...this.gaugeCommonOpts,
                         ...this.gaugeLeftOpts,
                         min: 0,
-                        max: maxNum,
+                        max: maxNum60,
                         data: [{ value: num60, name: '60万-100万企业' }],
                     },
                     {
                         ...this.gaugeCommonOpts,
                         ...this.gaugeMiddleOpts,
                         min: 0,
-                        max: maxNum,
+                        max: maxNum100,
                         data: [{ value: num100, name: '100万-500万企业' }],
                     },
                     {
                         ...this.gaugeCommonOpts,
                         ...this.gaugeRightOpts,
                         min: 0,
-                        max: maxNum,
+                        max: maxNum500,
                         data: [{ value: num500, name: '500万以上企业' }],
                     },
                 ],
